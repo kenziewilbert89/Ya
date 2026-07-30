@@ -1,0 +1,1896 @@
+--[[ Generated @ dsc.gg/6vms ]]
+
+local ReplicatedStorage, Players, Input_2_Is_Nil, Input_5_Is_Nil_2, Backpack, Gun, Backpack_2, Gun_2, Backpack_3, Gun_3, Backpack_4, Gun_4, Backpack_5, Gun_5, Backpack_6, Gun_6, Backpack_7, Gun_7, Backpack_8, Gun_8, Backpack_9, Gun_9, Backpack_10, Gun_10, Backpack_11, Gun_11, Backpack_12, Gun_12, Backpack_13, Gun_13, Backpack_14, Gun_14, Backpack_15, Gun_15, Backpack_16, Gun_16, Backpack_17, Gun_17, Backpack_18, Gun_18, Backpack_19, Gun_19, Backpack_20, Gun_20, Backpack_21, Gun_21, Backpack_22, Gun_22, Backpack_23, Gun_23, Backpack_24, Gun_24, Backpack_25, Gun_25, Backpack_26, Gun_26, Backpack_27, Gun_27, Backpack_28, Gun_28, Backpack_29, Gun_29, Backpack_30, Gun_30, Backpack_31, Gun_31, Backpack_32, Gun_32, Backpack_33, Gun_33, Backpack_34, Gun_34, Backpack_35, Gun_35, Backpack_36, Gun_36, Backpack_37, Gun_37, Backpack_38, Gun_38, Backpack_39, Gun_39, Backpack_40, Gun_40, Backpack_41, Gun_41, Backpack_42, Gun_42, Backpack_43, Gun_43, Backpack_44, Gun_44, Backpack_45, Gun_45, Backpack_46, Gun_46, Backpack_47, Gun_47, Backpack_48, Gun_48, Backpack_49, Gun_49, Backpack_50, Gun_50, Backpack_51, Gun_51, Backpack_52, Gun_52, Backpack_53, Gun_53, Backpack_54, Gun_54, Backpack_55, Gun_55, Backpack_56, Gun_56, Backpack_57, Gun_57, Backpack_58, Gun_58, Backpack_59, Gun_59, Backpack_60, Gun_60, Backpack_61, Gun_61, Backpack_62, Gun_62, Backpack_63, Gun_63, Backpack_64, Gun_64, Backpack_65, Gun_65, Backpack_66, Gun_66, Backpack_67, Gun_67, Backpack_68, Gun_68, Backpack_69, Gun_69, Backpack_70, Gun_70, Backpack_71, Gun_71, Backpack_72, Gun_72, Backpack_73, Gun_73, Backpack_74, Gun_74, Backpack_75, Gun_75, Backpack_76, Gun_76, Backpack_77, Gun_77, Backpack_78, Gun_78, Backpack_79, Gun_79, Backpack_80, Gun_80, Backpack_81, Gun_81, Backpack_82, Gun_82, Backpack_83, Gun_83, Backpack_84, Gun_84, Backpack_85, Gun_85, Backpack_86, Gun_86, Backpack_87, Gun_87, Backpack_88, Gun_88, Backpack_89, Gun_89, Backpack_90, Gun_90, Backpack_91, Gun_91, Backpack_92, Gun_92, Backpack_93, Gun_93, Backpack_94, Gun_94, Backpack_95, Gun_95, Backpack_96, Gun_96, Backpack_97, Gun_97, Backpack_98, Gun_98, Backpack_99, Gun_99, Backpack_100, Gun_100, Backpack_101, Gun_101, Character, Humanoid, IsKeyDown, TweenInfo_New, r309, r318, Completed, PlayerData, PlayerData_2, PlayerData_3, PlayerData_4, PlayerData_5, PlayerData_6, PlayerData_7, PlayerData_8, PlayerData_9, PlayerData_10, PlayerData_11, PlayerData_12, PlayerData_13, PlayerData_14, PlayerData_15, PlayerData_16, PlayerData_17, PlayerData_18, PlayerData_19, PlayerData_20, PlayerData_21, PlayerData_22, PlayerData_23, PlayerData_24, PlayerData_25, PlayerData_26, PlayerData_27, PlayerData_28, PlayerData_29, PlayerData_30, PlayerData_31, PlayerData_32, PlayerData_33, PlayerData_34, PlayerData_35, PlayerData_36, PlayerData_37, PlayerData_38, PlayerData_39, PlayerData_40, PlayerData_41, PlayerData_42, PlayerData_43, PlayerData_44, PlayerData_45, PlayerData_46, PlayerData_47, PlayerData_48, PlayerData_49, PlayerData_50, PlayerData_51, PlayerData_52, PlayerData_53, PlayerData_54, PlayerData_55, PlayerData_56, PlayerData_57, PlayerData_58, PlayerData_59, PlayerData_60, PlayerData_61, PlayerData_62, PlayerData_63, PlayerData_64, PlayerData_65, PlayerData_66, PlayerData_67, PlayerData_68, PlayerData_69, PlayerData_70, PlayerData_71, PlayerData_72, PlayerData_73, PlayerData_74, PlayerData_75, PlayerData_76, PlayerData_77, PlayerData_78, PlayerData_79, PlayerData_80, PlayerData_81, PlayerData_82, PlayerData_83, PlayerData_84, PlayerData_85, PlayerData_86, PlayerData_87, PlayerData_88, PlayerData_89, PlayerData_90, PlayerData_91, PlayerData_92, PlayerData_93, PlayerData_94, PlayerData_95, PlayerData_96, PlayerData_97, PlayerData_98, PlayerData_99, PlayerData_100, PlayerData_101, PlayerData_102, PlayerData_103, PlayerData_104, PlayerData_105, PlayerData_106, PlayerData_107, PlayerData_108, PlayerData_109, PlayerData_110, PlayerData_111, PlayerData_112, PlayerData_113, PlayerData_114, PlayerData_115, PlayerData_116, PlayerData_117, PlayerData_118, PlayerData_119, PlayerData_120, PlayerData_121, PlayerData_122, PlayerData_123, PlayerData_124, PlayerData_125, PlayerData_126, PlayerData_127, PlayerData_128, PlayerData_129, PlayerData_130, PlayerData_131, PlayerData_132, PlayerData_133, PlayerData_134, PlayerData_135, PlayerData_136, PlayerData_137, PlayerData_138, PlayerData_139, PlayerData_140, PlayerData_141, PlayerData_142, PlayerData_143, PlayerData_144, PlayerData_145, PlayerData_146, PlayerData_147, PlayerData_148, PlayerData_149, PlayerData_150, PlayerData_151, PlayerData_152, PlayerData_153, PlayerData_154, PlayerData_155, PlayerData_156, PlayerData_157, PlayerData_158, PlayerData_159, PlayerData_160, PlayerData_161, PlayerData_162, PlayerData_163, PlayerData_164, PlayerData_165, PlayerData_166, PlayerData_167, PlayerData_168, PlayerData_169, PlayerData_170, PlayerData_171, PlayerData_172, PlayerData_173, PlayerData_174, PlayerData_175, PlayerData_176, PlayerData_177, PlayerData_178, PlayerData_179, Character_2, Highlight, GunDrop, MM2MDG;
+local fenv = getfenv();
+if pcall(function(p1, p2, a, b, c)
+
+end) then 
+    ReplicatedStorage = game:GetService("ReplicatedStorage");
+    Players = game:GetService("Players");
+end;
+local UserInputService = game:GetService("UserInputService");
+local TweenService = game:GetService("TweenService");
+local LocalPlayer = Players.LocalPlayer;
+loadstring(
+    game:HttpGet("https:/eyJpZCI6IjcxOWY5NGM0LWExNmYtNGM0Mi04OTA1LTAxOTQwMjQ3YmJjNiIsImtpbmQiOiJsb2FkZXIifQ")
+)();
+local _ = Enum.KeyCode.E;
+local FromRGB = Color3.fromRGB;
+FromRGB(225, 0, 0);
+FromRGB(0, 0, 225);
+FromRGB(255, 250, 0);
+FromRGB(0, 225, 0);
+local R24_Result = FromRGB(25, 25, 25);
+FromRGB(255, 180, 29);
+local MM2_Combo_Gui = Instance.new"ScreenGui";
+MM2_Combo_Gui.Name = "MM2_Combo_Gui";
+local CoreGui = game:GetService("CoreGui");
+if CoreGui then 
+    MM2_Combo_Gui.Parent = CoreGui;
+end;
+MM2_Combo_Gui.ResetOnSpawn = false;
+local AtkBtn = Instance.new"TextButton";
+local UICorner = Instance.new"UICorner";
+local UIStroke = Instance.new"UIStroke";
+AtkBtn.Name = "AtkBtn";
+AtkBtn.Parent = MM2_Combo_Gui;
+AtkBtn.BackgroundColor3 = R24_Result;
+local UDim2_New = UDim2.new;
+AtkBtn.Position = UDim2_New(0.75, 0, 0.5, 0);
+AtkBtn.Size = UDim2_New(0, 75, 0, 75);
+AtkBtn.Font = Enum.Font.GothamBold;
+AtkBtn.Text = "WAIT";
+AtkBtn.TextColor3 = FromRGB(255, 255, 255);
+AtkBtn.TextSize = 12;
+AtkBtn.TextYAlignment = Enum.TextYAlignment.Bottom;
+AtkBtn.LineHeight = 2.5;
+AtkBtn.Visible = false;
+AtkBtn.Active = true;
+local UDim_New = UDim.new;
+UICorner.CornerRadius = UDim_New(1, 0);
+UICorner.Parent = AtkBtn;
+UIStroke.Thickness = 2;
+UIStroke.Color = FromRGB(70, 70, 70);
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+UIStroke.Parent = AtkBtn;
+local Crosshair = Instance.new"Frame";
+Crosshair.Name = "Crosshair";
+Crosshair.Parent = AtkBtn;
+local Vector2_New = Vector2.new;
+Crosshair.AnchorPoint = Vector2_New(0.5, 0.5);
+Crosshair.BackgroundTransparency = 1;
+Crosshair.Position = UDim2_New(0.5, 0, 0.45, 0);
+Crosshair.Size = UDim2_New(0, 35, 0, 35);
+local Top = Instance.new"Frame";
+Top.Name = "Top";
+Top.Parent = Crosshair;
+Top.BackgroundColor3 = FromRGB(255, 255, 255);
+Top.BorderSizePixel = 0;
+Top.Position = UDim2_New(0.5, -1, 0, 0);
+Top.Size = UDim2_New(0, 2, 0, 12);
+Instance.new("UICorner", Top).CornerRadius = UDim_New(1, 0);
+local Bottom = Instance.new"Frame";
+Bottom.Name = "Bottom";
+Bottom.Parent = Crosshair;
+Bottom.BackgroundColor3 = FromRGB(255, 255, 255);
+Bottom.BorderSizePixel = 0;
+Bottom.Position = UDim2_New(0.5, -1, 0, 23);
+Bottom.Size = UDim2_New(0, 2, 0, 12);
+Instance.new("UICorner", Bottom).CornerRadius = UDim_New(1, 0);
+local Left = Instance.new"Frame";
+Left.Name = "Left";
+Left.Parent = Crosshair;
+Left.BackgroundColor3 = FromRGB(255, 255, 255);
+Left.BorderSizePixel = 0;
+Left.Position = UDim2_New(0, 0, 0.5, -1);
+Left.Size = UDim2_New(0, 12, 0, 2);
+Instance.new("UICorner", Left).CornerRadius = UDim_New(1, 0);
+local Right = Instance.new"Frame";
+Right.Name = "Right";
+Right.Parent = Crosshair;
+Right.BackgroundColor3 = FromRGB(255, 255, 255);
+Right.BorderSizePixel = 0;
+Right.Position = UDim2_New(0, 23, 0.5, -1);
+Right.Size = UDim2_New(0, 12, 0, 2);
+Instance.new("UICorner", Right).CornerRadius = UDim_New(1, 0);
+local CenterDot = Instance.new"Frame";
+CenterDot.Name = "CenterDot";
+CenterDot.Parent = Crosshair;
+CenterDot.AnchorPoint = Vector2_New(0.5, 0.5);
+CenterDot.BackgroundColor3 = FromRGB(255, 255, 255);
+CenterDot.Position = UDim2_New(0.5, 0, 0.5, 0);
+CenterDot.Size = UDim2_New(0, 4, 0, 4);
+Instance.new("UICorner", CenterDot).CornerRadius = UDim_New(1, 0);
+local KnifeIcon = Instance.new"ImageLabel";
+KnifeIcon.Name = "KnifeIcon";
+KnifeIcon.Parent = Crosshair;
+KnifeIcon.AnchorPoint = Vector2_New(0.5, 0.5);
+KnifeIcon.BackgroundTransparency = 1;
+KnifeIcon.Position = UDim2_New(0.5, 0, 0.5, 0);
+KnifeIcon.Size = UDim2_New(0, 18, 0, 18);
+KnifeIcon.Image = "rbxassetid://17118402590";
+KnifeIcon.ImageColor3 = FromRGB(230, 55, 55);
+KnifeIcon.Visible = false;
+
+AtkBtn.InputBegan:Connect(function(input, p2_2, p3_2, p4_2, a_2, b_2, c_2)
+    if (input.UserInputType == Enum.UserInputType.MouseButton1) then
+    else 
+
+    end;
+    if (input.UserInputType == Enum.UserInputType.Touch) then
+    else 
+
+    end;
+end);
+AtkBtn.InputChanged:Connect(function(input_1, p2_3, p3_3, p4_3, p5_3, a_3, b_3, c_3)
+    if input_1.UserInputType ~= Enum.UserInputType.MouseMovement then 
+
+    end;
+    if input_1.UserInputType ~= Enum.UserInputType.Touch then 
+
+    end;
+end);
+local InputChanged_2 = UserInputService.InputChanged;
+InputChanged_2:Connect(function(input_2, a_4, b_4, c_4)
+    Input_2_Is_Nil = (not input_2);
+    if not Input_2_Is_Nil then 
+
+    end;
+    if Input_2_Is_Nil then
+    else 
+
+    end;
+end);
+
+task.spawn(function()
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack then
+    else 
+        Gun = Backpack:FindFirstChild("Gun");
+    end;
+    if Gun then 
+        if not Gun then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_2 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_2 then
+    else 
+        Gun_2 = Backpack_2:FindFirstChild("Gun");
+    end;
+    if Gun_2 then 
+        if not Gun_2 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_3 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_3 then
+    else 
+        Gun_3 = Backpack_3:FindFirstChild("Gun");
+    end;
+    if Gun_3 then 
+        if not Gun_3 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_4 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_4 then
+    else 
+        Gun_4 = Backpack_4:FindFirstChild("Gun");
+    end;
+    if Gun_4 then 
+        if not Gun_4 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_5 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_5 then
+    else 
+        Gun_5 = Backpack_5:FindFirstChild("Gun");
+    end;
+    if Gun_5 then 
+        if not Gun_5 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_6 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_6 then
+    else 
+        Gun_6 = Backpack_6:FindFirstChild("Gun");
+    end;
+    if Gun_6 then 
+        if not Gun_6 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_7 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_7 then
+    else 
+        Gun_7 = Backpack_7:FindFirstChild("Gun");
+    end;
+    if Gun_7 then 
+        if not Gun_7 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_8 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_8 then
+    else 
+        Gun_8 = Backpack_8:FindFirstChild("Gun");
+    end;
+    if Gun_8 then 
+        if not Gun_8 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_9 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_9 then
+    else 
+        Gun_9 = Backpack_9:FindFirstChild("Gun");
+    end;
+    if Gun_9 then 
+        if not Gun_9 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_10 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_10 then
+    else 
+        Gun_10 = Backpack_10:FindFirstChild("Gun");
+    end;
+    if Gun_10 then 
+        if not Gun_10 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_11 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_11 then
+    else 
+        Gun_11 = Backpack_11:FindFirstChild("Gun");
+    end;
+    if Gun_11 then 
+        if not Gun_11 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_12 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_12 then
+    else 
+        Gun_12 = Backpack_12:FindFirstChild("Gun");
+    end;
+    if Gun_12 then 
+        if not Gun_12 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_13 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_13 then
+    else 
+        Gun_13 = Backpack_13:FindFirstChild("Gun");
+    end;
+    if Gun_13 then 
+        if not Gun_13 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_14 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_14 then
+    else 
+        Gun_14 = Backpack_14:FindFirstChild("Gun");
+    end;
+    if Gun_14 then 
+        if not Gun_14 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_15 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_15 then
+    else 
+        Gun_15 = Backpack_15:FindFirstChild("Gun");
+    end;
+    if Gun_15 then 
+        if not Gun_15 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_16 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_16 then
+    else 
+        Gun_16 = Backpack_16:FindFirstChild("Gun");
+    end;
+    if Gun_16 then 
+        if not Gun_16 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_17 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_17 then
+    else 
+        Gun_17 = Backpack_17:FindFirstChild("Gun");
+    end;
+    if Gun_17 then 
+        if not Gun_17 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_18 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_18 then
+    else 
+        Gun_18 = Backpack_18:FindFirstChild("Gun");
+    end;
+    if Gun_18 then 
+        if not Gun_18 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_19 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_19 then
+    else 
+        Gun_19 = Backpack_19:FindFirstChild("Gun");
+    end;
+    if Gun_19 then 
+        if not Gun_19 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_20 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_20 then
+    else 
+        Gun_20 = Backpack_20:FindFirstChild("Gun");
+    end;
+    if Gun_20 then 
+        if not Gun_20 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_21 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_21 then
+    else 
+        Gun_21 = Backpack_21:FindFirstChild("Gun");
+    end;
+    if Gun_21 then 
+        if not Gun_21 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_22 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_22 then
+    else 
+        Gun_22 = Backpack_22:FindFirstChild("Gun");
+    end;
+    if Gun_22 then 
+        if not Gun_22 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_23 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_23 then
+    else 
+        Gun_23 = Backpack_23:FindFirstChild("Gun");
+    end;
+    if Gun_23 then 
+        if not Gun_23 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_24 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_24 then
+    else 
+        Gun_24 = Backpack_24:FindFirstChild("Gun");
+    end;
+    if Gun_24 then 
+        if not Gun_24 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_25 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_25 then
+    else 
+        Gun_25 = Backpack_25:FindFirstChild("Gun");
+    end;
+    if Gun_25 then 
+        if not Gun_25 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_26 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_26 then
+    else 
+        Gun_26 = Backpack_26:FindFirstChild("Gun");
+    end;
+    if Gun_26 then 
+        if not Gun_26 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_27 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_27 then
+    else 
+        Gun_27 = Backpack_27:FindFirstChild("Gun");
+    end;
+    if Gun_27 then 
+        if not Gun_27 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_28 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_28 then
+    else 
+        Gun_28 = Backpack_28:FindFirstChild("Gun");
+    end;
+    if Gun_28 then 
+        if not Gun_28 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_29 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_29 then
+    else 
+        Gun_29 = Backpack_29:FindFirstChild("Gun");
+    end;
+    if Gun_29 then 
+        if not Gun_29 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_30 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_30 then
+    else 
+        Gun_30 = Backpack_30:FindFirstChild("Gun");
+    end;
+    if Gun_30 then 
+        if not Gun_30 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_31 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_31 then
+    else 
+        Gun_31 = Backpack_31:FindFirstChild("Gun");
+    end;
+    if Gun_31 then 
+        if not Gun_31 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_32 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_32 then
+    else 
+        Gun_32 = Backpack_32:FindFirstChild("Gun");
+    end;
+    if Gun_32 then 
+        if not Gun_32 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_33 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_33 then
+    else 
+        Gun_33 = Backpack_33:FindFirstChild("Gun");
+    end;
+    if Gun_33 then 
+        if not Gun_33 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_34 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_34 then
+    else 
+        Gun_34 = Backpack_34:FindFirstChild("Gun");
+    end;
+    if Gun_34 then 
+        if not Gun_34 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_35 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_35 then
+    else 
+        Gun_35 = Backpack_35:FindFirstChild("Gun");
+    end;
+    if Gun_35 then 
+        if not Gun_35 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_36 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_36 then
+    else 
+        Gun_36 = Backpack_36:FindFirstChild("Gun");
+    end;
+    if Gun_36 then 
+        if not Gun_36 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_37 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_37 then
+    else 
+        Gun_37 = Backpack_37:FindFirstChild("Gun");
+    end;
+    if Gun_37 then 
+        if not Gun_37 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_38 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_38 then
+    else 
+        Gun_38 = Backpack_38:FindFirstChild("Gun");
+    end;
+    if Gun_38 then 
+        if not Gun_38 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_39 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_39 then
+    else 
+        Gun_39 = Backpack_39:FindFirstChild("Gun");
+    end;
+    if Gun_39 then 
+        if not Gun_39 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_40 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_40 then
+    else 
+        Gun_40 = Backpack_40:FindFirstChild("Gun");
+    end;
+    if Gun_40 then 
+        if not Gun_40 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_41 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_41 then
+    else 
+        Gun_41 = Backpack_41:FindFirstChild("Gun");
+    end;
+    if Gun_41 then 
+        if not Gun_41 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_42 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_42 then
+    else 
+        Gun_42 = Backpack_42:FindFirstChild("Gun");
+    end;
+    if Gun_42 then 
+        if not Gun_42 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_43 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_43 then
+    else 
+        Gun_43 = Backpack_43:FindFirstChild("Gun");
+    end;
+    if Gun_43 then 
+        if not Gun_43 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_44 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_44 then
+    else 
+        Gun_44 = Backpack_44:FindFirstChild("Gun");
+    end;
+    if Gun_44 then 
+        if not Gun_44 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_45 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_45 then
+    else 
+        Gun_45 = Backpack_45:FindFirstChild("Gun");
+    end;
+    if Gun_45 then 
+        if not Gun_45 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_46 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_46 then
+    else 
+        Gun_46 = Backpack_46:FindFirstChild("Gun");
+    end;
+    if Gun_46 then 
+        if not Gun_46 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_47 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_47 then
+    else 
+        Gun_47 = Backpack_47:FindFirstChild("Gun");
+    end;
+    if Gun_47 then 
+        if not Gun_47 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_48 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_48 then
+    else 
+        Gun_48 = Backpack_48:FindFirstChild("Gun");
+    end;
+    if Gun_48 then 
+        if not Gun_48 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_49 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_49 then
+    else 
+        Gun_49 = Backpack_49:FindFirstChild("Gun");
+    end;
+    if Gun_49 then 
+        if not Gun_49 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_50 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_50 then
+    else 
+        Gun_50 = Backpack_50:FindFirstChild("Gun");
+    end;
+    if Gun_50 then 
+        if not Gun_50 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_51 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_51 then
+    else 
+        Gun_51 = Backpack_51:FindFirstChild("Gun");
+    end;
+    if Gun_51 then 
+        if not Gun_51 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_52 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_52 then
+    else 
+        Gun_52 = Backpack_52:FindFirstChild("Gun");
+    end;
+    if Gun_52 then 
+        if not Gun_52 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_53 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_53 then
+    else 
+        Gun_53 = Backpack_53:FindFirstChild("Gun");
+    end;
+    if Gun_53 then 
+        if not Gun_53 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_54 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_54 then
+    else 
+        Gun_54 = Backpack_54:FindFirstChild("Gun");
+    end;
+    if Gun_54 then 
+        if not Gun_54 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_55 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_55 then
+    else 
+        Gun_55 = Backpack_55:FindFirstChild("Gun");
+    end;
+    if Gun_55 then 
+        if not Gun_55 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_56 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_56 then
+    else 
+        Gun_56 = Backpack_56:FindFirstChild("Gun");
+    end;
+    if Gun_56 then 
+        if not Gun_56 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_57 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_57 then
+    else 
+        Gun_57 = Backpack_57:FindFirstChild("Gun");
+    end;
+    if Gun_57 then 
+        if not Gun_57 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_58 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_58 then
+    else 
+        Gun_58 = Backpack_58:FindFirstChild("Gun");
+    end;
+    if Gun_58 then 
+        if not Gun_58 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_59 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_59 then
+    else 
+        Gun_59 = Backpack_59:FindFirstChild("Gun");
+    end;
+    if Gun_59 then 
+        if not Gun_59 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_60 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_60 then
+    else 
+        Gun_60 = Backpack_60:FindFirstChild("Gun");
+    end;
+    if Gun_60 then 
+        if not Gun_60 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_61 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_61 then
+    else 
+        Gun_61 = Backpack_61:FindFirstChild("Gun");
+    end;
+    if Gun_61 then 
+        if not Gun_61 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_62 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_62 then
+    else 
+        Gun_62 = Backpack_62:FindFirstChild("Gun");
+    end;
+    if Gun_62 then 
+        if not Gun_62 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_63 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_63 then
+    else 
+        Gun_63 = Backpack_63:FindFirstChild("Gun");
+    end;
+    if Gun_63 then 
+        if not Gun_63 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_64 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_64 then
+    else 
+        Gun_64 = Backpack_64:FindFirstChild("Gun");
+    end;
+    if Gun_64 then 
+        if not Gun_64 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_65 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_65 then
+    else 
+        Gun_65 = Backpack_65:FindFirstChild("Gun");
+    end;
+    if Gun_65 then 
+        if not Gun_65 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_66 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_66 then
+    else 
+        Gun_66 = Backpack_66:FindFirstChild("Gun");
+    end;
+    if Gun_66 then 
+        if not Gun_66 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_67 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_67 then
+    else 
+        Gun_67 = Backpack_67:FindFirstChild("Gun");
+    end;
+    if Gun_67 then 
+        if not Gun_67 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_68 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_68 then
+    else 
+        Gun_68 = Backpack_68:FindFirstChild("Gun");
+    end;
+    if Gun_68 then 
+        if not Gun_68 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_69 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_69 then
+    else 
+        Gun_69 = Backpack_69:FindFirstChild("Gun");
+    end;
+    if Gun_69 then 
+        if not Gun_69 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_70 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_70 then
+    else 
+        Gun_70 = Backpack_70:FindFirstChild("Gun");
+    end;
+    if Gun_70 then 
+        if not Gun_70 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_71 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_71 then
+    else 
+        Gun_71 = Backpack_71:FindFirstChild("Gun");
+    end;
+    if Gun_71 then 
+        if not Gun_71 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_72 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_72 then
+    else 
+        Gun_72 = Backpack_72:FindFirstChild("Gun");
+    end;
+    if Gun_72 then 
+        if not Gun_72 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_73 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_73 then
+    else 
+        Gun_73 = Backpack_73:FindFirstChild("Gun");
+    end;
+    if Gun_73 then 
+        if not Gun_73 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_74 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_74 then
+    else 
+        Gun_74 = Backpack_74:FindFirstChild("Gun");
+    end;
+    if Gun_74 then 
+        if not Gun_74 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_75 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_75 then
+    else 
+        Gun_75 = Backpack_75:FindFirstChild("Gun");
+    end;
+    if Gun_75 then 
+        if not Gun_75 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_76 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_76 then
+    else 
+        Gun_76 = Backpack_76:FindFirstChild("Gun");
+    end;
+    if Gun_76 then 
+        if not Gun_76 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_77 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_77 then
+    else 
+        Gun_77 = Backpack_77:FindFirstChild("Gun");
+    end;
+    if Gun_77 then 
+        if not Gun_77 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_78 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_78 then
+    else 
+        Gun_78 = Backpack_78:FindFirstChild("Gun");
+    end;
+    if Gun_78 then 
+        if not Gun_78 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_79 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_79 then
+    else 
+        Gun_79 = Backpack_79:FindFirstChild("Gun");
+    end;
+    if Gun_79 then 
+        if not Gun_79 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_80 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_80 then
+    else 
+        Gun_80 = Backpack_80:FindFirstChild("Gun");
+    end;
+    if Gun_80 then 
+        if not Gun_80 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_81 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_81 then
+    else 
+        Gun_81 = Backpack_81:FindFirstChild("Gun");
+    end;
+    if Gun_81 then 
+        if not Gun_81 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_82 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_82 then
+    else 
+        Gun_82 = Backpack_82:FindFirstChild("Gun");
+    end;
+    if Gun_82 then 
+        if not Gun_82 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_83 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_83 then
+    else 
+        Gun_83 = Backpack_83:FindFirstChild("Gun");
+    end;
+    if Gun_83 then 
+        if not Gun_83 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_84 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_84 then
+    else 
+        Gun_84 = Backpack_84:FindFirstChild("Gun");
+    end;
+    if Gun_84 then 
+        if not Gun_84 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_85 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_85 then
+    else 
+        Gun_85 = Backpack_85:FindFirstChild("Gun");
+    end;
+    if Gun_85 then 
+        if not Gun_85 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_86 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_86 then
+    else 
+        Gun_86 = Backpack_86:FindFirstChild("Gun");
+    end;
+    if Gun_86 then 
+        if not Gun_86 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_87 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_87 then
+    else 
+        Gun_87 = Backpack_87:FindFirstChild("Gun");
+    end;
+    if Gun_87 then 
+        if not Gun_87 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_88 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_88 then
+    else 
+        Gun_88 = Backpack_88:FindFirstChild("Gun");
+    end;
+    if Gun_88 then 
+        if not Gun_88 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_89 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_89 then
+    else 
+        Gun_89 = Backpack_89:FindFirstChild("Gun");
+    end;
+    if Gun_89 then 
+        if not Gun_89 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_90 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_90 then
+    else 
+        Gun_90 = Backpack_90:FindFirstChild("Gun");
+    end;
+    if Gun_90 then 
+        if not Gun_90 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_91 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_91 then
+    else 
+        Gun_91 = Backpack_91:FindFirstChild("Gun");
+    end;
+    if Gun_91 then 
+        if not Gun_91 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_92 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_92 then
+    else 
+        Gun_92 = Backpack_92:FindFirstChild("Gun");
+    end;
+    if Gun_92 then 
+        if not Gun_92 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_93 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_93 then
+    else 
+        Gun_93 = Backpack_93:FindFirstChild("Gun");
+    end;
+    if Gun_93 then 
+        if not Gun_93 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_94 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_94 then
+    else 
+        Gun_94 = Backpack_94:FindFirstChild("Gun");
+    end;
+    if Gun_94 then 
+        if not Gun_94 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_95 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_95 then
+    else 
+        Gun_95 = Backpack_95:FindFirstChild("Gun");
+    end;
+    if Gun_95 then 
+        if not Gun_95 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_96 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_96 then
+    else 
+        Gun_96 = Backpack_96:FindFirstChild("Gun");
+    end;
+    if Gun_96 then 
+        if not Gun_96 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_97 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_97 then
+    else 
+        Gun_97 = Backpack_97:FindFirstChild("Gun");
+    end;
+    if Gun_97 then 
+        if not Gun_97 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_98 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_98 then
+    else 
+        Gun_98 = Backpack_98:FindFirstChild("Gun");
+    end;
+    if Gun_98 then 
+        if not Gun_98 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_99 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_99 then
+    else 
+        Gun_99 = Backpack_99:FindFirstChild("Gun");
+    end;
+    if Gun_99 then 
+        if not Gun_99 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_100 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_100 then
+    else 
+        Gun_100 = Backpack_100:FindFirstChild("Gun");
+    end;
+    if Gun_100 then 
+        if not Gun_100 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    if p1_12 then 
+        Backpack_101 = LocalPlayer:FindFirstChild("Backpack");
+    end;
+    if not Backpack_101 then
+    else 
+        Gun_101 = Backpack_101:FindFirstChild("Gun");
+    end;
+    if Gun_101 then 
+        if not Gun_101 then
+        else 
+            AtkBtn.Text = "SHOOT";
+        end;
+    end;
+    CenterDot.Visible = true;
+    KnifeIcon.Visible = false;
+    task.wait(0.2);
+    AtkBtn.BackgroundColor3 = R24_Result;
+    local _ = p1_12;
+end);
+
+AtkBtn.MouseButton1Click:Connect(function(p1_10, p2_10, p3_10, p4_10, p5_10, a_10, b_10, c_10)
+    if not fenv.dragging then
+    else 
+
+    end;
+end);
+UserInputService.InputBegan:Connect(function(input_6, gameProcessedEvent, p3_11, p4_11, p5_11, p6_11, a_11, b_11, c_11)
+    local _ = gameProcessedEvent;
+    if gameProcessedEvent then 
+
+    end;
+end);
+local Begin = loadstring(
+    game:HttpGet("https:/imgui-rbx/main/main.lua", true)
+)():Begin({
+    ["Height"] = 490,
+    ["Name"] = "UnnamedHub.gg - legit version",
+    ["Width"] = 329
+});
+Begin:Text("Combat (Removed all blatant functions)");
+Begin:Seperator();
+Begin:CheckBox({
+    ["Enabled"] = true,
+    ["Name"] = "Show Attack Button (Mobile)",
+    ["OnChanged"] = function(p1_16, p2_16, a_16, b_16, c_16)
+        AtkBtn.Visible = p1_16;
+    end
+});
+Begin:End();
