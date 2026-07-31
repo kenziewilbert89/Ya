@@ -1,0 +1,2181 @@
+--[[
+    OVERDRIVE H - MM2 COMBAT STANDALONE
+    Semua fitur combat untuk MM2 dalam satu script
+    Menggunakan WindUI Library
+    Langsung aktif tanpa perlu load ulang
+]]
+
+-- ============================================================
+-- LOAD WINDUI
+-- ============================================================
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/wilbertfongkenzie-cmd/ui-libary/refs/heads/main/yuuri.lua.txt"))()
+
+-- ============================================================
+-- VARIABLES & SETUP
+-- ============================================================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local HttpService = game:GetService("HttpService")
+local Camera = workspace.CurrentCamera
+
+-- ============================================================
+-- UTILITY FUNCTIONS
+-- ============================================================
+
+local function GetRoot(plr)
+    if not plr or not plr.Character then return nil end
+    return plr.Character:FindFirstChild("HumanoidRootPart")
+end
+
+local function GetHumanoid(plr)
+    if not plr or not plr.Character then return nil end
+    return plr.Character:FindFirstChildOfClass("Humanoid")
+end
+
+local function IsAlive(plr)
+    local hum = GetHumanoid(plr)
+    return hum and hum.Health > 0
+end
+
+local function Distance(pos1, pos2)
+    return (pos1 - pos2).Magnitude
+end
+
+local function GetAllPlayers()
+    return Players:GetPlayers()
+end
+
+local function GetPlayerByName(name)
+    for _, plr in ipairs(GetAllPlayers()) do
+        if plr.Name:lower():match(name:lower()) then
+            return plr
+        end
+    end
+    return nil
+end
+
+-- ============================================================
+-- GET MURDERER (FIXED)
+-- ============================================================
+
+function GetMurderer()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            -- CEK DI CHARACTER
+            if plr.Character then
+                for _, child in ipairs(plr.Character:GetChildren()) do
+                    if child.Name == "Knife" and child:IsA("Tool") then
+                        return plr
+                    end
+                end
+            end
+            
+            -- CEK DI BACKPACK
+            if plr.Backpack then
+                for _, child in ipairs(plr.Backpack:GetChildren()) do
+                    if child.Name == "Knife" and child:IsA("Tool") then
+                        return plr
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+-- ============================================================
+-- GET SHERIFF (FIXED)
+-- ============================================================
+
+function GetSheriff()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            -- CEK DI CHARACTER
+            if plr.Character then
+                for _, child in ipairs(plr.Character:GetChildren()) do
+                    if child.Name == "Gun" and child:IsA("Tool") then
+                        return plr
+                    end
+                end
+            end
+            
+            -- CEK DI BACKPACK
+            if plr.Backpack then
+                for _, child in ipairs(plr.Backpack:GetChildren()) do
+                    if child.Name == "Gun" and child:IsA("Tool") then
+                        return plr
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+-- ============================================================
+-- IS MURDERER (FIXED)
+-- ============================================================
+
+function IsMurderer()
+    local char = LocalPlayer.Character
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    
+    if char then
+        for _, child in ipairs(char:GetChildren()) do
+            if child.Name == "Knife" and child:IsA("Tool") then
+                return true
+            end
+        end
+    end
+    
+    if bp then
+        for _, child in ipairs(bp:GetChildren()) do
+            if child.Name == "Knife" and child:IsA("Tool") then
+                return true
+            end
+        end
+    end
+    
+    return false
+end
+
+-- ============================================================
+-- IS SHERIFF (FIXED)
+-- ============================================================
+
+function IsSheriff()
+    local char = LocalPlayer.Character
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    
+    if char then
+        for _, child in ipairs(char:GetChildren()) do
+            if child.Name == "Gun" and child:IsA("Tool") then
+                return true
+            end
+        end
+    end
+    
+    if bp then
+        for _, child in ipairs(bp:GetChildren()) do
+            if child.Name == "Gun" and child:IsA("Tool") then
+                return true
+            end
+        end
+    end
+    
+    return false
+end
+
+-- ============================================================
+-- EQUIP KNIFE
+-- ============================================================
+
+function EquipKnife()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return nil end
+    
+    local knife = char:FindFirstChild("Knife")
+    if knife then return knife end
+    
+    if bp then
+        knife = bp:FindFirstChild("Knife")
+        if knife then
+            humanoid:EquipTool(knife)
+            task.wait(0.1)
+            return char:FindFirstChild("Knife")
+        end
+    end
+    
+    return nil
+end
+
+-- ============================================================
+-- GET KNIFE
+-- ============================================================
+
+function GetKnife()
+    local char = LocalPlayer.Character
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    return (char and char:FindFirstChild("Knife")) or (bp and bp:FindFirstChild("Knife"))
+end
+
+-- ============================================================
+-- EQUIP GUN
+-- ============================================================
+
+function EquipGun()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return nil end
+    
+    local gun = char:FindFirstChild("Gun")
+    if gun then return gun end
+    
+    if bp then
+        gun = bp:FindFirstChild("Gun")
+        if gun then
+            humanoid:EquipTool(gun)
+            task.wait(0.1)
+            return char:FindFirstChild("Gun")
+        end
+    end
+    
+    return nil
+end
+
+-- ============================================================
+-- GET GUN
+-- ============================================================
+
+function GetGun()
+    local char = LocalPlayer.Character
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    return (char and char:FindFirstChild("Gun")) or (bp and bp:FindFirstChild("Gun"))
+end
+
+-- ============================================================
+-- GET TARGET BY CLOSEST
+-- ============================================================
+
+function GetTargetByClosest()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    
+    local myRoot = char:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    
+    local closest = nil
+    local closestDist = math.huge
+    
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and IsAlive(plr) then
+            local root = GetRoot(plr)
+            if root then
+                local dist = Distance(myRoot.Position, root.Position)
+                if dist < closestDist then
+                    closestDist = dist
+                    closest = plr
+                end
+            end
+        end
+    end
+    
+    return closest
+end
+
+-- ============================================================
+-- GET TARGET BY MOUSE
+-- ============================================================
+
+function GetTargetByMouse()
+    local mouse = LocalPlayer:GetMouse()
+    if not mouse then return nil end
+    
+    local closest = nil
+    local closestDist = math.huge
+    
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and IsAlive(plr) then
+            local root = GetRoot(plr)
+            if root then
+                local screenPos, onScreen = Camera:WorldToViewportPoint(root.Position)
+                if onScreen then
+                    local mousePos = Vector2.new(mouse.X, mouse.Y)
+                    local screenVec = Vector2.new(screenPos.X, screenPos.Y)
+                    local dist = (mousePos - screenVec).Magnitude
+                    if dist < closestDist then
+                        closestDist = dist
+                        closest = plr
+                    end
+                end
+            end
+        end
+    end
+    
+    return closest
+end
+
+-- ============================================================
+-- GET KNIFE TARGET
+-- ============================================================
+
+function GetKnifeTarget()
+    local mode = getgenv().KnifeTargetMode or "Closest"
+    
+    if mode == "Mouse Cursor" then
+        return GetTargetByMouse()
+    else
+        return GetTargetByClosest()
+    end
+end
+
+-- ============================================================
+-- PREDIKSI POSISI KNIFE
+-- ============================================================
+
+function GetKnifePrediction(target)
+    if not target then return nil end
+    
+    local targetRoot = GetRoot(target)
+    if not targetRoot then return nil end
+    
+    local velocity = targetRoot.AssemblyLinearVelocity
+    local predTime = getgenv().KnifePredictionTime or 0.16
+    local predictedPos = targetRoot.Position + Vector3.new(velocity.X, 0, velocity.Z) * predTime
+    
+    return predictedPos
+end
+
+-- ============================================================
+-- PREDIKSI POSISI GUN
+-- ============================================================
+
+function GetGunPrediction(target)
+    if not target then return nil end
+    
+    local targetRoot = GetRoot(target)
+    if not targetRoot then return nil end
+    
+    local velocity = targetRoot.AssemblyLinearVelocity
+    local predTime = getgenv().GunPredictionTime or 0.125
+    local predictedPos = targetRoot.Position + velocity * predTime
+    
+    return predictedPos
+end
+
+-- ============================================================
+-- KILL PLAYER (DENGAN HandleTouched - THUNDER HUB REMOTE)
+-- ============================================================
+
+function KillPlayer(targetPlr)
+    if not targetPlr or not IsAlive(targetPlr) then return false end
+    
+    local char = LocalPlayer.Character
+    if not char then return false end
+    
+    -- Equip knife
+    local knife = EquipKnife()
+    if not knife then
+        knife = GetKnife()
+    end
+    if not knife then return false end
+    
+    local targetRoot = GetRoot(targetPlr)
+    if not targetRoot then return false end
+    
+    -- Anchor target
+    local myRoot = char:FindFirstChild("HumanoidRootPart")
+    if myRoot then
+        targetRoot.Anchored = true
+        targetRoot.CFrame = myRoot.CFrame * CFrame.new(0, 0, -2)
+    end
+    
+    task.wait(0.05)
+    
+    local killed = false
+    
+    -- METHOD 1: HandleTouched (THUNDER HUB)
+    pcall(function()
+        local knifeEvents = char:FindFirstChild("Knife")
+        if knifeEvents then
+            knifeEvents = knifeEvents:FindFirstChild("Events")
+            if knifeEvents then
+                local handleTouched = knifeEvents:FindFirstChild("HandleTouched")
+                if handleTouched then
+                    handleTouched:FireServer(targetRoot)
+                    killed = true
+                end
+            end
+        end
+    end)
+    
+    -- METHOD 2: KnifeStabbed (BACKUP)
+    if not killed then
+        pcall(function()
+            local knifeEvents = char:FindFirstChild("Knife")
+            if knifeEvents then
+                knifeEvents = knifeEvents:FindFirstChild("Events")
+                if knifeEvents then
+                    local knifeStabbed = knifeEvents:FindFirstChild("KnifeStabbed")
+                    if knifeStabbed then
+                        knifeStabbed:FireServer()
+                        killed = true
+                    end
+                end
+            end
+        end)
+    end
+    
+    -- METHOD 3: firetouchinterest (BACKUP)
+    if not killed and knife and knife:FindFirstChild("Handle") then
+        pcall(function()
+            firetouchinterest(targetRoot, knife.Handle, 1)
+            firetouchinterest(targetRoot, knife.Handle, 0)
+            killed = true
+        end)
+    end
+    
+    -- Unanchor target
+    task.wait(0.05)
+    targetRoot.Anchored = false
+    
+    return killed
+end
+
+-- ============================================================
+-- KILL ALL PLAYERS
+-- ============================================================
+
+function KillAllPlayers()
+    local killed = 0
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and IsAlive(plr) then
+            if KillPlayer(plr) then
+                killed = killed + 1
+            end
+            task.wait(0.05)
+        end
+    end
+    return killed
+end
+
+-- ============================================================
+-- KILL SHERIFF
+-- ============================================================
+
+function KillSheriff()
+    local sheriff = GetSheriff()
+    if sheriff and IsAlive(sheriff) then
+        return KillPlayer(sheriff)
+    end
+    return false
+end
+
+-- ============================================================
+-- SHOOT MURDERER (DENGAN REMOTE YANG BENAR)
+-- ============================================================
+
+function ShootMurderer()
+    -- CEK CHARACTER
+    local char = LocalPlayer.Character
+    if not char then
+        WindUI:Notify({Title = "❌ Error", Content = "Character not found!", Duration = 2})
+        return false
+    end
+    
+    -- CEK GUN
+    local gun = EquipGun()
+    if not gun then
+        gun = GetGun()
+    end
+    
+    if not gun then
+        WindUI:Notify({Title = "❌ No Gun", Content = "Are you Sheriff?", Duration = 3})
+        return false
+    end
+    
+    -- CEK MURDERER
+    local murderer = GetMurderer()
+    if not murderer then
+        WindUI:Notify({Title = "❌ No Target", Content = "No Murderer found!", Duration = 2})
+        return false
+    end
+    
+    if not murderer.Character then
+        WindUI:Notify({Title = "❌ Error", Content = "Murderer has no character!", Duration = 2})
+        return false
+    end
+    
+    local targetRoot = GetRoot(murderer)
+    if not targetRoot then
+        WindUI:Notify({Title = "❌ Error", Content = "Target root not found!", Duration = 2})
+        return false
+    end
+    
+    local myRoot = char:FindFirstChild("HumanoidRootPart")
+    if not myRoot then
+        WindUI:Notify({Title = "❌ Error", Content = "My root not found!", Duration = 2})
+        return false
+    end
+    
+    -- PREDIKSI POSISI
+    local mode = getgenv().SheriffSilentAimMode or "Dynamic"
+    local targetPos = nil
+    
+    if mode == "Overflow (Premium)" then
+        local rootPos = targetRoot.Position
+        local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+        local velocity = targetRoot.AssemblyLinearVelocity
+        targetPos = rootPos + moveDir + (velocity.Magnitude > 0 and velocity.Unit * 2.12565 or Vector3.new(0, 0, 0))
+        
+    elseif mode == "Dynamic" then
+        local rootCF = targetRoot.CFrame
+        local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+        local velocity = targetRoot.AssemblyLinearVelocity
+        local speed = velocity.Magnitude / 15
+        targetPos = (rootCF + moveDir * speed).Position
+        
+    elseif mode == "Velocity" then
+        local velocity = targetRoot.AssemblyLinearVelocity
+        local predTime = getgenv().GunPredictionTime or 0.125
+        targetPos = targetRoot.Position + (velocity * predTime)
+        
+    else  -- Regular
+        local rootCF = targetRoot.CFrame
+        local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+        targetPos = (rootCF + moveDir).Position
+    end
+    
+    -- Ambil attachment untuk CFrame
+    local attachment = myRoot:FindFirstChild("GunRaycastAttachment")
+    local shootCFrame = attachment and attachment.WorldCFrame or myRoot.CFrame
+    
+    -- SHOOT (PAKAI REMOTE YANG BENAR)
+    local success = false
+    
+    pcall(function()
+        -- Method 1: Gun.Shoot
+        if gun:FindFirstChild("Shoot") then
+            gun.Shoot:FireServer(shootCFrame, CFrame.new(targetPos))
+            success = true
+        end
+    end)
+    
+    if not success then
+        pcall(function()
+            -- Method 2: Cari remote di ReplicatedStorage
+            local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+            if remotes then
+                local shootRemote = remotes:FindFirstChild("Extras"):FindFirstChild("ShootGun")
+                if shootRemote then
+                    shootRemote:FireServer(shootCFrame, CFrame.new(targetPos))
+                    success = true
+                end
+            end
+        end)
+    end
+    
+    if not success then
+        pcall(function()
+            -- Method 3: Cari remote langsung
+            local remote = ReplicatedStorage:FindFirstChild("Shoot", true)
+            if remote then
+                remote:FireServer(shootCFrame, CFrame.new(targetPos))
+                success = true
+            end
+        end)
+    end
+    
+    if success then
+        WindUI:Notify({Title = "✅ Shot fired!", Content = "Target: " .. murderer.Name, Duration = 2})
+        return true
+    else
+        WindUI:Notify({Title = "❌ Failed", Content = "Failed to shoot!", Duration = 3})
+        return false
+    end
+end
+
+-- ============================================================
+-- THROW KNIFE (DENGAN REMOTE YANG BENAR)
+-- ============================================================
+
+function ThrowKnife()
+    -- CEK MURDERER
+    if not IsMurderer() then
+        WindUI:Notify({Title = "❌ Not Murderer", Content = "You don't have a knife!", Duration = 2})
+        return false
+    end
+    
+    -- CEK CHARACTER
+    local char = LocalPlayer.Character
+    if not char then
+        WindUI:Notify({Title = "❌ Error", Content = "Character not found!", Duration = 2})
+        return false
+    end
+    
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        WindUI:Notify({Title = "❌ Error", Content = "Humanoid not found!", Duration = 2})
+        return false
+    end
+    
+    -- CEK KNIFE
+    local knife = EquipKnife()
+    if not knife then
+        knife = GetKnife()
+    end
+    
+    if not knife then
+        WindUI:Notify({Title = "❌ No Knife", Content = "You need a knife to throw!", Duration = 2})
+        return false
+    end
+    
+    -- GET TARGET
+    local target = GetKnifeTarget()
+    if not target then
+        WindUI:Notify({Title = "❌ No Target", Content = "No alive players found!", Duration = 3})
+        return false
+    end
+    
+    if not target.Character then
+        WindUI:Notify({Title = "❌ Error", Content = "Target has no character!", Duration = 2})
+        return false
+    end
+    
+    if not IsAlive(target) then
+        WindUI:Notify({Title = "❌ Target Dead", Content = target.Name .. " is already dead!", Duration = 2})
+        return false
+    end
+    
+    -- PREDIKSI POSISI
+    local targetRoot = GetRoot(target)
+    if not targetRoot then
+        WindUI:Notify({Title = "❌ Error", Content = "Target root not found!", Duration = 2})
+        return false
+    end
+    
+    local predictedPos = GetKnifePrediction(target)
+    if not predictedPos then
+        predictedPos = targetRoot.Position
+    end
+    
+    -- THROW KNIFE
+    local success = false
+    
+    -- METHOD 1: KnifeThrown (Events)
+    pcall(function()
+        local knifeEvents = char:FindFirstChild("Knife")
+        if knifeEvents then
+            knifeEvents = knifeEvents:FindFirstChild("Events")
+            if knifeEvents then
+                local knifeThrown = knifeEvents:FindFirstChild("KnifeThrown")
+                if knifeThrown then
+                    local handleCFrame = knife.Handle and knife.Handle.CFrame or CFrame.new()
+                    knifeThrown:FireServer(handleCFrame, CFrame.new(predictedPos))
+                    success = true
+                end
+            end
+        end
+    end)
+    
+    -- METHOD 2: ReplicatedStorage
+    if not success then
+        pcall(function()
+            local remote = ReplicatedStorage:FindFirstChild("KnifeThrown", true)
+            if remote then
+                local handleCFrame = knife.Handle and knife.Handle.CFrame or CFrame.new()
+                remote:FireServer(handleCFrame, CFrame.new(predictedPos))
+                success = true
+            end
+        end)
+    end
+    
+    -- METHOD 3: Throw (Tool)
+    if not success then
+        pcall(function()
+            local knifeEvents = char:FindFirstChild("Knife")
+            if knifeEvents then
+                knifeEvents = knifeEvents:FindFirstChild("Events")
+                if knifeEvents then
+                    local knifeThrow = knifeEvents:FindFirstChild("Throw")
+                    if knifeThrow then                        knifeThrow:FireServer(CFrame.new(predictedPos))
+                        success = true
+                    end
+                end
+            end
+        end)
+    end
+    
+    -- METHOD 4: KnifeStabbed (BACKUP)
+    if not success then
+        pcall(function()
+            local knifeEvents = char:FindFirstChild("Knife")
+            if knifeEvents then
+                knifeEvents = knifeEvents:FindFirstChild("Events")
+                if knifeEvents then
+                    local knifeStabbed = knifeEvents:FindFirstChild("KnifeStabbed")
+                    if knifeStabbed then
+                        knifeStabbed:FireServer()
+                        success = true
+                    end
+                end
+            end
+        end)
+    end
+    
+    if success then
+        WindUI:Notify({Title = "✅ Knife Thrown!", Content = "Target: " .. target.Name, Duration = 2})
+        return true
+    else
+        WindUI:Notify({Title = "❌ Throw Failed", Content = "Failed to throw knife!", Duration = 3})
+        return false
+    end
+end
+
+-- ============================================================
+-- AUTO SHOOT MURDERER
+-- ============================================================
+
+local autoShootRunning = false
+local autoShootConnection = nil
+local autoShootRadius = 14
+local autoShootAngle = 0
+
+function ToggleAutoShoot(state)
+    if state then
+        if autoShootRunning then return end
+        autoShootRunning = true
+        
+        autoShootConnection = RunService.Heartbeat:Connect(function()
+            if not autoShootRunning then return end
+            
+            -- CEK SHERIFF
+            if not IsSheriff() then return end
+            
+            local murderer = GetMurderer()
+            if not murderer or not murderer.Character then return end
+            
+            local targetRoot = GetRoot(murderer)
+            if not targetRoot then return end
+            
+            local char = LocalPlayer.Character
+            if not char then return end
+            
+            local gun = GetGun()
+            if not gun then
+                gun = EquipGun()
+            end
+            if not gun then return end
+            
+            local myRoot = char:FindFirstChild("HumanoidRootPart")
+            if not myRoot then return end
+            
+            -- PREDIKSI
+            local mode = getgenv().SheriffSilentAimMode or "Dynamic"
+            local targetPos = nil
+            
+            if mode == "Overflow (Premium)" then
+                local rootPos = targetRoot.Position
+                local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+                local velocity = targetRoot.AssemblyLinearVelocity
+                targetPos = rootPos + moveDir + (velocity.Magnitude > 0 and velocity.Unit * 2.12565 or Vector3.new(0, 0, 0))
+                
+            elseif mode == "Dynamic" then
+                local rootCF = targetRoot.CFrame
+                local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+                local velocity = targetRoot.AssemblyLinearVelocity
+                local speed = velocity.Magnitude / 15
+                targetPos = (rootCF + moveDir * speed).Position
+                
+            elseif mode == "Velocity" then
+                local velocity = targetRoot.AssemblyLinearVelocity
+                local predTime = getgenv().GunPredictionTime or 0.125
+                targetPos = targetRoot.Position + (velocity * predTime)
+                
+            else
+                local rootCF = targetRoot.CFrame
+                local moveDir = murderer.Character.Humanoid and murderer.Character.Humanoid.MoveDirection or Vector3.new()
+                targetPos = (rootCF + moveDir).Position
+            end
+            
+            if targetPos then
+                local attachment = myRoot:FindFirstChild("GunRaycastAttachment")
+                local shootCFrame = attachment and attachment.WorldCFrame or myRoot.CFrame
+                
+                pcall(function()
+                    if gun:FindFirstChild("Shoot") then
+                        gun.Shoot:FireServer(shootCFrame, CFrame.new(targetPos))
+                    end
+                end)
+            end
+        end)
+        
+        -- CIRCLE MOVEMENT
+        task.spawn(function()
+            while autoShootRunning do
+                if not IsSheriff() then
+                    task.wait(1)
+                else
+                    local char = LocalPlayer.Character
+                    if char then
+                        local murderer = GetMurderer()
+                        if murderer then
+                            local targetRoot = GetRoot(murderer)
+                            if targetRoot then
+                                local x = math.cos(math.rad(autoShootAngle)) * autoShootRadius
+                                local z = math.sin(math.rad(autoShootAngle)) * autoShootRadius
+                                char:SetPrimaryPartCFrame(targetRoot.CFrame * CFrame.new(x, 0, z))
+                                autoShootAngle = (autoShootAngle + 5) % 360
+                                task.wait(0.03)
+                            end
+                        else
+                            task.wait(0.4)
+                        end
+                    end
+                end
+            end
+        end)
+        
+    else
+        if autoShootConnection then
+            autoShootConnection:Disconnect()
+            autoShootConnection = nil
+        end
+        autoShootRunning = false
+    end
+end
+
+function SetAutoShootRadius(value)
+    autoShootRadius = tonumber(value) or 14
+end
+
+-- ============================================================
+-- AUTO KILL EVERYONE (UNTUK MURDERER)
+-- ============================================================
+
+local autoKillAllRunning = false
+local autoKillAllConnection = nil
+
+function ToggleAutoKillAll(state)
+    if state then
+        if autoKillAllRunning then return end
+        autoKillAllRunning = true
+        
+        autoKillAllConnection = RunService.Heartbeat:Connect(function()
+            if not autoKillAllRunning then return end
+            
+            if IsMurderer() then
+                KillAllPlayers()
+            end
+        end)
+        
+    else
+        if autoKillAllConnection then
+            autoKillAllConnection:Disconnect()
+            autoKillAllConnection = nil
+        end
+        autoKillAllRunning = false
+    end
+end
+
+-- ============================================================
+-- AUTO KILL SHERIFF
+-- ============================================================
+
+local autoKillSheriffRunning = false
+local autoKillSheriffConnection = nil
+
+function ToggleAutoKillSheriff(state)
+    if state then
+        if autoKillSheriffRunning then return end
+        autoKillSheriffRunning = true
+        
+        autoKillSheriffConnection = RunService.Heartbeat:Connect(function()
+            if not autoKillSheriffRunning then return end
+            
+            if IsMurderer() then
+                local sheriff = GetSheriff()
+                if sheriff and IsAlive(sheriff) then
+                    KillSheriff()
+                end
+            end
+        end)
+        
+    else
+        if autoKillSheriffConnection then
+            autoKillSheriffConnection:Disconnect()
+            autoKillSheriffConnection = nil
+        end
+        autoKillSheriffRunning = false
+    end
+end
+
+-- ============================================================
+-- KNIFE AURA
+-- ============================================================
+
+local knifeAuraRunning = false
+local knifeAuraConnection = nil
+local knifeAuraRange = 30
+
+function ToggleKnifeAura(state)
+    if state then
+        if knifeAuraRunning then return end
+        knifeAuraRunning = true
+        
+        knifeAuraConnection = RunService.Heartbeat:Connect(function()
+            if not knifeAuraRunning then return end
+            
+            if IsMurderer() then
+                local myRoot = GetRoot(LocalPlayer)
+                if myRoot then
+                    for _, plr in ipairs(Players:GetPlayers()) do
+                        if plr ~= LocalPlayer and IsAlive(plr) then
+                            local root = GetRoot(plr)
+                            if root and Distance(myRoot.Position, root.Position) <= knifeAuraRange then
+                                KillPlayer(plr)
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        
+    else
+        if knifeAuraConnection then
+            knifeAuraConnection:Disconnect()
+            knifeAuraConnection = nil
+        end
+        knifeAuraRunning = false
+    end
+end
+
+function SetKnifeAuraRange(value)
+    knifeAuraRange = tonumber(value) or 30
+end
+
+-- ============================================================
+-- THROWING KNIFE AURA
+-- ============================================================
+
+local throwingKnifeAuraRunning = false
+local throwingKnifeAuraConnection = nil
+local throwingKnifeRange = 8
+
+function ToggleThrowingKnifeAura(state)
+    if state then
+        if throwingKnifeAuraRunning then return end
+        throwingKnifeAuraRunning = true
+        
+        throwingKnifeAuraConnection = RunService.Heartbeat:Connect(function()
+            if not throwingKnifeAuraRunning then return end
+            
+            if IsMurderer() then
+                for _, knifeModel in ipairs(Workspace:GetChildren()) do
+                    if knifeModel:IsA("Model") and knifeModel.Name == "ThrowingKnife" then
+                        local bladePos = knifeModel:FindFirstChild("BladePosition")
+                        if bladePos then
+                            for _, plr in ipairs(Players:GetPlayers()) do
+                                if plr ~= LocalPlayer and IsAlive(plr) then
+                                    local root = GetRoot(plr)
+                                    if root and Distance(bladePos.Position, root.Position) <= throwingKnifeRange then
+                                        pcall(function()
+                                            local char = LocalPlayer.Character
+                                            if char and char.Knife and char.Knife.Events and char.Knife.Events.KnifeStabbed then
+                                                char.Knife.Events.KnifeStabbed:FireServer()
+                                            end
+                                        end)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        
+    else
+        if throwingKnifeAuraConnection then
+            throwingKnifeAuraConnection:Disconnect()
+            throwingKnifeAuraConnection = nil
+        end
+        throwingKnifeAuraRunning = false
+    end
+end
+
+function SetThrowingKnifeRange(value)
+    throwingKnifeRange = tonumber(value) or 8
+end
+
+-- ============================================================
+-- STAB REACH
+-- ============================================================
+
+local stabReachRunning = false
+local stabReachConnection = nil
+local stabDistance = 35
+
+function ToggleStabReach(state)
+    if state then
+        if stabReachRunning then return end
+        stabReachRunning = true
+        
+        stabReachConnection = RunService.Heartbeat:Connect(function()
+            if not stabReachRunning then return end
+            
+            if IsMurderer() then
+                local myRoot = GetRoot(LocalPlayer)
+                if myRoot then
+                    local knife = GetKnife()
+                    if knife and knife:FindFirstChild("Handle") then
+                        for _, plr in ipairs(Players:GetPlayers()) do
+                            if plr ~= LocalPlayer and IsAlive(plr) then
+                                local root = GetRoot(plr)
+                                if root and Distance(myRoot.Position, root.Position) <= stabDistance then
+                                    pcall(function()
+                                        firetouchinterest(root, knife.Handle, 1)
+                                        firetouchinterest(root, knife.Handle, 0)
+                                    end)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        
+    else
+        if stabReachConnection then
+            stabReachConnection:Disconnect()
+            stabReachConnection = nil
+        end
+        stabReachRunning = false
+    end
+end
+
+function SetStabDistance(value)
+    stabDistance = tonumber(value) or 35
+end
+
+-- ============================================================
+-- SPEED GLITCH
+-- ============================================================
+
+local speedGlitchRunning = false
+local speedGlitchIntensity = 35
+
+function ToggleSpeedGlitch(state)
+    if state then
+        if speedGlitchRunning then return end
+        speedGlitchRunning = true
+        
+        UserInputService.JumpRequest:Connect(function()
+            if not speedGlitchRunning then return end
+            
+            local char = LocalPlayer.Character
+            if not char then return end
+            
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if not humanoid then return end
+            
+            local origSpeed = humanoid.WalkSpeed
+            humanoid.WalkSpeed = speedGlitchIntensity
+            
+            local state = humanoid:GetState()
+            local waitTime = 0
+            
+            while state == Enum.HumanoidStateType.Landed or 
+                  state == Enum.HumanoidStateType.Freefall or 
+                  state == Enum.HumanoidStateType.Jumping do
+                task.wait()
+                state = humanoid:GetState()
+                waitTime = waitTime + 1
+                
+                if waitTime > 50 then
+                    break
+                end
+            end
+            
+            humanoid.WalkSpeed = origSpeed
+        end)
+        
+    else
+        speedGlitchRunning = false
+    end
+end
+
+function SetSpeedGlitchIntensity(value)
+    speedGlitchIntensity = tonumber(value) or 35
+end
+
+-- ============================================================
+-- FAKE KNIFE
+-- ============================================================
+
+local fakeKnifeTool = nil
+
+function CreateFakeKnife()
+    if fakeKnifeTool then
+        WindUI:Notify({Title = "Fake Knife", Content = "Already equipped!", Duration = 2})
+        return
+    end
+    
+    local char = LocalPlayer.Character
+    if not char then
+        WindUI:Notify({Title = "Error", Content = "Character not found!", Duration = 2})
+        return
+    end
+    
+    -- Cari KnifeDisplay
+    local knifeDisplay = nil
+    for _, child in ipairs(char:GetChildren()) do
+        if child.Name == "KnifeDisplay" then
+            knifeDisplay = child
+            break
+        end
+    end
+    
+    if not knifeDisplay then
+        local playerChar = Workspace:FindFirstChild(LocalPlayer.Name)
+        if playerChar then
+            for _, child in ipairs(playerChar:GetChildren()) do
+                if child.Name == "KnifeDisplay" then
+                    knifeDisplay = child
+                    break
+                end
+            end
+        end
+    end
+    
+    if not knifeDisplay then
+        WindUI:Notify({Title = "Error", Content = "KnifeDisplay not found!", Duration = 2})
+        return
+    end
+    
+    -- Buat Tool
+    local tool = Instance.new("Tool")
+    tool.Name = "Fake Knife"
+    tool.RequiresHandle = true
+    tool.CanBeDropped = false
+    tool.GripPos = Vector3.new(0, -1.15, 0)
+    
+    -- Handle
+    local handle = Instance.new("Part")
+    handle.Name = "Handle"
+    handle.Size = knifeDisplay.Size or Vector3.new(0.3, 3.4, 1.1)
+    handle.CanCollide = false
+    handle.Anchored = false
+    handle.Parent = tool
+    
+    -- Clone mesh
+    local mesh = knifeDisplay:FindFirstChild("Mesh")
+    if mesh then
+        local newMesh = mesh:Clone()
+        newMesh.Parent = handle
+    end
+    
+    -- Animasi
+    local anim1 = Instance.new("Animation")
+    anim1.AnimationId = "rbxassetid://2467567750"
+    local anim2 = Instance.new("Animation")
+    anim2.AnimationId = "rbxassetid://1957890538"
+    local anims = {anim1, anim2}
+    
+    local isStabbing = false
+    tool.Activated:Connect(function()
+        if not isStabbing then
+            isStabbing = true
+            local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                local animTrack = humanoid:LoadAnimation(anims[math.random(1, 2)])
+                animTrack:Play()
+                task.wait(1)
+                isStabbing = false
+            else
+                isStabbing = false
+            end
+        end
+    end)
+    
+    tool.Parent = LocalPlayer.Backpack
+    fakeKnifeTool = tool
+    WindUI:Notify({Title = "Fake Knife", Content = "Equipped!", Duration = 2})
+end
+
+function DestroyFakeKnife()
+    if fakeKnifeTool then
+        fakeKnifeTool:Destroy()
+        fakeKnifeTool = nil
+        WindUI:Notify({Title = "Fake Knife", Content = "Removed!", Duration = 2})
+    end
+end
+
+-- ============================================================
+-- GRAB GUN (ANTI FLING)
+-- ============================================================
+
+local grabLock = false
+
+function GrabGun()
+    if grabLock then 
+        WindUI:Notify({Title = "Grab Gun", Content = "Please wait...", Duration = 2})
+        return false
+    end
+    
+    grabLock = true
+    
+    -- CEK MURDERER
+    if IsMurderer() then
+        WindUI:Notify({Title = "Grab Gun", Content = "You are the Murderer!", Duration = 2})
+        grabLock = false
+        return false
+    end
+    
+    -- CARI GUNDROP
+    local GunDrop = nil
+    for _, Descendant in ipairs(Workspace:GetDescendants()) do
+        if Descendant.Name == "GunDrop" and Descendant:IsA("BasePart") then
+            GunDrop = Descendant
+            break
+        end
+    end
+    
+    if not GunDrop then
+        WindUI:Notify({Title = "Grab Gun", Content = "No gun drop found!", Duration = 2})
+        grabLock = false
+        return false
+    end
+    
+    local char = LocalPlayer.Character
+    if not char then
+        grabLock = false
+        return false
+    end
+    
+    local RootPart = char:FindFirstChild("HumanoidRootPart")
+    if not RootPart then
+        grabLock = false
+        return false
+    end
+    
+    -- ANTI FLING
+    local OriginalPos = RootPart.Position
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    
+    if humanoid then
+        humanoid.PlatformStand = true
+    end
+    
+    RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+    RootPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+    RootPart.CFrame = GunDrop.CFrame + Vector3.new(0, 2, 0)
+    
+    task.wait(0.15)
+    
+    RootPart.CFrame = CFrame.new(OriginalPos.X, OriginalPos.Y + 5, OriginalPos.Z)
+    RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+    
+    task.wait(0.05)
+    
+    if humanoid then
+        humanoid.PlatformStand = false
+    end
+    
+    WindUI:Notify({Title = "Grab Gun", Content = "Gun acquired!", Duration = 2})
+    grabLock = false
+    return true
+end
+
+-- ============================================================
+-- BREAK GUN (FUNGSI)
+-- ============================================================
+
+function BreakGun()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character then
+            local gun = plr.Character:FindFirstChild("Gun")
+            if gun then
+                local knifeServer = gun:FindFirstChild("KnifeServer")
+                if knifeServer then
+                    local shootGun = knifeServer:FindFirstChild("ShootGun")
+                    if shootGun then
+                        pcall(function()
+                            shootGun:InvokeServer(0, {}, "AH2")
+                            WindUI:Notify({Title = "Break Gun", Content = "Gun broken!", Duration = 2})
+                            return true
+                        end)
+                    end
+                end
+            end
+        end
+    end
+    
+    WindUI:Notify({Title = "Break Gun", Content = "No gun to break!", Duration = 2})
+    return false
+end
+
+-- ============================================================
+-- STEAL GUN
+-- ============================================================
+
+function StealGun()
+    -- Cari sheriff
+    local sheriff = nil
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character then
+            local gun = plr.Character:FindFirstChild("Gun")
+            if gun then
+                sheriff = plr
+                break
+            end
+        end
+    end
+    
+    if not sheriff then
+        WindUI:Notify({Title = "Steal Gun", Content = "No Sheriff found!", Duration = 2})
+        return false
+    end
+    
+    -- Fling sheriff (anti fling method)
+    local targetRoot = GetRoot(sheriff)
+    local myRoot = GetRoot(LocalPlayer)
+    
+    if targetRoot and myRoot then
+        local direction = (targetRoot.Position - myRoot.Position).Unit
+        targetRoot.AssemblyLinearVelocity = direction * 99999
+        targetRoot.AssemblyAngularVelocity = Vector3.new(0, 9999, 0)
+        
+        task.wait(1)
+        
+        -- Grab gun
+        return GrabGun()
+    end
+    
+    return false
+end
+
+-- ============================================================
+-- NOTIFY ROLE FUNCTIONS
+-- ============================================================
+
+local function SendChatMessage(Message)
+    local TextChatService = game:GetService("TextChatService")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    
+    if TextChatService and TextChatService:FindFirstChild("ChatInputBarConfiguration") then
+        local TextChannels = TextChatService:FindFirstChild("TextChannels")
+        if TextChannels and TextChannels:FindFirstChild("RBXGeneral") then
+            TextChannels.RBXGeneral:SendAsync(Message)
+            return true
+        end
+    end
+    
+    local ChatEvents = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if ChatEvents then
+        ChatEvents.SayMessageRequest:FireServer(Message, "All")
+        return true
+    end
+    
+    return false
+end
+
+function ExposeRole(WeaponName, RoleName)
+    for _, Player in ipairs(Players:GetPlayers()) do
+        local Character, Backpack = Player.Character, Player.Backpack
+        if (Character and Character:FindFirstChild(WeaponName)) or (Backpack and Backpack:FindFirstChild(WeaponName)) then
+            SendChatMessage(RoleName .. ": " .. Player.Name)
+            return true
+        end
+    end
+    return false
+end
+
+function NotifyRole(WeaponName, RoleName, Icon)
+    for _, Player in ipairs(Players:GetPlayers()) do
+        local Character, Backpack = Player.Character, Player.Backpack
+        if (Character and Character:FindFirstChild(WeaponName)) or (Backpack and Backpack:FindFirstChild(WeaponName)) then
+            WindUI:Notify({
+                Title = "ESP",
+                Content = RoleName .. ": " .. Player.Name,
+                Duration = 5,
+                Icon = Icon or "skull"
+            })
+            return true
+        end
+    end
+    return false
+end
+
+-- ============================================================
+-- CREATE WINDUI
+-- ============================================================
+
+local Window = WindUI:CreateWindow({
+    Title = "MM2 Combat",
+    Author = "Overdrive H",
+    Size = UDim2.fromOffset(550, 450),
+    SideBarWidth = 180
+})
+
+-- ============================================================
+-- TAB: COMBAT (MURDERER)
+-- ============================================================
+
+local CombatTab = Window:Tab({
+    Title = "Murderer",
+    Icon = "swords"
+})
+
+CombatTab:Section({
+    Title = "General",
+    Icon = "settings"
+})
+
+-- Target Mode
+CombatTab:Dropdown({
+    Title = "Target Mode",
+    Desc = "Method to select target",
+    Values = {"Closest", "Mouse Cursor"},
+    Value = "Closest",
+    Callback = function(value)
+        getgenv().KnifeTargetMode = value
+    end
+})
+
+-- Knife Prediction Time
+CombatTab:Slider({
+    Title = "Prediction Time",
+    Desc = "Knife prediction time",
+    Value = {
+        Min = 0.05,
+        Max = 0.5,
+        Default = 0.16
+    },
+    Callback = function(value)
+        getgenv().KnifePredictionTime = value
+    end
+})
+
+CombatTab:Divider()
+
+-- Throw Knife Button
+CombatTab:Button({
+    Title = "Throw Knife",
+    Desc = "Throw knife at target",
+    Icon = "target",
+    Callback = ThrowKnife
+})
+
+-- Throw Knife Keybind
+CombatTab:Keybind({
+    Title = "Throw Keybind",
+    Desc = "Press key to throw knife",
+    Value = "R",
+    Callback = ThrowKnife
+})
+
+CombatTab:Divider()
+
+-- Kill Everyone Button
+CombatTab:Button({
+    Title = "Kill Everyone",
+    Desc = "Kill all alive players instantly",
+    Icon = "skull",
+    Callback = function()
+        if not IsMurderer() then
+            WindUI:Notify({Title = "Error", Content = "You're not the Murderer!", Duration = 2})
+            return
+        end
+        
+        local killed = KillAllPlayers()
+        WindUI:Notify({
+            Title = "Kill Everyone",
+            Content = "Killed " .. killed .. " players!",
+            Duration = 3
+        })
+    end
+})
+
+-- Kill Everyone Keybind
+CombatTab:Keybind({
+    Title = "Kill All Keybind",
+    Desc = "Press key to kill everyone",
+    Value = "B",
+    Callback = function()
+        if not IsMurderer() then
+            WindUI:Notify({Title = "Error", Content = "You're not the Murderer!", Duration = 2})
+            return
+        end
+        
+        local killed = KillAllPlayers()
+        WindUI:Notify({
+            Title = "Kill Everyone",
+            Content = "Killed " .. killed .. " players!",
+            Duration = 3
+        })
+    end
+})
+
+CombatTab:Divider()
+
+-- Kill Sheriff Button
+CombatTab:Button({
+    Title = "Kill Sheriff",
+    Desc = "Kill the Sheriff instantly",
+    Icon = "badge",
+    Callback = function()
+        if not IsMurderer() then
+            WindUI:Notify({Title = "Error", Content = "You're not the Murderer!", Duration = 2})
+            return
+        end
+        
+        if KillSheriff() then
+            WindUI:Notify({Title = "Kill Sheriff", Content = "Sheriff killed!", Duration = 2})
+        else
+            WindUI:Notify({Title = "Kill Sheriff", Content = "Sheriff not found or already dead!", Duration = 2})
+        end
+    end
+})
+
+CombatTab:Divider()
+
+-- Player Dropdown - Kill Player
+local function GetPlayerNames()
+    local names = {"Select Player"}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            table.insert(names, plr.Name)
+        end
+    end
+    return names
+end
+
+CombatTab:Dropdown({
+    Title = "Kill Player",
+    Desc = "Select a player to kill instantly",
+    Values = GetPlayerNames(),
+    Value = "Select Player",
+    Callback = function(value)
+        if value == "Select Player" then return end
+        if not IsMurderer() then
+            WindUI:Notify({Title = "Error", Content = "You're not the Murderer!", Duration = 2})
+            return
+        end
+        
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr.Name == value and IsAlive(plr) then
+                if KillPlayer(plr) then
+                    WindUI:Notify({Title = "Kill Player", Content = value .. " killed!", Duration = 2})
+                else
+                    WindUI:Notify({Title = "Kill Player", Content = "Failed to kill " .. value, Duration = 2})
+                end
+                return
+            end
+        end
+        WindUI:Notify({Title = "Kill Player", Content = value .. " not found or already dead!", Duration = 2})
+    end
+})
+
+CombatTab:Section({
+    Title = "Auto Features",
+    Icon = "play"
+})
+
+-- Auto Kill Everyone
+CombatTab:Toggle({
+    Title = "Auto Kill Everyone",
+    Desc = "Auto kill all alive players",
+    Value = false,
+    Callback = ToggleAutoKillAll
+})
+
+-- Auto Kill Sheriff
+CombatTab:Toggle({
+    Title = "Auto Kill Sheriff",
+    Desc = "Auto kill sheriff when found",
+    Value = false,
+    Callback = ToggleAutoKillSheriff
+})
+
+CombatTab:Divider()
+
+-- Knife Aura
+CombatTab:Toggle({
+    Title = "Knife Aura",
+    Desc = "Auto stab nearby players",
+    Value = false,
+    Callback = ToggleKnifeAura
+})
+
+-- Knife Range
+CombatTab:Slider({
+    Title = "Knife Range",
+    Desc = "Max distance for knife aura",
+    Value = {
+        Min = 1,
+        Max = 999,
+        Default = 30
+    },
+    Callback = SetKnifeAuraRange
+})
+
+CombatTab:Divider()
+
+-- Throwing Knife Aura
+CombatTab:Toggle({
+    Title = "Throwing Knife Aura",
+    Desc = "Auto kill from thrown knives",
+    Value = false,
+    Callback = ToggleThrowingKnifeAura
+})
+
+-- Throwing Knife Range
+CombatTab:Slider({
+    Title = "Throwing Knife Range",
+    Desc = "Max distance for throwing knife aura",
+    Value = {
+        Min = 1,
+        Max = 999,
+        Default = 8
+    },
+    Callback = SetThrowingKnifeRange
+})
+
+CombatTab:Divider()
+
+-- Stab Reach
+CombatTab:Toggle({
+    Title = "Stab Reach",
+    Desc = "Extended stab range",
+    Value = false,
+    Callback = ToggleStabReach
+})
+
+-- Stab Distance
+CombatTab:Slider({
+    Title = "Stab Distance",
+    Desc = "Max distance for stab reach",
+    Value = {
+        Min = 1,
+        Max = 999,
+        Default = 35
+    },
+    Callback = SetStabDistance
+})
+
+CombatTab:Divider()
+
+-- Speed Glitch
+CombatTab:Toggle({
+    Title = "Speed Glitch",
+    Desc = "Speed glitch on jump",
+    Value = false,
+    Callback = ToggleSpeedGlitch
+})
+
+-- Speed Glitch Intensity
+CombatTab:Slider({
+    Title = "Speed Glitch Intensity",
+    Desc = "Speed boost amount",
+    Value = {
+        Min = 1,
+        Max = 120,
+        Default = 35
+    },
+    Callback = SetSpeedGlitchIntensity
+})
+
+CombatTab:Section({
+    Title = "Fake Knife",
+    Icon = "knife"
+})
+
+CombatTab:Button({
+    Title = "Create Fake Knife",
+    Desc = "Create visual fake knife",
+    Icon = "plus",
+    Callback = CreateFakeKnife
+})
+
+CombatTab:Button({
+    Title = "Remove Fake Knife",
+    Desc = "Remove fake knife",
+    Icon = "trash",
+    Callback = DestroyFakeKnife
+})
+
+-- ============================================================
+-- TAB: COMBAT (SHERIFF)
+-- ============================================================
+
+local SheriffTab = Window:Tab({
+    Title = "Sheriff",
+    Icon = "gun"
+})
+
+SheriffTab:Section({
+    Title = "Gun Settings",
+    Icon = "settings"
+})
+
+-- Silent Aim Mode
+SheriffTab:Dropdown({
+    Title = "Silent Aim Mode",
+    Desc = "Prediction mode for gun",
+    Values = {"Dynamic", "Overflow (Premium)", "Velocity", "Regular"},
+    Value = "Dynamic",
+    Callback = function(value)
+        getgenv().SheriffSilentAimMode = value
+    end
+})
+
+-- Gun Prediction Time
+SheriffTab:Slider({
+    Title = "Prediction Time",
+    Desc = "Gun prediction time",
+    Value = {
+        Min = 0.05,
+        Max = 0.5,
+        Default = 0.125
+    },
+    Callback = function(value)
+        getgenv().GunPredictionTime = value
+    end
+})
+
+SheriffTab:Divider()
+
+-- Shoot Murderer Button
+SheriffTab:Button({
+    Title = "Shoot Murderer",
+    Desc = "Shoot at murderer",
+    Icon = "target",
+    Callback = ShootMurderer
+})
+
+-- Shoot Keybind
+SheriffTab:Keybind({
+    Title = "Shoot Keybind",
+    Desc = "Press key to shoot",
+    Value = "Q",
+    Callback = ShootMurderer
+})
+
+SheriffTab:Divider()
+
+-- Auto Shoot
+SheriffTab:Toggle({
+    Title = "Auto Shoot",
+    Desc = "Auto shoot with circle movement",
+    Value = false,
+    Callback = ToggleAutoShoot
+})
+
+-- Auto Shoot Radius
+SheriffTab:Slider({
+    Title = "Auto Shoot Radius",
+    Desc = "Circle radius for auto shoot",
+    Value = {
+        Min = 5,
+        Max = 16,
+        Default = 14
+    },
+    Callback = SetAutoShootRadius
+})
+
+SheriffTab:Section({
+    Title = "Gun Utilities",
+    Icon = "tools"
+})
+
+-- Grab Gun
+SheriffTab:Button({
+    Title = "Grab Gun",
+    Desc = "Grab dropped gun",
+    Icon = "hand",
+    Callback = GrabGun
+})
+
+SheriffTab:Keybind({
+    Title = "Grab Gun Keybind",
+    Desc = "Press key to grab gun",
+    Value = "G",
+    Callback = GrabGun
+})
+
+SheriffTab:Divider()
+
+-- Break Gun
+SheriffTab:Button({
+    Title = "Break Gun",
+    Desc = "Break Sheriff's gun",
+    Icon = "wrench",
+    Callback = BreakGun
+})
+
+-- Steal Gun
+SheriffTab:Button({
+    Title = "Steal Gun",
+    Desc = "Steal gun from Sheriff",
+    Icon = "lock",
+    Callback = StealGun
+})
+
+-- ============================================================
+-- TAB: ESP
+-- ============================================================
+
+local ESPTab = Window:Tab({
+    Title = "ESP",
+    Icon = "eye"
+})
+
+ESPTab:Section({
+    Title = "Expose Roles",
+    Icon = "badge-info"
+})
+
+-- Expose Murderer
+ESPTab:Button({
+    Title = "Expose Murderer",
+    Desc = "Expose murderer in chat",
+    Icon = "skull",
+    Callback = function()
+        if ExposeRole("Knife", "Murderer") then
+            WindUI:Notify({Title = "Expose", Content = "Murderer exposed in chat!", Duration = 2})
+        else
+            WindUI:Notify({Title = "Expose", Content = "Murderer not found!", Duration = 2})
+        end
+    end
+})
+
+-- Expose Sheriff
+ESPTab:Button({
+    Title = "Expose Sheriff",
+    Desc = "Expose sheriff in chat",
+    Icon = "badge",
+    Callback = function()
+        if ExposeRole("Gun", "Sheriff") then
+            WindUI:Notify({Title = "Expose", Content = "Sheriff exposed in chat!", Duration = 2})
+        else
+            WindUI:Notify({Title = "Expose", Content = "Sheriff not found!", Duration = 2})
+        end
+    end
+})
+
+ESPTab:Divider()
+
+-- Notify Murderer
+ESPTab:Button({
+    Title = "Notify Murderer",
+    Desc = "Notify murderer found",
+    Icon = "bell",
+    Callback = function()
+        if NotifyRole("Knife", "Murderer", "skull") then
+            return
+        end
+        WindUI:Notify({Title = "ESP", Content = "Murderer not found!", Duration = 2})
+    end
+})
+
+-- Notify Sheriff
+ESPTab:Button({
+    Title = "Notify Sheriff",
+    Desc = "Notify sheriff found",
+    Icon = "bell",
+    Callback = function()
+        if NotifyRole("Gun", "Sheriff", "badge") then
+            return
+        end
+        WindUI:Notify({Title = "ESP", Content = "Sheriff not found!", Duration = 2})
+    end
+})
+
+ESPTab:Section({
+    Title = "Auto Expose",
+    Icon = "play"
+})
+
+-- Auto Expose Murderer
+local autoExposeMurderer = false
+local autoExposeMurdererConn = nil
+
+ESPTab:Toggle({
+    Title = "Auto Expose Murderer",
+    Desc = "Auto expose murderer when found",
+    Value = false,
+    Callback = function(state)
+        autoExposeMurderer = state
+        
+        if autoExposeMurdererConn then
+            autoExposeMurdererConn:Disconnect()
+            autoExposeMurdererConn = nil
+        end
+        
+        if state then
+            autoExposeMurdererConn = RunService.Heartbeat:Connect(function()
+                if ExposeRole("Knife", "Murderer") then
+                    WindUI:Notify({Title = "Expose", Content = "Murderer exposed in chat!", Duration = 2})
+                    if autoExposeMurdererConn then
+                        autoExposeMurdererConn:Disconnect()
+                        autoExposeMurdererConn = nil
+                    end
+                end
+            end)
+        end
+    end
+})
+
+-- Auto Expose Sheriff
+local autoExposeSheriff = false
+local autoExposeSheriffConn = nil
+
+ESPTab:Toggle({
+    Title = "Auto Expose Sheriff",
+    Desc = "Auto expose sheriff when found",
+    Value = false,
+    Callback = function(state)
+        autoExposeSheriff = state
+        
+        if autoExposeSheriffConn then
+            autoExposeSheriffConn:Disconnect()
+            autoExposeSheriffConn = nil
+        end
+        
+        if state then
+            autoExposeSheriffConn = RunService.Heartbeat:Connect(function()
+                if ExposeRole("Gun", "Sheriff") then
+                    WindUI:Notify({Title = "Expose", Content = "Sheriff exposed in chat!", Duration = 2})
+                    if autoExposeSheriffConn then
+                        autoExposeSheriffConn:Disconnect()
+                        autoExposeSheriffConn = nil
+                    end
+                end
+            end)
+        end
+    end
+})
+
+-- ============================================================
+-- TAB: TELEPORT
+-- ============================================================
+
+local TeleportTab = Window:Tab({
+    Title = "Teleport",
+    Icon = "globe"
+})
+
+TeleportTab:Section({
+    Title = "Teleport Locations"
+})
+
+-- Teleport to Murderer
+TeleportTab:Button({
+    Title = "Teleport to Murderer",
+    Desc = "Teleport to murderer location",
+    Icon = "skull",
+    Callback = function()
+        local murderer = GetMurderer()
+        if murderer and murderer.Character then
+            local root = GetRoot(murderer)
+            if root then
+                local myRoot = GetRoot(LocalPlayer)
+                if myRoot then
+                    myRoot.CFrame = root.CFrame * CFrame.new(0, 3, 0)
+                    WindUI:Notify({Title = "Teleport", Content = "Teleported to Murderer!", Duration = 2})
+                    return
+                end
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = "Murderer not found!", Duration = 2})
+    end
+})
+
+-- Teleport to Sheriff
+TeleportTab:Button({
+    Title = "Teleport to Sheriff",
+    Desc = "Teleport to sheriff location",
+    Icon = "badge",
+    Callback = function()
+        local sheriff = GetSheriff()
+        if sheriff and sheriff.Character then
+            local root = GetRoot(sheriff)
+            if root then
+                local myRoot = GetRoot(LocalPlayer)
+                if myRoot then
+                    myRoot.CFrame = root.CFrame * CFrame.new(0, 3, 0)
+                    WindUI:Notify({Title = "Teleport", Content = "Teleported to Sheriff!", Duration = 2})
+                    return
+                end
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = "Sheriff not found!", Duration = 2})
+    end
+})
+
+TeleportTab:Divider()
+
+-- Teleport to Map
+TeleportTab:Button({
+    Title = "Teleport to Map",
+    Desc = "Teleport to map spawn",
+    Icon = "map",
+    Callback = function()
+        local map = nil
+        for _, child in ipairs(Workspace:GetChildren()) do
+            if child:FindFirstChild("CoinContainer") and child:FindFirstChild("Spawns") then
+                map = child
+                break
+            end
+        end
+        
+        if map then
+            local spawns = map:FindFirstChild("Spawns")
+            if spawns then
+                local children = spawns:GetChildren()
+                if #children > 0 then
+                    local spawn = children[math.random(1, #children)]
+                    local myRoot = GetRoot(LocalPlayer)
+                    if myRoot then
+                        myRoot.CFrame = CFrame.new(spawn.Position) * CFrame.new(0, 3, 0)
+                        WindUI:Notify({Title = "Teleport", Content = "Teleported to map!", Duration = 2})
+                        return
+                    end
+                end
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = "Map not found!", Duration = 2})
+    end
+})
+
+-- Teleport to Lobby
+TeleportTab:Button({
+    Title = "Teleport to Lobby",
+    Desc = "Teleport to lobby",
+    Icon = "home",
+    Callback = function()
+        local lobby = Workspace:FindFirstChild("Lobby")
+        if lobby then
+            local spawns = lobby:FindFirstChild("Spawns")
+            if spawns then
+                local children = spawns:GetChildren()
+                if #children > 0 then
+                    local spawn = children[math.random(1, #children)]
+                    local myRoot = GetRoot(LocalPlayer)
+                    if myRoot then
+                        myRoot.CFrame = CFrame.new(spawn.Position) * CFrame.new(0, 3, 0)
+                        WindUI:Notify({Title = "Teleport", Content = "Teleported to Lobby!", Duration = 2})
+                        return
+                    end
+                end
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = "Lobby not found!", Duration = 2})
+    end
+})
+
+-- Teleport to GunDrop
+TeleportTab:Button({
+    Title = "Teleport to GunDrop",
+    Desc = "Teleport to gun drop",
+    Icon = "gun",
+    Callback = function()
+        local gunDrop = nil
+        for _, child in ipairs(Workspace:GetDescendants()) do
+            if child.Name == "GunDrop" and child:IsA("BasePart") then
+                gunDrop = child
+                break
+            end
+        end
+        
+        if gunDrop then
+            local myRoot = GetRoot(LocalPlayer)
+            if myRoot then
+                myRoot.CFrame = gunDrop.CFrame * CFrame.new(0, 2, 0)
+                WindUI:Notify({Title = "Teleport", Content = "Teleported to GunDrop!", Duration = 2})
+                return
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = "GunDrop not found!", Duration = 2})
+    end
+})
+
+TeleportTab:Divider()
+
+-- Teleport to Player
+local function GetPlayerList()
+    local names = {"Select Player"}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            table.insert(names, plr.Name)
+        end
+    end
+    return names
+end
+
+TeleportTab:Dropdown({
+    Title = "Teleport to Player",
+    Desc = "Select a player to teleport to",
+    Values = GetPlayerList(),
+    Value = "Select Player",
+    Callback = function(value)
+        if value == "Select Player" then return end
+        
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr.Name == value and plr.Character then
+                local root = GetRoot(plr)
+                if root then
+                    local myRoot = GetRoot(LocalPlayer)
+                    if myRoot then
+                        myRoot.CFrame = root.CFrame * CFrame.new(0, 3, 0)
+                        WindUI:Notify({Title = "Teleport", Content = "Teleported to " .. value .. "!", Duration = 2})
+                        return
+                    end
+                end
+            end
+        end
+        WindUI:Notify({Title = "Teleport", Content = value .. " not found!", Duration = 2})
+    end
+})
+
+-- ============================================================
+-- INISIALISASI DEFAULT
+-- ============================================================
+
+-- Set default values
+getgenv().KnifeTargetMode = "Closest"
+getgenv().KnifePredictionTime = 0.16
+getgenv().SheriffSilentAimMode = "Dynamic"
+getgenv().GunPredictionTime = 0.125
+
+print("[MM2 Combat] Script loaded successfully!")
+print("[MM2 Combat] All features ready!")
+
+-- Notify loaded
+WindUI:Notify({
+    Title = "MM2 Combat",
+    Content = "All features loaded!",
+    Duration = 3
+})
+
+-- ============================================================
+-- RETURN MODULE
+-- ============================================================
+
+return {
+    GetMurderer = GetMurderer,
+    GetSheriff = GetSheriff,
+    IsMurderer = IsMurderer,
+    IsSheriff = IsSheriff,
+    KillPlayer = KillPlayer,
+    KillAllPlayers = KillAllPlayers,
+    KillSheriff = KillSheriff,
+    ShootMurderer = ShootMurderer,
+    ThrowKnife = ThrowKnife,
+    GrabGun = GrabGun,
+    BreakGun = BreakGun,
+    StealGun = StealGun,
+    ExposeRole = ExposeRole,
+    NotifyRole = NotifyRole,
+    ToggleAutoShoot = ToggleAutoShoot,
+    ToggleAutoKillAll = ToggleAutoKillAll,
+    ToggleAutoKillSheriff = ToggleAutoKillSheriff,
+    ToggleKnifeAura = ToggleKnifeAura,
+    ToggleThrowingKnifeAura = ToggleThrowingKnifeAura,
+    ToggleStabReach = ToggleStabReach,
+    ToggleSpeedGlitch = ToggleSpeedGlitch
+}
