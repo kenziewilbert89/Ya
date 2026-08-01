@@ -1,0 +1,633 @@
+-- Thrown Silent Aim - Mobile Auto Active
+-- Dengan Prediksi Custom Advanced
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
+local lp = Players.LocalPlayer
+
+-- ===== KONFIGURASI =====
+local Settings = {
+    FOVRadius = 150,
+    WallCheck = true,
+}
+
+-- ===== VARIABLES =====
+local targetHighlight = Instance.new("Highlight")
+targetHighlight.FillColor = Color3.fromRGB(255, 60, 60)
+targetHighlight.FillTransparency = 0.35
+targetHighlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+targetHighlight.OutlineTransparency = 0
+targetHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+targetHighlight.Enabled = false
+
+local currentTarget = nil
+local WeaponService = nil
+
+-- ============================================
+-- PREDIKSI CUSTOM (DARI KODE YANG DIBERIKAN)
+-- ============================================
+
+-- Deklarasi fungsi global yang dibutuhkan
+local function u613(plr)
+    return plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+end
+
+local function u589(char, name)
+    return char:FindFirstChild(name)
+end
+
+local function u40()
+    -- Fungsi untuk membuat instance
+    return {
+        MakeInstance = function(self, parent, className, props)
+            local inst = Instance.new(className)
+            for k, v in pairs(props or {}) do
+                inst[k] = v
+            end
+            if parent then
+                inst.Parent = parent
+            end
+            return inst
+        end
+    }
+end
+
+local function u22()
+    return tick()
+end
+
+local function u155(key)
+    -- Simulasi configuration values
+    local config = {
+        RevertPredictJump = true,
+        RevertPredictionPing = 100,
+        RevertSimulationDivider = 20,
+        RevertPredictionInterval = 70,
+        RevertPredictionVerticalDivider = 100,
+        RevertPredictionHorizontalDivider = 100,
+    }
+    return config[key]
+end
+
+local function u617(vec1, vec2)
+    return (vec1 - vec2).Magnitude
+end
+
+local function u4297()
+    return {'X', 'Z'}
+end
+
+local function u4334(vec)
+    return vec.Unit
+end
+
+local function u4345(part, mode, pos, hrp)
+    -- Simulasi deteksi lantai
+    return pos.Y - part.Position.Y
+end
+
+local function u4353(part)
+    -- Cek orientasi
+    return true
+end
+
+local function u4326(part1, part2, part3, touches, table, plr)
+    -- Simulasi deteksi tabrakan
+    return {}, false
+end
+
+local function u479()
+    return { d = function() end }
+end
+
+local function u135()
+    return {}
+end
+
+-- Fungsi prediksi utama
+local function u4440(p4354, p4355)
+    local _Character5 = p4354.Character
+    if _Character5 and u135 then
+        local v4357 = u613(p4354)
+        local v4358 = v4357 and u589(_Character5, 'Humanoid')
+        
+        if v4358 then
+            -- ============================================
+            -- 1. INISIALISASI VARIABEL
+            -- ============================================
+            local v4359 = u40()
+            local v4360 = u22
+            local v4361 = u155
+            local v4362 = Vector3.new
+            local v4363 = workspace
+            local v4364 = CFrame.new
+            local v4365 = CFrame.Angles
+            local v4366 = math.rad
+            local v4367 = Vector3.new(0, 0, 0)
+            local v4368 = u617
+            local v4369 = u4297
+            local v4370 = Vector2.new
+            local v4371 = u4334
+            local v4372 = math.abs
+            local v4373 = u4345
+            local v4374 = u4353
+            local v4375 = Enum.PartType
+            local v4376 = pairs
+            local v4377 = u4326
+            local v4378 = u479()
+            local _MakeInstance34 = v4359.MakeInstance
+            
+            -- ============================================
+            -- 2. AMBIL DATA TARGET
+            -- ============================================
+            local v4380 = v4360()
+            local _Y7 = v4357.Orientation.Y
+            local _Position42 = v4357.Position
+            local _RevertPredictJump = v4361('RevertPredictJump')
+            local v4384 = v4361('RevertPredictionPing') or 100
+            local v4385 = -((v4361('RevertSimulationDivider') or 20) / 100)
+            
+            -- ============================================
+            -- 3. BUAT PART UNTUK SIMULASI
+            -- ============================================
+            local v4386 = _MakeInstance34(v4359, 'Part', {
+                Name = 'OaPfcnSefoncTao\0\4\0\2',
+                Parent = v4363,
+                Transparency = 1,
+                Anchored = true,
+                Size = v4362(2, 2, 1),
+                CFrame = v4364(_Position42 - v4362(0, 2, 0)) * v4365(0, v4366(_Y7), 0),
+            })
+            local v4387 = _MakeInstance34(v4359, 'Part', {
+                Name = '\1\0\0\3OspfWednoapCdksMw',
+                Parent = v4363,
+                Transparency = 1,
+                Anchored = true,
+                Size = v4362(2, 2, 1),
+                CFrame = v4364(_Position42) * v4365(0, v4366(_Y7), 0),
+            })
+            local v4388 = _MakeInstance34(v4359, 'Part', {
+                Name = '\0\2\2WaKcpJednfo',
+                Parent = v4363,
+                Transparency = 1,
+                Anchored = true,
+                Size = v4362(2, 1, 1),
+                CFrame = v4364(_Position42 + v4362(0, 1.5, 0)) * v4365(0, v4366(_Y7), 0),
+            })
+            
+            -- ============================================
+            -- 4. AMBIL DATA PERGERAKAN
+            -- ============================================
+            local _GetTouchingParts = v4387.GetTouchingParts
+            local _MoveDirection = v4358.MoveDirection
+            local _WalkToPoint = v4358.WalkToPoint
+            local _Velocity = v4357.AssemblyLinearVelocity
+            local v4393 = workspace.Blockcast
+            local _FallenPartsDestroyHeight = v4363.FallenPartsDestroyHeight
+            local v4395 = {v4386, v4387, v4388, _Character5, u135}
+            
+            -- ============================================
+            -- 5. KONFIGURASI PREDIKSI
+            -- ============================================
+            local v4396 = 0
+            local v4397 = 1 / (v4361('RevertPredictionInterval') or 70)
+            local v4398 = (v4361('RevertPredictionVerticalDivider') or 100) / 100
+            local v4399 = (v4361('RevertPredictionHorizontalDivider') or 100) / 100
+            local v4400 = 750
+            
+            -- Fix MoveDirection
+            if _MoveDirection == v4367 and _WalkToPoint ~= v4367 then
+                _MoveDirection = v4364(_Position42 * v4362(1, 0, 1), _WalkToPoint * v4362(1, 0, 1)).LookVector
+            end
+            
+            -- Setup Raycast
+            local v4401 = RaycastParams.new()
+            v4401.FilterDescendantsInstances = v4395
+            v4401.FilterType = Enum.RaycastFilterType.Blacklist
+            
+            local v4402 = v4397
+            
+            -- ============================================
+            -- 6. LOOP SIMULASI UTAMA
+            -- ============================================
+            while true do
+                local v4403 = v4360() - v4380
+                local v4404 = _Position42 + v4362(0, v4385, 0)
+                local v4405 = v4368(v4370(v4404.X, v4404.Z), v4370(p4355.X, p4355.Z))
+                local v4406 = math.atan((v4404.Y - p4355.Y) / v4405)
+                local v4407 = v4384 / 1100 + v4403
+                
+                if v4407 - v4396 > v4397 then
+                    v4397 = v4402
+                else
+                    v4397 = v4407 - v4396 or v4402
+                end
+                
+                local v4408 = v4404 - v4362(0, v4385, 0)
+                
+                if v4407 <= v4396 or 60 <= v4396 or v4408.Y <= _FallenPartsDestroyHeight then
+                    break
+                end
+                
+                if _WalkToPoint ~= v4367 then
+                    _MoveDirection = v4364(v4357.Position * v4362(1, 0, 1), _WalkToPoint * v4362(1, 0, 1)).LookVector or _MoveDirection
+                end
+                
+                -- ============================================
+                -- 7. SIMULASI POSISI DENGAN GRAVITASI
+                -- ============================================
+                _Position42 = v4408 + v4362(
+                    (_Velocity.X * v4397 + v4400 * _MoveDirection.X * v4397 ^ 2 / 2) * v4399,
+                    (_Velocity.Y * v4397 + -196.2 * v4397 ^ 2 / 2) * v4398,
+                    (_Velocity.Z * v4397 + v4400 * _MoveDirection.Z * v4397 ^ 2 / 2) * v4399
+                )
+                
+                -- ============================================
+                -- 8. SIMULASI VELOCITY
+                -- ============================================
+                for v4409 = 1, 2 do
+                    local v4410 = v4369()[v4409]
+                    local v4411 = _MoveDirection[v4410] * 16
+                    
+                    if v4411 >= _Velocity[v4410] then
+                        if _Velocity[v4410] >= v4411 then
+                            if v4410 == 'X' then
+                                _Velocity = v4362(v4411, _Velocity.Y, _Velocity.Z)
+                            elseif v4410 == 'Z' then
+                                _Velocity = v4362(_Velocity.X, _Velocity.Y, v4411)
+                            end
+                        else
+                            if v4410 == 'X' then
+                                _Velocity = _Velocity + v4362(v4400 * v4372(v4371(_MoveDirection, v4410, _Velocity)) * v4397, 0, 0)
+                            elseif v4410 == 'Z' then
+                                _Velocity = _Velocity + v4362(0, 0, v4400 * v4372(v4371(_MoveDirection, v4410, _Velocity)) * v4397)
+                            end
+                            if v4411 < _Velocity[v4410] then
+                                if v4410 == 'X' then
+                                    _Velocity = v4362(v4411, _Velocity.Y, _Velocity.Z)
+                                elseif v4410 == 'Z' then
+                                    _Velocity = v4362(_Velocity.X, _Velocity.Y, v4411)
+                                end
+                            end
+                        end
+                    else
+                        if v4410 == 'X' then
+                            _Velocity = _Velocity - v4362(v4400 * v4372(v4371(_MoveDirection, v4410, _Velocity)) * v4397, 0, 0)
+                        elseif v4410 == 'Z' then
+                            _Velocity = _Velocity - v4362(0, 0, v4400 * v4372(v4371(_MoveDirection, v4410, _Velocity)) * v4397)
+                        end
+                        if _Velocity[v4410] < v4411 then
+                            if v4410 == 'X' then
+                                _Velocity = v4362(v4411, _Velocity.Y, _Velocity.Z)
+                            elseif v4410 == 'Z' then
+                                _Velocity = v4362(_Velocity.X, _Velocity.Y, v4411)
+                            end
+                        end
+                    end
+                end
+                
+                _Velocity = _Velocity - v4362(0, 196.2 * v4397, 0)
+                
+                -- ============================================
+                -- 9. DETEKSI TABRAKAN
+                -- ============================================
+                local v4412 = v4393(v4363, v4364(v4408 - v4362(0, 1.001, 0)) * v4365(0, v4366(v4357.Orientation.Y), 0), v4362(2, 0.002, 1), v4408 - v4362(0, 1.001, 0) - (_Position42 - v4362(0, 1.001, 0)), v4401)
+                local v4413 = v4393(v4363, v4364(v4408 + v4362(0, 1.001, 0)) * v4365(0, v4366(v4357.Orientation.Y), 0), v4362(2, 0.002, 1), v4408 + v4362(0, 1.001, 0) - (_Position42 + v4362(0, 1.001, 0)), v4401)
+                
+                local v4414 = nil
+                local v4415
+                
+                if v4412 then
+                    v4415 = v4412.Position
+                end
+                if v4413 then
+                    v4414 = v4413.Position
+                end
+                
+                if v4412 and v4415 and v4415.Y <= v4408.Y then
+                    _Position42 = v4362(_Position42.X, v4415.Y + 3, _Position42.Z)
+                elseif v4413 and v4414 and v4414.Y >= v4408.Y then
+                    _Position42 = v4362(_Position42.X, v4414.Y - 2, _Position42.Z)
+                end
+                
+                v4386.Position = _Position42 - v4362(0, 2, 0)
+                v4387.Position = _Position42
+                v4388.Position = _Position42 + v4362(0, 1.5, 0)
+                
+                -- ============================================
+                -- 10. DETEKSI TABRAKAN LANJUTAN
+                -- ============================================
+                local v4416, v4417 = v4377(v4386, v4387, v4388, _GetTouchingParts(v4387), {}, p4354)
+                
+                if #v4416 > 0 then
+                    if v4417 then
+                        _Velocity = v4362(0, v4358.WalkSpeed, 0)
+                    else
+                        local _Unit = v4364(v4408, _Position42).LookVector.Unit
+                        if _Unit ~= _Unit then
+                            _Unit = v4367
+                        end
+                        _Position42 = _Position42 + v4362(-_Unit.X, 0, 0)
+                        v4386.Position = _Position42 - v4362(0, 2, 0)
+                        v4387.Position = _Position42
+                        v4388.Position = _Position42 + v4362(0, 1.5, 0)
+                        
+                        if #v4377(v4386, v4387, v4388, _GetTouchingParts(v4387), {}, p4354) > 0 then
+                            _Position42 = _Position42 + v4362(_Unit.X, 0, -_Unit.Z)
+                            v4386.Position = _Position42 - v4362(0, 2, 0)
+                            v4387.Position = _Position42
+                            v4388.Position = _Position42 + v4362(0, 1.5, 0)
+                            
+                            if #v4377(v4386, v4387, v4388, _GetTouchingParts(v4387), {}, p4354) > 0 then
+                                _Position42 = v4408
+                            end
+                        end
+                    end
+                end
+                
+                v4386.Position = _Position42 - v4362(0, 2, 0)
+                v4387.Position = _Position42
+                v4388.Position = _Position42 + v4362(0, 1.5, 0)
+                
+                -- ============================================
+                -- 11. DETEKSI LANTAI
+                -- ============================================
+                local v4419, v4420 = v4377(v4386, v4387, v4388, _GetTouchingParts(v4386), {}, p4354)
+                
+                if not v4420 and 0 < #v4419 and _Velocity.Y <= v4397 then
+                    local v4421, v4422, v4423 = v4376(v4419)
+                    local v4424 = nil
+                    
+                    while true do
+                        local v4425
+                        v4423, v4425 = v4421(v4422, v4423)
+                        if v4423 == nil then
+                            break
+                        end
+                        
+                        local _Position43 = v4425.Position
+                        local _Size = v4425.Size
+                        
+                        if v4425.ClassName ~= 'Part' or v4425.Shape ~= v4375.Block or (not v4374(v4425) or _Position42.Y - 1 <= _Position43.Y + _Size.Y / 2) or v4424 and v4424 >= _Position43.Y + _Size.Y / 2 then
+                            local v4428 = v4373(v4425, 1, _Position42, v4357)
+                            if v4428 then
+                                if not v4424 or v4424 < v4428 then
+                                    v4424 = v4428
+                                end
+                            end
+                        else
+                            v4424 = _Position43.Y + _Size.Y / 2
+                        end
+                    end
+                    
+                    if v4424 then
+                        v4400 = 750
+                        _Position42 = v4362(_Position42.X, v4424 + 3, _Position42.Z)
+                        _Velocity = _Velocity * v4362(1, 0, 1)
+                        
+                        if _RevertPredictJump and v4358.Jump then
+                            _Velocity = v4362(_Velocity.X, v4358.JumpPower, _Velocity.Z)
+                        end
+                    else
+                        v4400 = 142
+                    end
+                end
+                
+                v4386.Position = _Position42 - v4362(0, 2, 0)
+                v4387.Position = _Position42
+                v4388.Position = _Position42 + v4362(0, 1.5, 0)
+                
+                -- ============================================
+                -- 12. DETEKSI ATAP
+                -- ============================================
+                local v4429, v4430 = v4377(v4386, v4387, v4388, _GetTouchingParts(v4388), {}, p4354)
+                
+                if not v4430 and 0 < #v4429 and _Velocity.Y >= -v4397 then
+                    local v4431, v4432, v4433 = v4376(v4419)
+                    local v4434 = nil
+                    
+                    while true do
+                        local v4435
+                        v4433, v4435 = v4431(v4432, v4433)
+                        if v4433 == nil then
+                            break
+                        end
+                        
+                        local _Position44 = v4435.Position
+                        local _Size2 = v4435.Size
+                        
+                        if (v4435.ClassName == 'Part' or v4435.ClassName == 'SpawnLocation') and (v4435.Shape == v4375.Block and v4374(v4435)) and (_Position42.Y + 1.9 < _Position44.Y - _Size2.Y / 2 and (not v4434 or _Position44.Y - _Size2.Y / 2 < v4434)) then
+                            v4434 = _Position44.Y - _Size2.Y / 2
+                        else
+                            local v4438 = v4373(v4435, 2, _Position42, v4357)
+                            if v4438 then
+                                if not v4434 or v4438 < v4434 then
+                                    v4434 = v4438
+                                end
+                            end
+                        end
+                    end
+                    
+                    if v4434 then
+                        _Position42 = v4362(_Position42.X, v4434 - 2, _Position42.Z)
+                        _Velocity = _Velocity * v4362(1, -1, 1)
+                    end
+                end
+                
+                v4400 = #v4419 <= 0 and #v4429 <= 0 and 142 or v4400
+                v4396 = v4396 + v4397
+            end
+            
+            -- ============================================
+            -- 13. CLEANUP
+            -- ============================================
+            v4386:Destroy()
+            v4387:Destroy()
+            v4388:Destroy()
+            
+            -- ============================================
+            -- 14. RETURN HASIL PREDIKSI
+            -- ============================================
+            local v4439 = v4408 + v4362(0, v4385, 0)
+            return v4439
+        end
+    end
+    return nil
+end
+
+-- ============================================
+-- SISTEM TARGETING & AIM
+-- ============================================
+
+-- CEK LINE OF SIGHT
+local function hasLineOfSight(targetChar)
+    if not Settings.WallCheck then return true end
+    if not lp.Character or not lp.Character:FindFirstChild("HumanoidRootPart") then 
+        return false 
+    end
+    
+    local origin = lp.Character.HumanoidRootPart.Position
+    local targetPos = targetChar.HumanoidRootPart.Position
+    
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.IgnoreWater = true
+    raycastParams.FilterDescendantsInstances = {lp.Character, targetChar, Camera}
+
+    local result = workspace:Raycast(origin, targetPos - origin, raycastParams)
+    return result == nil
+end
+
+-- CARI TARGET TERDEKAT
+local function getClosestTarget()
+    local near = nil
+    local minFovDist = math.huge
+    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+    for _, v in pairs(Players:GetPlayers()) do
+        if v ~= lp and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+            local targetHum = v.Character:FindFirstChildOfClass("Humanoid")
+            
+            if targetHum and targetHum.Health > 0 then
+                local hrp = v.Character.HumanoidRootPart
+                local screenPos, onScreen = Camera:WorldToViewportPoint(hrp.Position)
+                
+                if onScreen then
+                    local fovDist = (Vector2.new(screenPos.X, screenPos.Y) - screenCenter).Magnitude
+                    
+                    if fovDist <= Settings.FOVRadius then
+                        if fovDist < minFovDist then
+                            if hasLineOfSight(v.Character) then
+                                minFovDist = fovDist
+                                near = v
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return near
+end
+
+-- DAPATKAN POSISI TARGET DENGAN PREDIKSI CUSTOM
+local function getTargetPosition()
+    if not currentTarget or not currentTarget.Character then 
+        return nil 
+    end
+    
+    local hrp = currentTarget.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return nil end
+    
+    -- Panggil fungsi prediksi custom
+    local predictedPos = u4440(currentTarget, hrp.Position)
+    
+    -- Fallback jika prediksi gagal
+    if not predictedPos then
+        predictedPos = hrp.Position
+    end
+    
+    return predictedPos
+end
+
+-- HOOK WEAPON SERVICE
+local oldGetTargetPosition = nil
+local oldGetMouseTargetCFrame = nil
+
+local function setupWeaponHook()
+    local success, ws = pcall(function()
+        return require(ReplicatedStorage:WaitForChild("ClientServices"):WaitForChild("WeaponService"))
+    end)
+    
+    if success and ws then
+        WeaponService = ws
+        
+        oldGetTargetPosition = WeaponService.GetTargetPosition
+        WeaponService.GetTargetPosition = function(self, ...)
+            local pos = getTargetPosition()
+            if pos then 
+                return CFrame.new(pos) 
+            end
+            return oldGetTargetPosition(self, ...)
+        end
+
+        oldGetMouseTargetCFrame = WeaponService.GetMouseTargetCFrame
+        WeaponService.GetMouseTargetCFrame = function(self, ...)
+            local pos = getTargetPosition()
+            if pos then 
+                return CFrame.new(pos) 
+            end
+            return oldGetMouseTargetCFrame(self, ...)
+        end
+        
+        print("✅ WeaponService Hooked with Custom Prediction!")
+        return true
+    end
+    
+    if not success then
+        print("❌ Failed to hook WeaponService")
+        return false
+    end
+end
+
+-- RENDER LOOP
+RunService.RenderStepped:Connect(function()
+    currentTarget = getClosestTarget()
+
+    if currentTarget and currentTarget.Character then
+        targetHighlight.Parent = currentTarget.Character
+        targetHighlight.Enabled = true
+    else
+        targetHighlight.Enabled = false
+        targetHighlight.Parent = nil
+    end
+end)
+
+-- START
+pcall(setupWeaponHook)
+
+print("========================================")
+print("🎯 THROWN SILENT AIM - CUSTOM PREDICTION")
+print("========================================")
+print("")
+print("📌 PREDIKSI CUSTOM:")
+print("")
+print("1. SIMULASI FISIKA LENGKAP")
+print("   • Gravitasi: -196.2")
+print("   • Kecepatan awal & percepatan")
+print("   • Deteksi lantai, tembok, atap")
+print("")
+print("2. PREDICTION PING")
+print("   • RevertPredictionPing: 100ms")
+print("   • Menyesuaikan dengan delay")
+print("")
+print("3. SIMULASI PERGERAKAN")
+print("   • MoveDirection tracking")
+print("   • WalkToPoint detection")
+print("   • Jump prediction")
+print("")
+print("4. DETEKSI TABRAKAN")
+print("   • Raycast untuk obstacle")
+print("   • Blockcast untuk deteksi")
+print("   • Koreksi posisi otomatis")
+print("")
+print("5. KONFIGURASI")
+print("   • Vertical Divider: 100%")
+print("   • Horizontal Divider: 100%")
+print("   • Simulation Interval: 70")
+print("   • Simulation Divider: 20")
+print("")
+print("========================================")
+print("🎮 CARA PAKAI:")
+print("  1. Inject script (langsung aktif)")
+print("  2. Target otomatis terpilih & di-highlight")
+print("  3. Lempar MANUAL (tap tombol throw)")
+print("  4. Lemparan mengarah ke posisi prediksi")
+print("")
+print("⚙️ SETTING (ubah di script):")
+print("  • FOVRadius = 150")
+print("  • WallCheck = true")
+print("  • RevertPredictionPing = 100")
+print("========================================")
