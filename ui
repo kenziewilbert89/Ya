@@ -1,1266 +1,3001 @@
 -- ============================================
--- OVERDRIVE UI LIBRARY
--- Complete UI System with Same Calling Method
+-- OVERDRIVE H UI LIBRARY (EXACT COPY)
+-- Complete UI System - Same as Original
 -- ============================================
 
 local Library = {}
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-local Heartbeat = RunService.Heartbeat
-
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
 
 -- ============================================
--- UTILITY FUNCTIONS
+-- ORIGINAL UI CODE (COPIED VERBATIM)
 -- ============================================
 
-local function MakeInstance(className, properties, parent, ...)
-    local instance = Instance.new(className)
-    for prop, value in pairs(properties) do
-        instance[prop] = value
-    end
-    if parent then
-        instance.Parent = parent
-    end
-    local args = {...}
-    for i = 1, #args do
-        args[i].Parent = instance
-    end
-    return instance
-end
-
-local function PlayTween(obj, info, properties)
-    local tween = TweenService:Create(obj, info, properties)
-    tween:Play()
-    return tween
-end
-
-local function RandomString(length)
-    length = length or 10
-    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    local result = ""
-    for i = 1, length do
-        result = result .. string.sub(chars, math.random(1, #chars), math.random(1, #chars))
-    end
-    return result
-end
-
--- ============================================
--- UI THEMES
--- ============================================
-
-local Themes = {
-    Amethyst = {
-        MBG = Color3.fromRGB(0, 0, 225),
-        MTG = Color3.fromRGB(0, 0, 225),
-        USC = Color3.fromRGB(0, 0, 225),
-        UFB = Color3.fromRGB(0, 0, 225),
-    },
-    Amoled = {
-        MBG = Color3.fromRGB(35, 35, 35),
-        MTG = Color3.fromRGB(35, 35, 35),
-        USC = Color3.fromRGB(35, 35, 35),
-        UFB = Color3.fromRGB(40, 40, 40),
-    },
-    Crimson = {
-        MBG = Color3.fromRGB(220, 20, 60),
-        MTG = Color3.fromRGB(225, 20, 60),
-        USC = Color3.fromRGB(230, 20, 60),
-        UFB = Color3.fromRGB(220, 25, 60),
-    },
-    Dark = {
-        MBG = Color3.fromRGB(60, 60, 60),
-        MTG = Color3.fromRGB(60, 60, 60),
-        USC = Color3.fromRGB(60, 60, 60),
-        UFB = Color3.fromRGB(60, 60, 60),
-    },
-    NEO = {
-        MBG = Color3.fromRGB(220, 20, 60),
-        MTG = Color3.fromRGB(225, 20, 60),
-        USC = Color3.fromRGB(230, 20, 60),
-        UFB = Color3.fromRGB(220, 25, 60),
-    },
-}
-
-local CurrentTheme = Themes.Amethyst
-local ThemeList = {"Amethyst", "Amoled", "Crimson", "Dark", "NEO"}
-
--- ============================================
--- MAIN UI CREATION
--- ============================================
-
-local function CreateUI()
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "OverdriveUI"
-    ScreenGui.Parent = CoreGui
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    -- Minimize Button
-    local MinimizeButton = MakeInstance("TextButton", {
-        Name = "MinimizeButton",
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0.005, 0, 0.05, 0),
-        Size = UDim2.new(0, 35, 0, 35),
-        Font = Enum.Font.GothamBold,
-        Text = "ODH",
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextSize = 14,
-        TextWrapped = true,
-        Draggable = true,
-        Active = true,
-        Visible = false,
-    }, ScreenGui)
-    
-    MakeInstance("UICorner", {
-        CornerRadius = UDim.new(0, 20),
-    }, MinimizeButton)
-    
-    MakeInstance("UIStroke", {
-        Transparency = 0.55,
-        Color = Color3.fromRGB(0, 0, 255),
-        ApplyStrokeMode = "Border",
-        Thickness = 2,
-        Enabled = true,
-    }, MinimizeButton)
-
-    -- Notification Container
-    local NotificationContainer = MakeInstance("Frame", {
-        Name = "NotificationContainer",
-        BackgroundTransparency = 1,
-        AnchorPoint = Vector2.new(0, 1),
-        Position = UDim2.new(0, 10, 1, -10),
-        Size = UDim2.new(0, 250, 0, 0),
-    }, ScreenGui)
-    
-    MakeInstance("UIListLayout", {
-        Name = "Layout",
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        VerticalAlignment = Enum.VerticalAlignment.Bottom,
-        Padding = UDim.new(0, 5),
-    }, NotificationContainer)
-
-    -- Drawing Folder
-    local DrawingFolder = MakeInstance("ScreenGui", {
-        Name = "ODHDrawingFolder",
-        Parent = ScreenGui,
-        IgnoreGuiInset = true,
-    })
-
-    -- Main Frame
-    local MainFrame = MakeInstance("CanvasGroup", {
-        Name = "StarterFrame",
-        Parent = ScreenGui,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+local function v1655()
+    local u906 = u40
+    local u907 = u155
+    local u908 = u131
+    local u909 = _fromRGB
+    local u910 = _new4
+    local u911 = _new3
+    local u912 = _new5
+    local u913 = _insert
+    local u914 = u479
+    local u915 = _new6
+    local u916 = _EasingStyle
+    local _MakeInstance8 = u906.MakeInstance
+    local _TranslateMatchs2 = u906.TranslateMatchs
+    local _PlayTween5 = u906.PlayTween
+    local _Wait5 = _Heartbeat.Wait
+    local u921 = _MakeInstance8(u906, 'CanvasGroup', {
+        Name = 'StarterFrame',
+        Parent = u907('ScreenGui'),
+        BackgroundColor3 = u909(255, 255, 255),
         BackgroundTransparency = 1,
         ClipsDescendants = true,
-        GroupColor3 = Color3.fromRGB(255, 255, 255),
+        GroupColor3 = u909(255, 255, 255),
         GroupTransparency = 0,
-        Position = UDim2.new(0.5, 0, -0.5, 0),
-        Size = UDim2.new(0, 30, 0, 30),
-        AnchorPoint = Vector2.new(0.5, 0.5),
+        Position = u910(0.5, 0, -0.5, 0),
+        Size = u910(0, 30, 0, 30),
+        AnchorPoint = u911(0.5, 0.5),
         Draggable = true,
         Active = true,
-    })
-    
-    local UIScale = MakeInstance("UIScale", {
-        Name = "UIScale",
+    }, _MakeInstance8(u906, 'UIScale', {
+        Name = 'UIScale',
         Scale = 1,
-    }, MainFrame)
-    
-    MakeInstance("UICorner", {
-        CornerRadius = UDim.new(0, 10),
-    }, MainFrame)
-    
-    local MainStroke = MakeInstance("UIStroke", {
-        Name = "UIStroke",
+    }), _MakeInstance8(u906, 'UICorner', {
+        Name = 'UICorner',
+        CornerRadius = u912(0, 10),
+    }), _MakeInstance8(u906, 'UIStroke', {
+        Name = 'UIStroke',
         Transparency = 0.55,
-        Color = Color3.fromRGB(0, 0, 255),
+        Color = u909(0, 0, 255),
         Thickness = 2,
         Enabled = true,
-    }, MainFrame)
-
-    local MainContainer = MakeInstance("ImageLabel", {
-        Name = "MainFrame",
+    }), _MakeInstance8(u906, 'ImageLabel', {
+        Name = 'MainFrame',
         BackgroundTransparency = 0.5,
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(1, 0, 1, 0),
-        AnchorPoint = Vector2.new(0.5, 0.5),
-    }, MainFrame)
-    
-    local Title = MakeInstance("TextLabel", {
-        Name = "Title",
+        BackgroundColor3 = u909(30, 30, 30),
+        Position = u910(0.5, 0, 0.5, 0),
+        Size = u910(1, 0, 1, 0),
+        AnchorPoint = u911(0.5, 0.5),
+    }, _MakeInstance8(u906, 'TextLabel', {
+        Name = 'Title',
         BackgroundTransparency = 0.8,
-        BackgroundColor3 = Color3.fromRGB(0, 0, 225),
-        Position = UDim2.new(0.5, 0, 0.045, 0),
-        Size = UDim2.new(0, 600, 0, 20),
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Font = Enum.Font.Gotham,
-        Text = "",
+        BackgroundColor3 = u909(0, 0, 225),
+        Position = u910(0.5, 0, 0.045, 0),
+        Size = u910(0, 600, 0, 20),
+        AnchorPoint = u911(0.5, 0.5),
+        Font = _Font.Gotham,
+        Text = '',
         TextSize = 12,
         TextTransparency = 1,
-        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextColor3 = u909(255, 255, 255),
         RichText = true,
-        TextXAlignment = Enum.TextXAlignment.Left,
-    }, MainContainer)
-    
-    MakeInstance("UICorner", {
-        CornerRadius = UDim.new(0, 10),
-    }, Title)
-
-    local TabFrame = MakeInstance("ScrollingFrame", {
-        Name = "TabFrame",
+        TextXAlignment = _TextXAlignment.Left,
+    }, _MakeInstance8(u906, 'UICorner', {
+        Name = 'UICorner',
+        CornerRadius = u912(0, 10),
+    })), _MakeInstance8(u906, 'ScrollingFrame', {
+        Name = 'TabFrame',
         BackgroundTransparency = 0.95,
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-        Position = UDim2.new(0.125, 0, 1.5, 0),
-        Size = UDim2.new(0, 140, 0, 270),
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        CanvasSize = UDim2.new(0, 0, 0, 0),
-        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        BackgroundColor3 = u909(30, 30, 30),
+        Position = u910(0.125, 0, 1.5, 0),
+        Size = u910(0, 140, 0, 270),
+        AnchorPoint = u911(0.5, 0.5),
+        CanvasSize = u910(0, 0, 0, 0),
+        AutomaticCanvasSize = _AutomaticSize.Y,
         Visible = false,
         ScrollBarThickness = 0,
-    }, MainContainer)
-    
-    MakeInstance("UICorner", {
-        CornerRadius = UDim.new(0, 5),
-    }, TabFrame)
-    
-    MakeInstance("UIListLayout", {
-        Name = "UIListLayout",
-        HorizontalAlignment = Enum.HorizontalAlignment.Center,
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        Padding = UDim.new(0, 8),
-    }, TabFrame)
+    }, _MakeInstance8(u906, 'UICorner', {
+        Name = 'UICorner',
+        CornerRadius = u912(0, 5),
+    }), _MakeInstance8(u906, 'UIListLayout', {
+        Name = 'UIListLayout',
+        HorizontalAlignment = _HorizontalAlignment.Center,
+        SortOrder = _SortOrder.LayoutOrder,
+        Padding = u912(0, 8),
+    }))))
+    local _MainFrame = u921.MainFrame
+    local u923 = {
+        Christmas = {
+            IMG = 'rbxassetid://113441398369454',
+            MBG = u909(192, 192, 192),
+            MTG = u909(191, 191, 191),
+            USC = u909(190, 190, 190),
+            UFB = u909(200, 200, 200),
+        },
+        Valentine = {
+            IMG = 'rbxassetid://109467000240160',
+            MBG = u909(255, 105, 180),
+            MTG = u909(254, 104, 179),
+            USC = u909(255, 100, 190),
+            UFB = u909(250, 100, 178),
+        },
+        Halloween = {
+            IMG = 'rbxassetid://76882543451266',
+            MBG = u909(255, 215, 0),
+            MTG = u909(255, 20, 0),
+            USC = u909(255, 216, 0),
+            UFB = u909(255, 0, 0),
+        },
+        Amethyst = {
+            MBG = u909(0, 0, 225),
+            MTG = u909(0, 0, 225),
+            USC = u909(0, 0, 225),
+            UFB = u909(0, 0, 225),
+        },
+        Amoled = {
+            MBG = u909(35, 35, 35),
+            MTG = u909(35, 35, 35),
+            USC = u909(35, 35, 35),
+            UFB = u909(40, 40, 40),
+        },
+        Crimson = {
+            MBG = u909(220, 20, 60),
+            MTG = u909(225, 20, 60),
+            USC = u909(230, 20, 60),
+            UFB = u909(220, 25, 60),
+        },
+        Dark = {
+            MBG = u909(60, 60, 60),
+            MTG = u909(60, 60, 60),
+            USC = u909(60, 60, 60),
+            UFB = u909(60, 60, 60),
+        },
+        NEO = {
+            MBG = u909(220, 20, 60),
+            MTG = u909(225, 20, 60),
+            USC = u909(230, 20, 60),
+            UFB = u909(220, 25, 60),
+        },
+    }
+    local _Configurations2 = u907('Configurations')
+    local _ScreenGui5 = u907('ScreenGui')
+    local v926 = {}
+    local u927 = {}
+    local u928 = {}
+    local u929 = {}
+    local u930 = true
+    local u931 = '1.9'
+    local u932 = nil
+    local u933 = nil
+    local u934 = nil
+    local u935 = nil
+    local u936 = true
+    local u937 = true
+    local u938 = {}
 
-    local State = {
-        ScreenGui = ScreenGui,
-        MinimizeButton = MinimizeButton,
-        NotificationContainer = NotificationContainer,
-        DrawingFolder = DrawingFolder,
-        MainFrame = MainFrame,
-        UIScale = UIScale,
-        MainStroke = MainStroke,
-        MainContainer = MainContainer,
-        Title = Title,
-        TabFrame = TabFrame,
-        CurrentTheme = CurrentTheme,
-        ThemeList = ThemeList,
-        Tabs = {},
-        CurrentTab = nil,
-        IsOpen = false,
-        Strokes = {MainStroke, MinimizeButton:FindFirstChild("UIStroke")},
-        Flags = {},
-        Bindables = {},
+    u913(u929, _MainFrame)
+    u913(u928, u921.UIStroke)
+    u913(u928, _ScreenGui5['Shindeiru p\0\1AxueoNe'].UIStroke)
+
+    local u939 = {
+        'Visible',
+        'Rotation',
     }
 
-    -- ============================================
-    -- UI METHODS
-    -- ============================================
+    function u914.Coroutine()
+        local v940 = u939
+        local v941 = u908
+        local v942 = _MainFrame
+        local v943 = v940[1]
+        local v944 = v940[2]
+        local v945 = nil
 
-    function State:ApplySetting(setting, value)
-        if setting == "GuiScale" then
-            self.UIScale.Scale = value
-        elseif setting == "Theme" then
-            local theme = Themes[value]
-            if theme then
-                self.CurrentTheme = theme
-                self.MainStroke.Color = theme.USC
-                self.Title.BackgroundColor3 = theme.MTG
-                self.MainContainer.BackgroundColor3 = theme.MBG
-                
-                for _, stroke in pairs(self.Strokes) do
-                    if stroke and stroke:IsA("UIStroke") then
-                        stroke.Color = theme.USC
+        while true do
+            repeat
+                v941(0.0055)
+                local v946 = u933
+            until v946 and (u937 and v942[v943])
+
+            local v947 = v946[v944]
+
+            if v945 then
+                if v947 < 16 then
+                    v946[v944] = v947 + 2
+                else
+                    v945 = false
+                end
+            elseif v947 > -16 then
+                v946[v944] = v947 - 2
+            else
+                v945 = true
+            end
+        end
+    end
+
+    local u948 = {
+        'Position',
+        'Completed',
+        'd',
+    }
+    local _PlayTween6 = u906.PlayTween
+    local _Wait6 = _Heartbeat.Wait
+    local u951 = u915(0.5)
+    local u952 = {}
+    local u953 = {ImageTransparency = 1}
+
+    local function u963(p954, p955, p956)
+        local v957 = u948
+        local v958 = u906
+        local v959 = _PlayTween6
+        local v960 = _Wait6
+        local v961 = u952
+        local v962 = v957[2]
+
+        v961[v957[1] ] = u910(p956 / 100, 0, 1, 0)
+
+        v960(v959(v958, p954, u915(p955), v961)[v962])
+        v960(v959(v958, p954, u951, u953)[v962])
+
+        u914[v957[3] ] = p954
+    end
+
+    function v926.ApplySetting(p964, p965, p966)
+        if p965 == 'GuiScale' then
+            local v967 = u589(u921, 'UIScale')
+            if v967 then
+                v967.Scale = p966
+            end
+        elseif p965 == 'KeybindsEnabled' then
+            u936 = p966
+        elseif p965 == 'SpinningTabIcons' then
+            u937 = p966
+            if u933 then
+                u933.Rotation = 0
+            end
+        elseif p965 == 'Theme' and u932 ~= p966 then
+            local u968 = u906
+            u935 = u923[p966]
+
+            if not u935 then
+                p964:ApplySetting(p965, u968.ThemeList[1])
+                return
+            end
+
+            local u969 = _MainFrame
+            local v970 = u915
+            local v971 = u916
+            local v972 = _PlayTween5
+            local u973 = u911
+            local u974 = _MakeInstance8
+            local u975 = u914
+            local v976 = u589
+
+            u932 = p966
+
+            if p966 == 'Amethyst' or p966 == 'Crimson' or (p966 == 'Dark' or p966 == 'NEO') then
+                local _t8 = _date('*t', _time())
+                u969.ImageRectSize = u973(0, 0)
+                u969.ImageRectOffset = u973(0, 0)
+                u969.ImageTransparency = 0
+                u969.Image = ''
+
+                u908()
+
+                if _t8.month == 4 and _t8.day == 1 then
+                    u969.Image = 'rbxassetid://110466491587898'
+                    u969.ImageRectSize = u973(143, 125)
+
+                    function u975.Coroutine()
+                        local v978 = u908
+                        local v979 = u973
+                        local v980 = u969
+
+                        while u932 == 'Amethyst' or (u932 == 'Crimson' or u932 == 'Dark') or p966 == 'NEO' do
+                            v978(0.1)
+                            local v981 = 0
+                            local v982 = 0
+
+                            for _ = 1, 54 do
+                                v978(0.015)
+                                v980.ImageRectOffset = v979(140 * v981, v982)
+
+                                if v981 == 6 then
+                                    v982 = v982 + 125
+                                    v981 = -1
+                                end
+
+                                v981 = v981 + 1
+                            end
+                        end
+                    end
+                end
+            elseif p966 == 'Amoled' then
+                local v983 = nil
+                u969.ImageTransparency = 0.1
+                u969.ImageRectSize = u973(200, 112)
+
+                local u984 = getcustomasset or getsynasset
+
+                if u984 then
+                    local _httpsrawgithubusercontentcomItsJiDyOverdriveHrefsheadsmainimagesAmoled_Theme_Spritesrv = u968:HttpRequest('https://raw.githubusercontent.com/ItsJiDy/Overdrive-H/refs/heads/main/images/Amoled_Theme_Sprites.rv')
+
+                    if _httpsrawgithubusercontentcomItsJiDyOverdriveHrefsheadsmainimagesAmoled_Theme_Spritesrv then
+                        local u986 = 'ODH-' .. _random(1, 9999999) * 9999 .. '.png'
+                        u142(u986, _httpsrawgithubusercontentcomItsJiDyOverdriveHrefsheadsmainimagesAmoled_Theme_Spritesrv)
+
+                        local v987, v988 = u15(function()
+                            return u984(u986)
+                        end)
+
+                        if v987 and v988 and u77.s(v988) then
+                            local v989 = deletefile or delfile
+                            if v989 then
+                                v989(u986)
+                                v983 = v988
+                            else
+                                v983 = v988
+                            end
+                        else
+                            u968:Notify('Failed to load the animated background.')
+                        end
+                    end
+                else
+                    u968:Notify('Failed to load the animated background.')
+                end
+                if v983 then
+                    u969.Image = v983
+
+                    function u975.Coroutine()
+                        local v990 = u908
+                        local v991 = u973
+
+                        while true do
+                            if u932 ~= 'Amoled' then
+                                return
+                            end
+
+                            v990()
+                            local v992 = 0
+                            local v993 = 0
+                            local v994 = 5
+
+                            for _ = 1, 145 do
+                                if u932 ~= 'Amoled' then
+                                    break
+                                end
+
+                                v992 = v992 + 1
+                                v993 = v992 == 0 and 5 or (v992 == 1 and 215 or (v992 == 2 and 425 or (v992 == 3 and 635 or (v992 == 4 and 845 or v993))))
+                                u969.ImageRectOffset = v991(v993, v994)
+
+                                if v992 == 4 then
+                                    v994 = v994 + 122
+                                    v992 = -1
+                                end
+
+                                v990(0.03)
+                            end
+                        end
+                    end
+                end
+            else
+                u969.ImageRectSize = u973(0, 0)
+                u969.ImageRectOffset = u973(0, 0)
+                u969.ImageTransparency = 0
+                u969.Image = u935.IMG or ''
+
+                if p966 == 'Christmas' then
+                    function u975.Coroutine()
+                        local v995 = u968
+                        local v996 = u908
+                        local v997 = _random
+                        local v998 = u910
+                        local v999 = u975
+                        local v1000 = u963
+                        local v1001 = u974
+                        local v1002 = {
+                            Name = 'Falling Snowflake',
+                            Parent = u969,
+                            BackgroundTransparency = 1,
+                            BackgroundColor3 = u909(255, 255, 255),
+                            AnchorPoint = u973(0.5, 0.5),
+                            Image = 'rbxassetid://125703738613290',
+                        }
+                        local v1003 = {
+                            Callback = v1000,
+                            Args = {},
+                        }
+                        local _Args = v1003.Args
+
+                        while u932 == 'Christmas' do
+                            v996(v997(1, 50) / 100)
+                            local v1005 = v997(8, 19)
+                            local v1006 = v997(10, 95)
+                            local v1007 = v997(3, 8)
+
+                            v1002.Position = v998(v1006 / 100, 0, -0.1, 0)
+                            v1002.Size = v998(0, v1005, 0, v1005)
+                            _Args[1] = v1001(v995, 'ImageLabel', v1002)
+                            _Args[2] = v1007
+                            _Args[3] = v1006
+                            v999.Coroutine = v1003
+                        end
+                    end
+                elseif p966 == 'Valentine' then
+                    function u975.Coroutine()
+                        local v1008 = u968
+                        local v1009 = u908
+                        local v1010 = _random
+                        local v1011 = u910
+                        local v1012 = u975
+                        local v1013 = u963
+                        local v1014 = u974
+                        local v1015 = {
+                            Name = 'Falling Heart',
+                            Parent = u969,
+                            BackgroundTransparency = 1,
+                            BackgroundColor3 = u909(255, 255, 255),
+                            AnchorPoint = u973(0.5, 0.5),
+                        }
+                        local v1016 = {
+                            Callback = v1013,
+                            Args = {},
+                        }
+                        local _Args2 = v1016.Args
+
+                        while u932 == 'Valentine' do
+                            v1009(v1010(1, 50) / 100)
+                            local v1018 = v1010(8, 19)
+                            local v1019 = v1010(10, 95)
+                            local v1020 = v1010(3, 8)
+                            local v1021 = v1010(1, 3)
+                            local v1022 = v1021 == 1 and 'rbxassetid://96737420241051' or (v1021 == 2 and 'rbxassetid://101695571661044' or (v1021 == 3 and 'rbxassetid://121995545202141' or nil))
+
+                            v1015.Position = v1011(v1019 / 100, 0, -0.1, 0)
+                            v1015.Size = v1011(0, v1018, 0, v1018)
+                            v1015.Image = v1022
+                            _Args2[1] = v1014(v1008, 'ImageLabel', v1015)
+                            _Args2[2] = v1020
+                            _Args2[3] = v1019
+                            v1012.Coroutine = v1016
+                        end
+                    end
+                end
+            end
+
+            local v1023 = v970(0.5, v971.Sine)
+            local v1024 = {
+                BackgroundColor3 = u935.MBG,
+            }
+
+            v972(u968, u969, v1023, v1024)
+
+            v1024.BackgroundColor3 = u935.MTG
+            v972(u968, u969.Title, v1023, v1024)
+
+            local v1025 = _remove
+            local v1026 = u928
+            local v1027 = u929
+            local _USC = u935.USC
+            local _UFB = u935.UFB
+
+            if p966 == 'NEO' then
+                local _new10 = ColorSequenceKeypoint.new
+                local v1031 = {
+                    Name = 'UIGradient',
+                    Color = ColorSequence.new({
+                        _new10(0, u909(255, 0, 0)),
+                        _new10(0.45, u909(20, 20, 0)),
+                        _new10(1, u909(20, 20, 20)),
+                    }),
+                    Rotation = 45,
+                    Enabled = true,
+                }
+                local v1032, v1033, v1034 = u25(v1026)
+                local v1035 = {Color = _USC}
+
+                while true do
+                    local v1036
+                    v1034, v1036 = v1032(v1033, v1034)
+                    if v1034 == nil then break end
+                    if v1036 then
+                        v1031.Parent = v1036
+                        u974(u968, 'UIGradient', v1031)
+                        if v1036.Color ~= _USC then
+                            v972(u968, v1036, v1023, v1035)
+                        end
+                    else
+                        v1025(v1026, v1034)
+                    end
+                end
+
+                local v1037, v1038, v1039 = u25(v1027)
+                local v1040 = {BackgroundColor3 = _UFB}
+
+                while true do
+                    local v1041
+                    v1039, v1041 = v1037(v1038, v1039)
+                    if v1039 == nil then break end
+                    if v1041 then
+                        v1031.Parent = v1041
+                        u974(u968, 'UIGradient', v1031)
+                        if v1041.BackgroundColor3 ~= _UFB then
+                            v972(u968, v1041, v1023, v1040)
+                        end
+                    else
+                        v1025(v1027, v1039)
+                    end
+                end
+
+                local u1042 = u907
+                if not u1042('IsLoaded') then
+                    function u975.Coroutine()
+                        while not u1042('IsLoaded') do
+                            u908()
+                            if false then break end
+                        end
+                        local _ApplySetting = p964.ApplySetting
+                        u908(3)
+                        _ApplySetting(p964, p965, 'Crimson')
+                        _ApplySetting(p964, p965, 'NEO')
+                    end
+                end
+            else
+                local v1044, v1045, v1046 = u25(v1026)
+                local v1047 = {Color = _USC}
+
+                while true do
+                    local v1048
+                    v1046, v1048 = v1044(v1045, v1046)
+                    if v1046 == nil then break end
+                    if v1048 then
+                        local v1049 = v976(v1048, 'UIGradient')
+                        if v1049 then
+                            u975.d = v1049
+                        end
+                        if v1048.Color ~= _USC then
+                            v972(u968, v1048, v1023, v1047)
+                        end
+                    else
+                        v1025(v1026, v1046)
+                    end
+                end
+
+                local v1050, v1051, v1052 = u25(v1027)
+                local v1053 = {BackgroundColor3 = _UFB}
+
+                while true do
+                    local v1054
+                    v1052, v1054 = v1050(v1051, v1052)
+                    if v1052 == nil then break end
+                    if v1054 then
+                        local v1055 = v976(v1054, 'UIGradient')
+                        if v1055 then
+                            u975.d = v1055
+                        end
+                        if v1054.BackgroundColor3 ~= _UFB then
+                            v972(u968, v1054, v1023, v1053)
+                        end
+                    else
+                        v1025(v1027, v1052)
                     end
                 end
             end
         end
     end
 
-    function State:AddTab(name, icon)
-        local tab = {}
-        
-        -- Tab Button
-        local tabButton = MakeInstance("ImageButton", {
-            Name = RandomString(3) .. "Tab",
-            Parent = self.TabFrame,
-            BackgroundTransparency = 0.75,
-            BackgroundColor3 = self.CurrentTheme.UFB,
-            Size = UDim2.new(0, 130, 0, 40),
-            ClipsDescendants = true,
-        })
-        
-        MakeInstance("UICorner", {
-            CornerRadius = UDim.new(0, 5),
-        }, tabButton)
-        
-        local tabStroke = MakeInstance("UIStroke", {
-            Name = "UIStroke",
-            Transparency = 0.55,
-            Color = self.CurrentTheme.USC,
-            Thickness = 2,
-            Enabled = true,
-        }, tabButton)
-        
-        table.insert(self.Strokes, tabStroke)
-        
-        MakeInstance("ImageLabel", {
-            Name = "Icon",
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0.15, 0, 0.5, 0),
-            Size = UDim2.new(0, 28, 0, 28),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            Image = icon or "",
-            Rotation = 0,
-        }, tabButton)
-        
-        local tabTitle = MakeInstance("TextLabel", {
-            Name = "Title",
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0.525, 0, 0.5, 0),
-            Size = UDim2.new(0, 100, 0, 20),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            Font = Enum.Font.Gotham,
-            Text = name,
-            TextSize = 11,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-        }, tabButton)
+    local u1056 = _TranslateMatchs2(u906, 'Press Any Key!')
+    local _GetStringForKeyCode = _UserInputService.GetStringForKeyCode
+    local _Notify = u906.Notify
+    local _SaveConfigurations = u906.SaveConfigurations
+    local _Wait7 = _Heartbeat.Wait
 
-        -- Tab Content
-        local tabContent = MakeInstance("CanvasGroup", {
-            Name = name .. "Group",
-            Parent = self.TabFrame.Parent,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 1,
-            GroupColor3 = Color3.fromRGB(255, 255, 255),
-            GroupTransparency = 1,
-            Position = UDim2.new(0.6115, 0, 0.535, 0),
-            Size = UDim2.new(0, 455, 0, 270),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            Visible = false,
-        })
-        
-        local contentScroller = MakeInstance("ScrollingFrame", {
-            Name = "Sleeker",
-            BackgroundTransparency = 0.95,
-            BackgroundColor3 = Color3.fromRGB(15, 15, 15),
-            Position = UDim2.new(0.51, 0, 0.5, 0),
-            Size = UDim2.new(0, 455, 0, 270),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            CanvasSize = UDim2.new(0, 0, 0, 0),
-            AutomaticCanvasSize = Enum.AutomaticSize.Y,
-            ScrollBarThickness = 0,
-        }, tabContent)
-        
-        MakeInstance("UICorner", {
-            CornerRadius = UDim.new(0, 5),
-        }, contentScroller)
-        
-        local headerLabel = MakeInstance("TextLabel", {
-            Name = name,
-            BackgroundTransparency = 0.65,
-            BackgroundColor3 = Color3.fromRGB(0, 255, 15),
-            Size = UDim2.new(0, 435, 0, 25),
-            Font = Enum.Font.Gotham,
-            Text = name,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            RichText = true,
-        }, contentScroller)
-        
-        MakeInstance("UICorner", {
-            CornerRadius = UDim.new(0, 5),
-        }, headerLabel)
-        
-        MakeInstance("UIListLayout", {
-            Name = "UIListLayout",
-            HorizontalAlignment = Enum.HorizontalAlignment.Center,
-            SortOrder = Enum.SortOrder.LayoutOrder,
-            Padding = UDim.new(0, 8),
-        }, contentScroller)
+    u157(_UserInputService.InputBegan, function(p1061, p1062)
+        if not p1062 and (p1061.KeyCode ~= _KeyCode.Unknown and u936) then
+            local _Configurations3 = u907('Configurations')
+            local v1064 = u938
 
-        tab.Button = tabButton
-        tab.Content = tabContent
-        tab.Scroller = contentScroller
-        tab.Properties = {}
-        tab.Icon = tabButton.Icon
+            if _Configurations3 and v1064 then
+                local v1065 = u906
+                local v1066 = _GetStringForKeyCode(_UserInputService, p1061.KeyCode)
+                local v1067 = u1056
+                local v1068 = true
 
-        table.insert(self.Tabs, tab)
+                for v1069 = 1, #v1064 do
+                    local v1070 = v1064[v1069]
+                    local _Holder = Kebind.Holder
 
-        -- Tab Click Handler
-        tabButton.MouseButton1Click:Connect(function()
-            PlayTouchSound()
-            self:SelectTab(tab)
-        end)
+                    if _Holder.Text == v1067 then
+                        local v1072 = _Notify
 
-        -- Touch Effect
-        ApplyTouchEffect(tabButton)
+                        for v1073 = 1, #v1064 do
+                            if v1064[v1073].Holder.Text == v1066 then
+                                v1072(v1065, 'The keybind <font color="rgb(0, 255, 0)">' .. v1066 .. '</font> is already taken.')
+                                return
+                            end
+                        end
 
-        if not self.CurrentTab then
-            self:SelectTab(tab)
-        end
+                        _Holder.Text = v1066
+                        _Configurations3.Keybind[v1070.Name] = v1066
+                        _SaveConfigurations(v1065)
+                        return
+                    end
+                    if v1070.Holder.Text == v1066 then
+                        v1068 = v1070.Callback
+                        break
+                    end
+                end
 
-        return tab
-    end
-
-    function State:SelectTab(tab)
-        if self.CurrentTab == tab then return end
-        
-        local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine)
-        
-        if self.CurrentTab then
-            local oldTab = self.CurrentTab
-            PlayTween(oldTab.Button, tweenInfo, {BackgroundTransparency = 0.75})
-            PlayTween(oldTab.Button.Title, tweenInfo, {Position = UDim2.new(0.525, 0, 0.5, 0)})
-            PlayTween(oldTab.Button.Icon, tweenInfo, {Position = UDim2.new(0.15, 0, 0.5, 0)})
-            
-            oldTab.Content.GroupTransparency = 1
-            oldTab.Content.Visible = false
-            oldTab.Content.Parent = nil
-        end
-        
-        self.CurrentTab = tab
-        
-        tab.Content.Parent = self.TabFrame.Parent
-        tab.Content.Visible = true
-        
-        PlayTween(tab.Button, tweenInfo, {BackgroundTransparency = 0})
-        PlayTween(tab.Button.Title, tweenInfo, {Position = UDim2.new(0.55, 0, 0.5, 0)})
-        PlayTween(tab.Button.Icon, tweenInfo, {Position = UDim2.new(0.175, 0, 0.5, 0)})
-        
-        PlayTween(tab.Content, tweenInfo, {GroupTransparency = 0})
-    end
-
-    function State:RegisterProperty(tab, property)
-        if not tab then return end
-        
-        local propType = property.Type
-        local callback = property.Callback
-        local flag = property.Flag
-        local text = property.Text or ""
-        
-        local scroller = tab.Scroller
-        
-        if propType == "Label" then
-            local label = MakeInstance("TextLabel", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 415, 0, 25),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 13,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            })
-            
-            if flag then
-                self.Flags[flag] = function(value)
-                    label.Text = value
+                if v1068 then
+                    _Wait7(_Heartbeat)
+                    u164(v1068)
                 end
             end
-            
-        elseif propType == "Header" then
-            local header = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
+        end
+    end)
+
+    local v1074 = u915(0.5, u916.Sine)
+    local _ThemeList = u906.ThemeList
+
+    v926:ApplySetting('Theme', _ThemeList[u3(_Configurations2.Dropdown['Select Theme']) or 1] or _ThemeList[1])
+    _Wait5(_PlayTween5(u906, u921, v1074, {
+        Position = u910(0.5, 0, 0.5, 0),
+    }).Completed)
+    u908(0.5)
+    _Wait5(_PlayTween5(u906, u921, v1074, {
+        Size = u910(0, 500, 0, 200),
+    }).Completed)
+
+    local u1076 = {
+        Name = 'Status',
+        Parent = _MainFrame,
+        BackgroundTransparency = 1,
+        Size = u910(0, 350, 0, 30),
+    }
+    local u1077 = {
+        Name = 'LoadingCircle',
+        BackgroundTransparency = 1,
+        Position = u910(0, 0, 0, 3),
+        Size = u910(0, 25, 0, 25),
+        ImageTransparency = 1,
+        Image = 'rbxassetid://4965945816',
+    }
+    local u1078 = {
+        Name = 'StatusText',
+        BackgroundTransparency = 1,
+        Position = u910(0, 40, 0, 0),
+        Size = u910(0, 300, 0, 30),
+        Font = _Font.Gotham,
+        TextSize = 16,
+        TextColor3 = u909(255, 255, 255),
+        TextXAlignment = _TextXAlignment.Left,
+        TextTransparency = 1,
+    }
+    local u1079 = u915(0.5)
+    local u1080 = {ImageTransparency = 0}
+    local u1081 = {TextTransparency = 0}
+
+    local function v1091(p1082, p1083)
+        local v1084 = u906
+        local v1085 = _MakeInstance8
+        local v1086 = _PlayTween5
+        local v1087 = u1076
+        local v1088 = u1078
+        local v1089 = u1079
+
+        v1087.Position = u910(0, 25, 0, p1083)
+        v1088.Text = p1082
+
+        local v1090 = v1085(v1084, 'Frame', v1087, v1085(v1084, 'ImageLabel', u1077), v1085(v1084, 'TextLabel', v1088))
+
+        v1086(v1084, v1090.LoadingCircle, v1089, u1080)
+        v1086(v1084, v1090.StatusText, v1089, u1081)
+        u908(0.25)
+
+        return v1090
+    end
+
+    local _Connectingtoserver = v1091('Connecting to server...', 50)
+    local _Waitingforyoutowhitelist = v1091('Waiting for you to whitelist...', 90)
+    local _Initializing = v1091('Initializing...', 130)
+    local _LoadingCircle = _Connectingtoserver.LoadingCircle
+    local u1096 = 'Rotation'
+
+    function u914.Coroutine()
+        local v1097 = u1096
+        local v1098 = u908
+
+        while true do
+            v1098(0.005)
+            local v1099 = _LoadingCircle
+            if not v1099 then break end
+            v1099[v1097] = v1099[v1097] + 2
+        end
+    end
+
+    local u1100 = {
+        'https://api.overdrivehub.xyz/v1/script/server/request?i=',
+        ' ',
+        'POST',
+    }
+    local _HexEncode = u906.HexEncode
+    local _HttpRequest4 = u906.HttpRequest
+
+    local v1107 = u906
+    u906.WebServerSend(v1107, 'disconnect')
+
+    u906.WebServerSend(v1110, u1109)
+    u908(1)
+
+    _Connectingtoserver.StatusText.Text = 'Waiting for the server to respond...'
+    u908(1)
+
+    local function u1165(p1111, p1112, p1113, p1114, p1115, p1116, p1117)
+        local v1118 = u139
+        local v1119 = _date
+        local _getStrokes = v1118.getStrokes
+        local _getFlags = v1118.getFlags
+        local v1122 = u909
+        local v1123 = u906
+        local v1124 = u910
+        local v1125 = u912
+        local v1126 = _Font
+        local v1127 = _TextXAlignment
+        local v1128 = _TextYAlignment
+        local v1129 = _AutomaticSize
+        local v1130 = u913
+        local _MakeInstance9 = v1123.MakeInstance
+        local v1132 = v1122(0, 200, 0)
+
+        if p1114 == 0 then
+            v1132 = v1122(255, 0, 0)
+        elseif p1114 == 3 then
+            v1132 = v1122(15, 152, 186)
+        elseif p1114 == 2 then
+            v1132 = v1122(0, 255, 0)
+        elseif p1114 == 1 then
+            v1132 = v1122(0, 0, 255)
+        end
+
+        local _getHUD = v1118.getHUD
+        local _getTheme = v1118.getTheme
+        local v1135 = p1111 or _Name
+
+        if #v1135 > 50 then
+            v1135 = _sub(v1135, 1, 50) .. '...'
+        end
+
+        local _t9 = v1119('*t', p1116)
+        local v1137 = _time()
+        local _t10 = v1119('*t', v1137)
+        local v1139
+
+        if _t10.day ~= _t9.day or _t10.month ~= _t9.month or _t10.year ~= _t9.year then
+            local _t11 = v1119('*t', v1137 - 86400)
+            v1139 = _t11.day == _t9.day and _t11.month == _t9.month and _t11.year == _t9.year and 'Yesterday at ' or _t9.month .. '/' .. _t9.day .. '/' .. _t9.year .. ' at '
+        else
+            v1139 = 'Today at '
+        end
+
+        local _hour3 = _t9.hour
+        local _min2 = _t9.min
+        local v1143 = 'AM'
+
+        if _min2 < 10 then
+            _min2 = '0' .. _min2
+        end
+
+        local v1144 = _hour3 > 11 and 'PM' or v1143
+
+        if _hour3 > 12 then
+            _hour3 = _hour3 - 12
+        end
+
+        local u1145 = _MakeInstance9(v1123, 'Frame', {
+            Name = 'Message',
+            Parent = _getHUD,
+            BackgroundTransparency = 0.75,
+            BackgroundColor3 = _getTheme.UFB,
+            Size = v1124(0, 435, 0, 30),
+            AutomaticSize = v1129.Y,
+        }, _MakeInstance9(v1123, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = v1125(0, 5),
+        }), _MakeInstance9(v1123, 'UIStroke', {
+            Name = 'UIStroke',
+            Transparency = 0.55,
+            Color = p1115 and v1122(0, 255, 0) or _getTheme.USC,
+            Thickness = 2,
+            Enabled = true,
+        }), _MakeInstance9(v1123, 'ImageLabel', {
+            Name = 'Avatar',
+            BackgroundTransparency = 1,
+            Position = v1124(0, 15, 0, 7.5),
+            Size = v1124(0, 30, 0, 30),
+            Image = 'rbxthumb://type=AvatarHeadShot&id=' .. p1112 .. '&w=100&h=100',
+        }, _MakeInstance9(v1123, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = v1125(0, 15),
+        }), _MakeInstance9(v1123, 'UIStroke', {
+            Name = 'UIStroke',
+            Transparency = 0.55,
+            Color = v1132,
+            Thickness = 2,
+            Enabled = true,
+        })), _MakeInstance9(v1123, 'TextButton', {
+            Name = 'User',
+            BackgroundTransparency = 1,
+            Position = v1124(0, 55, 0, 13.5),
+            Size = v1124(0, 100, 0, 10),
+            Font = v1126.Gotham,
+            Text = v1135,
+            TextSize = 15,
+            TextColor3 = v1132,
+            TextXAlignment = v1127.Left,
+            TextYAlignment = v1128.Top,
+            RichText = true,
+        }), _MakeInstance9(v1123, 'TextLabel', {
+            Name = 'Time',
+            BackgroundTransparency = 1,
+            Position = v1124(0, 290, 0, 13.5),
+            Size = v1124(0, 100, 0, 10),
+            Font = v1126.Gotham,
+            Text = v1139 .. _hour3 .. ':' .. _min2 .. ' ' .. v1144,
+            TextSize = 11,
+            TextColor3 = v1122(255, 255, 255),
+            TextXAlignment = v1127.Left,
+            TextYAlignment = v1128.Top,
+            RichText = true,
+        }), _MakeInstance9(v1123, 'TextLabel', {
+            Name = 'Text',
+            BackgroundTransparency = 1,
+            Position = v1124(0, 15, 0, 50),
+            Size = v1124(0, 400, 0, 10),
+            Font = v1126.Gotham,
+            Text = p1113 .. '\n',
+            TextSize = 13,
+            TextWrapped = true,
+            TextColor3 = v1122(255, 255, 255),
+            TextXAlignment = v1127.Left,
+            TextYAlignment = v1128.Top,
+            AutomaticSize = v1129.Y,
+            RichText = true,
+        }))
+        local u1146 = u589(_getHUD.Parent, 'Enter Message')
+        local u1147 = {
+            'Text',
+            '@',
+            ' ',
+        }
+
+        u157(u1145.User.MouseButton1Click, function()
+            if u1146 then
+                local v1148 = u1147
+                local v1149 = v1148[1]
+                u1146[v1149] = u1146[v1149] .. v1148[2] .. p1111 .. v1148[3]
+            end
+        end)
+        v1130(_getStrokes, u1145.UIStroke)
+        v1130(_getFlags, u1145)
+
+        local v1150 = nil
+        local u1151 = nil
+
+        if p1114 == 0 then
+            v1150 = 'rbxassetid://115975092499176'
+            u1151 = 45
+        elseif p1114 == 3 then
+            v1150 = 'rbxassetid://98163105905575'
+            u1151 = 48
+        elseif p1114 == 2 then
+            v1150 = 'rbxassetid://96509635143788'
+            u1151 = 47
+        elseif p1114 == 1 then
+            v1150 = 'rbxassetid://77246024315687'
+            u1151 = 47
+        end
+        if v1150 and u1151 and p1117 then
+            local u1152 = _MakeInstance9(v1123, 'ImageLabel', {
+                Name = 'Decoration',
+                Parent = u1145.Avatar,
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 25),
+                AnchorPoint = u911(0.5, 0.5),
+                Position = v1124(0.5, 0, 0.5, 0),
+                Size = v1124(0, 40, 0, 40),
+                Image = v1150,
+                ImageRectSize = u911(143, 143),
+                ImageRectOffset = u911(0, 0),
             })
-            
-            local glow = MakeInstance("ImageLabel", {
-                Name = "Glow",
+            local u1153 = {
+                'DisableAnimatedDecorations',
+                'ImageRectOffset',
+            }
+
+            function u914.Coroutine()
+                local v1154 = u1153
+                local v1155 = u908
+                local v1156 = u1152
+                local v1157 = u1145
+                local v1158 = u1151
+                local v1159 = u907
+                local v1160 = u911
+                local v1161 = v1154[1]
+                local v1162 = v1154[2]
+
+                while v1156 and v1157 do
+                    v1155()
+                    if not v1159(v1161) then
+                        local v1163 = 0
+                        local v1164 = 0
+
+                        for _ = 1, v1158 do
+                            v1155(0.015)
+                            if v1157 then
+                                if v1156 then
+                                    v1156[v1162] = v1160(143 * v1164, v1163)
+
+                                    if v1164 == 6 then
+                                        v1163 = v1163 + 143
+                                        v1164 = -1
+                                    end
+
+                                    v1164 = v1164 + 1
+                                end
+                            end
+                        end
+                    end
+                    v1155()
+                end
+            end
+        end
+
+        return u1145
+    end
+
+    local u1166 = ''
+
+    local function u1173(p1167, p1168, p1169)
+        local v1170 = u1166
+        local v1171 = #p1167
+
+        for v1172 = p1168, v1171 do
+            v1170 = v1170 .. p1167[v1172]
+
+            if v1172 ~= v1171 then
+                v1170 = v1170 .. p1169
+            end
+        end
+
+        return v1170
+    end
+
+    local u1174 = nil
+
+    local v1232 = u921
+    local u1233 = u911
+    local u1234 = u916
+    local u1235 = u928
+    local u1236 = u933
+    local u1237 = u935
+    local u1238 = _MainFrame
+    local u1239 = u929
+    local u1240 = u914
+    local u1241 = u1056
+    local u1242 = u910
+    local v1243 = _MakeInstance8
+    local u1244 = u938
+    local u1245 = u908
+
+    if not u135 then
+        while true do
+            u135 = _LocalPlayer.Character
+            if u135 then break end
+            u1245()
+            if false then break end
+        end
+    end
+
+    local v1246 = u915(1)
+    local _LoadingCircle2 = _Connectingtoserver.LoadingCircle
+    local _StatusText = _Connectingtoserver.StatusText
+
+    _StatusText.Text = 'Connected to Server!'
+    _StatusText.TextColor3 = u909(0, 255, 0)
+
+    _Wait5(_PlayTween5(u906, _LoadingCircle2, v1246, {ImageTransparency = 1}).Completed)
+
+    _LoadingCircle = _Waitingforyoutowhitelist.LoadingCircle
+    _LoadingCircle2.Rotation = 0
+    _LoadingCircle2.Image = 'rbxassetid://6031094667'
+
+    _PlayTween5(u906, _LoadingCircle2, v1246, {ImageTransparency = 0})
+
+    if u907('IsPremium') then
+        u1245(1)
+    else
+        local v1249 = v1243(u906, 'TextButton', {
+            Name = 'EnterKey',
+            Parent = u1238,
+            BackgroundColor3 = u1237.UFB,
+            BackgroundTransparency = 1,
+            AnchorPoint = u1233(0.5, 0.5),
+            Position = u1242(0.5, 0, 0.9, 0),
+            Size = u1242(0, 480, 0, 25),
+            Font = _Font.Gotham,
+            Text = 'Copy Whitelist',
+            TextSize = 14,
+            TextColor3 = u909(255, 255, 255),
+            TextTransparency = 1,
+        }, v1243(u906, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = u912(0, 10),
+        }))
+
+        u157(v1249.MouseButton1Click, function()
+            local v1250 = u141
+            if v1250 then
+                v1250('https://overdrivehub.xyz/whitelist/selections?HWID=' .. u443)
+                u906:Notify('Link copied to clipboard | Paste it on your browser.')
+            end
+        end)
+
+        local v1251 = u915(0.5)
+        _PlayTween5(u906, v1249, v1251, {
+            BackgroundTransparency = 0.85,
+            TextTransparency = 0,
+        })
+        _PlayTween5(u906, v1249, v1251, {
+            BackgroundTransparency = 1,
+            TextTransparency = 1,
+        })
+    end
+
+    local v1252 = u915(1)
+    local _LoadingCircle3 = _Waitingforyoutowhitelist.LoadingCircle
+    local _StatusText2 = _Waitingforyoutowhitelist.StatusText
+
+    _StatusText2.Text = 'Authenticated!'
+    _StatusText2.TextColor3 = u909(0, 255, 0)
+
+    _Wait5(_PlayTween5(u906, _LoadingCircle3, v1252, {ImageTransparency = 1}).Completed)
+
+    _LoadingCircle = _Initializing.LoadingCircle
+    _LoadingCircle3.Rotation = 0
+    _LoadingCircle3.Image = 'rbxassetid://6031094667'
+
+    _PlayTween5(u906, _LoadingCircle3, v1252, {ImageTransparency = 0})
+
+    local _Game = u906.Game
+
+    while true do
+        if _Game == 'Murder Mystery 2' then
+            local v1256 = u589(_LocalPlayer, 'PlayerGui')
+            local v1257 = v1256 and u589(v1256, 'MainGUI')
+            local v1258 = v1257 and u589(v1257, 'Game')
+
+            if v1258 then
+                u153('IsMobile', not u589(v1258, 'Inventory'))
+                break
+            end
+        else
+            if _Game ~= 'Blade Ball' then
+                break
+            end
+
+            local v1259 = u589(_LocalPlayer, 'PlayerGui')
+            local v1260 = v1259 and u589(v1259, 'Hotbar')
+
+            if v1260 then
+                local v1261 = u589(v1260, 'Ability')
+                local v1262 = u589(v1260, 'Block')
+
+                if v1261 then
+                    u153('AbilityGradient', u589(v1261, 'UIGradient'))
+                end
+                if v1262 then
+                    u153('BlockGradient', u589(v1262, 'UIGradient'))
+                end
+                if v1261 and v1262 then
+                    break
+                end
+            end
+        end
+
+        u1245()
+    end
+
+    u1245(1)
+
+    local v1263 = u915(1)
+    local _LoadingCircle4 = _Initializing.LoadingCircle
+    local _StatusText3 = _Initializing.StatusText
+
+    _StatusText3.Text = 'Ready!'
+    _StatusText3.TextColor3 = u909(0, 255, 0)
+
+    _Wait5(_PlayTween5(u906, _LoadingCircle4, v1263, {ImageTransparency = 1}).Completed)
+
+    _LoadingCircle = nil
+    _LoadingCircle4.Rotation = 0
+    _LoadingCircle4.Image = 'rbxassetid://6031094667'
+
+    _PlayTween5(u906, _LoadingCircle4, v1263, {ImageTransparency = 0})
+    u1245(2)
+
+    local v1266 = u915(0.5)
+    local v1267 = {ImageTransparency = 1}
+    local v1268 = {TextTransparency = 1}
+
+    _PlayTween5(u906, _Connectingtoserver.LoadingCircle, v1266, v1267)
+    _PlayTween5(u906, _Connectingtoserver.StatusText, v1266, v1268)
+    _PlayTween5(u906, _Waitingforyoutowhitelist.LoadingCircle, v1266, v1267)
+    _PlayTween5(u906, _Waitingforyoutowhitelist.StatusText, v1266, v1268)
+    _PlayTween5(u906, _Initializing.LoadingCircle, v1266, v1267)
+    _Wait5(_PlayTween5(u906, _Initializing.StatusText, v1266, v1268).Completed)
+
+    u1240.d = _Connectingtoserver
+    u1240.d = _Waitingforyoutowhitelist
+    u1240.d = _Initializing
+    u1240.d = CopyWhitelist
+
+    u1245(0.5)
+    _Wait5(_PlayTween5(u906, v1232, v1074, {
+        Size = u1242(0, 600, 0, 300),
+    }).Completed)
+    u1245(1)
+
+    u1238.TabFrame.Visible = true
+
+    local v1269 = u915(1)
+
+    _PlayTween5(u906, u1238.TabFrame, v1269, {
+        Position = u1242(0.125, 0, 0.535, 0),
+    })
+    _PlayTween5(u906, u1238.Title, v1269, {
+        BackgroundTransparency = 0.35,
+        TextTransparency = 0,
+    })
+    _PlayTween5(u906, u1238, v1269, {BackgroundTransparency = 0.5})
+
+    local v1270 = ''
+    local v1271
+
+    if _ThemeList[1] ~= 'Halloween' then
+        if _ThemeList[1] ~= 'Christmas' then
+            if _ThemeList[1] ~= 'Valentine' then
+                local _t12 = _date('*t', _time())
+                v1271 = _t12.month == 4 and _t12.day == 1 and '<font color="rgb(0, 255, 0)">[APRIL FOOLS]</font> ' or v1270
+            else
+                v1271 = '<font color="rgb(255, 105, 190)">[VALENTINE]</font> '
+            end
+        else
+            v1271 = '<font color="rgb(0, 0, 255)">[WINTER]</font> '
+        end
+    else
+        v1271 = '<font color="rgb(255, 0, 0)">[HALLOWEEN]</font> '
+    end
+
+    u906:AnimateRichText(u1238.Title, ' Overdrive H ' .. v1271 .. '| VER. <u><font color="rgb(0, 255, 0)">' .. u931 .. '</font></u> | <font color="rgb(0, 255, 0)">' .. u906.Game .. '</font>')
+
+    function u1240.Coroutine()
+        local v1273 = u906
+        local v1274 = u1245
+        local v1275 = u2
+        local _HttpRequest6 = v1273.HttpRequest
+        local _JSDecode4 = v1273.JSDecode
+        local _Notify3 = v1273.Notify
+
+        while true do
+            repeat
+                v1274(10)
+                local v1279 = _HttpRequest6(v1273, 'https://raw.githubusercontent.com/ItsJiDy/Overdrive-H/refs/heads/main/current%20version.json')
+            until v1279
+
+            local v1280 = _JSDecode4(v1273, v1279)
+
+            if v1280 and v1280.VERSION ~= u931 then
+                _Notify3(v1273, '<font color="rgb(0, 0, 255)">Overdrive H</font> just got updated, new version: <font color="rgb(0, 255, 0)">' .. v1275(v1280.VERSION) .. '</font>')
+            end
+        end
+    end
+
+    local u1281 = {}
+
+    local function v1285()
+        local v1282 = u591()
+        local v1283 = u1281
+
+        for v1284 = 1, #v1283 do
+            v1283[v1284](v1282)
+        end
+    end
+
+    u157(_Players.PlayerAdded, v1285)
+    u157(_Players.PlayerRemoving, v1285)
+
+    local u1286 = nil
+    local u1287 = nil
+
+    function v926.AddTab(_, p1288, p1289)
+        local u1290 = u906
+        local u1291 = u1238
+        local u1292 = u1242
+        local u1293 = u912
+        local u1294 = u1233
+        local u1295 = _Font
+        local u1296 = u909
+        local u1297 = u1281
+        local u1298 = u913
+        local u1299 = u927
+        local u1300 = _Wait5
+        local _TranslateMatchs3 = u1290.TranslateMatchs
+        local _MakeInstance10 = u1290.MakeInstance
+        local _AnimateRichText = u1290.AnimateRichText
+        local _ApplyTouchEffect = u1290.ApplyTouchEffect
+        local _PlayTouchSoundEffect3 = u1290.PlayTouchSoundEffect
+        local u1306 = _MakeInstance10(u1290, 'ImageButton', {
+            Name = u1290:RandomString(3) .. '\0Am\0\2',
+            Parent = u1291.TabFrame,
+            BackgroundTransparency = u930 and 0 or 0.75,
+            BackgroundColor3 = u1237.UFB,
+            Size = u1292(0, 130, 0, 40),
+            ClipsDescendants = true,
+        }, _MakeInstance10(u1290, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = u1293(0, 5),
+        }), _MakeInstance10(u1290, 'UIStroke', {
+            Name = 'UIStroke',
+            Transparency = 0.55,
+            Color = u1237.USC,
+            Thickness = 2,
+            Enabled = true,
+        }), _MakeInstance10(u1290, 'ImageLabel', {
+            Name = 'Icon',
+            BackgroundTransparency = 1,
+            Position = u930 and u1292(0.175, 0, 0.5, 0) or u1292(0.15, 0, 0.5, 0),
+            Size = u1292(0, 28, 0, 28),
+            AnchorPoint = u1294(0.5, 0.5),
+            Image = p1289 or '',
+            Rotation = 0,
+        }), _MakeInstance10(u1290, 'TextLabel', {
+            Name = 'Title',
+            BackgroundTransparency = 1,
+            Position = u930 and u1292(0.55, 0, 0.5, 0) or u1292(0.525, 0, 0.5, 0),
+            Size = u1292(0, 100, 0, 20),
+            AnchorPoint = u1294(0.5, 0.5),
+            Font = u1295.Gotham,
+            Text = '',
+            TextSize = 11,
+            TextColor3 = u1296(255, 255, 255),
+        }))
+        local u1307 = _MakeInstance10(u1290, 'CanvasGroup', {
+            Name = p1288 .. ' Group',
+            Parent = u930 and u1291 and u1291 or nil,
+            BackgroundColor3 = u1296(255, 255, 255),
+            BackgroundTransparency = 1,
+            GroupColor3 = u1296(255, 255, 255),
+            GroupTransparency = u930 and 0 or 1,
+            Position = u1292(0.6115, 0, 0.535, 0),
+            Size = u1292(0, 455, 0, 270),
+            AnchorPoint = u1294(0.5, 0.5),
+            Visible = u930,
+        }, _MakeInstance10(u1290, 'ScrollingFrame', {
+            Name = 'Sleeker',
+            BackgroundTransparency = 0.95,
+            BackgroundColor3 = u1296(15, 15, 15),
+            Position = u1292(0.51, 0, 0.5, 0),
+            Size = u1292(0, 455, 0, 270),
+            AnchorPoint = u1294(0.5, 0.5),
+            CanvasSize = u1292(0, 0, 0, 0),
+            AutomaticCanvasSize = _AutomaticSize.Y,
+            ScrollBarThickness = 0,
+        }, _MakeInstance10(u1290, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = u1293(0, 5),
+        }), _MakeInstance10(u1290, 'TextLabel', {
+            Name = p1288,
+            BackgroundTransparency = 0.65,
+            BackgroundColor3 = u1296(0, 255, 15),
+            Size = u1292(0, 435, 0, 25),
+            Font = u1295.Gotham,
+            Text = _TranslateMatchs3(u1290, p1288),
+            TextSize = 14,
+            TextColor3 = u1296(255, 255, 255),
+            RichText = true,
+        }, _MakeInstance10(u1290, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = u1293(0, 5),
+        })), _MakeInstance10(u1290, 'UIListLayout', {
+            Name = 'UIListLayout',
+            HorizontalAlignment = _HorizontalAlignment.Center,
+            SortOrder = _SortOrder.LayoutOrder,
+            Padding = u1293(0, 8),
+        })))
+        local u1308 = #u1299 + 1
+        local u1309 = {}
+
+        u1299[u1308] = {
+            Holder = u1307,
+            Container = u1306,
+        }
+
+        if u930 then
+            u1236 = u1306.Icon
+            u1307.Position = u1292(0.6115, 0, 0.835, 0)
+
+            _PlayTween5(u1290, u1307, u915(1), {
+                Position = u1292(0.6115, 0, 0.535, 0),
+            })
+
+            u1286 = u1306
+            u1287 = u1299[u1308]
+        end
+
+        u930 = false
+
+        u1298(u1235, u1306.UIStroke)
+        u1298(u1239, u1306)
+        _AnimateRichText(u1290, u1306.Title, _TranslateMatchs3(u1290, p1288))
+
+        local u1310 = u915(0.3, u1234.Sine)
+        local u1311 = {Transparency = 0.75}
+        local u1312 = {
+            Position = u1292(0.525, 0, 0.5, 0),
+        }
+        local u1313 = {
+            Position = u1292(0.15, 0, 0.5, 0),
+        }
+        local u1314 = {Transparency = 0}
+        local u1315 = {
+            Position = u1292(0.55, 0, 0.5, 0),
+        }
+        local u1316 = {
+            Position = u1292(0.175, 0, 0.5, 0),
+        }
+        local u1317 = {GroupTransparency = 0}
+
+        u157(u1306.MouseButton1Click, function()
+            local v1318 = u1290
+            local v1319 = u1306
+
+            _PlayTouchSoundEffect3(v1318)
+
+            if not u934 and u1286 ~= v1319 then
+                local v1320 = u1310
+                local v1321 = _PlayTween5
+                local v1322 = u1307
+
+                u1286 = v1319
+                u934 = true
+                u1236.Rotation = 0
+                u1236 = v1319.Icon
+
+                local v1323 = u1287
+                local _Container = v1323.Container
+                local _Holder2 = v1323.Holder
+
+                v1321(v1318, _Container, v1320, u1311)
+                v1321(v1318, _Container.Title, v1320, u1312)
+                v1321(v1318, _Container.Icon, v1320, u1313)
+
+                _Holder2.GroupTransparency = 1
+                _Holder2.Visible = false
+                _Holder2.Parent = nil
+                v1322.Parent = u1291
+                v1322.Visible = true
+
+                v1321(v1318, v1319, v1320, u1314)
+                v1321(v1318, v1319.Title, v1320, u1315)
+                v1321(v1318, v1319.Icon, v1320, u1316)
+                u1300(v1321(v1318, v1322, v1320, u1317).Completed)
+
+                u1287 = u1299[u1308]
+                u934 = false
+            end
+        end)
+        _ApplyTouchEffect(u1290, u1306)
+
+        local u1326 = {}
+        local u1327 = {
+            __NOTICE = "i don't know how'd you get in here but buzz off!",
+        }
+        local u1328 = _gsub(u2(u1327), 'table', 'odh')
+
+        function u1327.__ONREGISTER()
+            u1290:Kick(u1327.__NOTICE)
+        end
+        function u1240.Coroutine()
+            local v1329 = u1326
+            local u1330 = _Heartbeat
+            local v1331 = u1309
+            local v1332 = u1307
+            local v1333 = u1295
+            local u1334 = u1292
+            local u1335 = u1296
+            local u1336 = _TextXAlignment
+            local v1337 = u1294
+            local v1338 = u1298
+            local v1339 = u1237
+            local v1340 = u1235
+            local u1341 = u907
+            local u1342 = _min
+            local v1343 = u1239
+            local u1344 = _TranslateMatchs3
+            local u1345 = _MakeInstance10
+            local v1346 = _AnimateRichText
+            local v1347 = _ApplyTouchEffect
+            local u1348 = _PlayTouchSoundEffect3
+            local u1349 = u157
+            local v1350 = u1297
+            local u1351 = _PlayTween5
+            local u1352 = u164
+            local v1353 = _Configurations2
+            local v1354 = u77
+            local v1355 = u2
+            local u1356 = u3
+            local u1357 = _lower
+            local u1358 = u1241
+            local _Wait9 = u1330.Wait
+            local _Notify4 = u1290.Notify
+            local _RemoveRichText = u1290.RemoveRichText
+            local _SaveConfigurations2 = u1290.SaveConfigurations
+            local _Sleeker = v1332.Sleeker
+            local _UserInputState = Enum.UserInputState
+            local _UserInputType = Enum.UserInputType
+            local _t13 = v1354.t
+            local _b = v1354.b
+            local _s = v1354.s
+            local _Gotham = v1333.Gotham
+            local _Dropdown = v1353.Dropdown
+            local _Toggle = v1353.Toggle
+            local _Slider = v1353.Slider
+            local _Keybind = v1353.Keybind
+            local _TextBox = v1353.TextBox
+            local v1375 = v1337(0.5, 0.5)
+            local u1376 = u1335(255, 255, 255)
+            local v1377 = {
+                Name = 'UICorner',
+                CornerRadius = u1293(0, 5),
+            }
+            local v1378 = {
+                Name = 'UICorner',
+                CornerRadius = u1293(0, 3),
+            }
+            local v1379 = {
+                Name = 'UIStroke',
+                Transparency = 0.55,
+                Color = v1339.USC,
+                Thickness = 2,
+                ApplyStrokeMode = 'Border',
+                Enabled = true,
+            }
+            local v1380 = {
+                Parent = _Sleeker,
                 BackgroundTransparency = 1,
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Size = UDim2.new(1, 10, 1, 10),
-                Image = "rbxassetid://6014261993",
-                ImageColor3 = self.CurrentTheme.UFB,
+                Size = u1334(0, 415, 0, 25),
+                Font = _Gotham,
+                Text = '',
+                TextSize = 13,
+                TextColor3 = u1376,
+                TextXAlignment = u1336.Left,
+                RichText = true,
+            }
+            local v1381 = {
+                Parent = _Sleeker,
+                BackgroundTransparency = 1,
+                Size = u1334(0, 400, 0, 35),
+                Font = _Gotham,
+                Text = '',
+                TextSize = 20,
+                TextColor3 = u1376,
+                TextXAlignment = u1336.Left,
+                RichText = true,
+            }
+            local v1382 = {
+                Name = 'Underline',
+                BackgroundColor3 = v1339.UFB,
+                Position = u1334(0, 0, 1, 0),
+            }
+            local v1383 = {
+                Name = 'Glow',
+                BackgroundTransparency = 1,
+                AnchorPoint = v1337(0.5, 0.5),
+                Position = u1334(0.5, 0, 0.5, 0),
+                Size = u1334(1, 10, 1, 10),
+                Image = 'rbxassetid://6014261993',
+                ImageColor3 = v1339.UFB,
                 ImageTransparency = 0.7,
                 ScaleType = Enum.ScaleType.Slice,
                 SliceCenter = Rect.new(49, 49, 450, 450),
-            }, header)
-            
-            local underline = MakeInstance("Frame", {
-                Name = "Underline",
-                BackgroundColor3 = self.CurrentTheme.UFB,
-                Position = UDim2.new(0, 0, 1, 0),
-                Size = UDim2.new(0, #text * 9, 0, 2),
-            }, header)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 5),
-            }, underline)
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
+            }
+            local v1384 = {
+                Name = 'Click',
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 400, 0, 35),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 20,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            }, header)
-            
-        elseif propType == "Button" then
-            local button = MakeInstance("ImageButton", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 0.75,
-                BackgroundColor3 = self.CurrentTheme.UFB,
-                Size = UDim2.new(0, 435, 0, 30),
-                ClipsDescendants = true,
-            })
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 5),
-            }, button)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, button)
-            
-            table.insert(self.Strokes, stroke)
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 30),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                RichText = true,
-            }, button)
-            
-            MakeInstance("ImageLabel", {
-                Name = "Click",
-                BackgroundTransparency = 1,
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.9, 0, 0.5, 0),
-                Size = UDim2.new(0, 20, 0, 20),
-                Image = "rbxassetid://109049639340001",
-                ImageColor3 = Color3.fromRGB(255, 255, 255),
-            }, button)
-            
-            button.MouseButton1Click:Connect(function()
-                PlayTouchSound()
-                if callback then callback() end
-            end)
-            
-            ApplyTouchEffect(button)
-            
-        elseif propType == "Toggle" then
-            local container = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 30),
-            })
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.15, 0, 0.5, 0),
-                Size = UDim2.new(0, 100, 0, 10),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            }, container)
-            
-            local toggleFrame = MakeInstance("Frame", {
-                Name = "Toggle",
+                AnchorPoint = v1375,
+                Position = u1334(0.9, 0, 0.5, 0),
+                Size = u1334(0, 20, 0, 20),
+                Image = 'rbxassetid://109049639340001',
+                ImageColor3 = u1376,
+            }
+            local v1385 = {
+                Name = 'Activator',
                 BackgroundTransparency = 0,
-                BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-                Position = UDim2.new(0.25, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Size = UDim2.new(0, 15, 0, 10),
-            }, container)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, toggleFrame)
-            
-            local activator = MakeInstance("ImageButton", {
-                Name = "Activator",
-                BackgroundTransparency = 0,
-                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
-                Position = UDim2.new(0.8, 0, 0.5, 0),
-                Size = UDim2.new(0, 45, 0, 13),
-                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundColor3 = u1335(255, 0, 0),
+                Position = u1334(0.8, 0, 0.5, 0),
+                Size = u1334(0, 45, 0, 13),
+                AnchorPoint = v1375,
                 ClipsDescendants = true,
-            }, container)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, activator)
-            
-            table.insert(self.Strokes, stroke)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, activator)
-            
-            local state = false
-            
-            activator.MouseButton1Click:Connect(function()
-                PlayTouchSound()
-                state = not state
-                
-                local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
-                if state then
-                    activator.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                    toggleFrame.Position = UDim2.new(0.75, 0, 0.5, 0)
-                else
-                    activator.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                    toggleFrame.Position = UDim2.new(0.25, 0, 0.5, 0)
-                end
-                
-                if callback then callback(state) end
-            end)
-            
-            if flag then
-                self.Flags[flag] = function(value)
-                    state = value
-                    if state then
-                        activator.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                        toggleFrame.Position = UDim2.new(0.75, 0, 0.5, 0)
-                    else
-                        activator.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                        toggleFrame.Position = UDim2.new(0.25, 0, 0.5, 0)
-                    end
-                end
+            }
+            local v1386 = {
+                Name = 'Toggle',
+                BackgroundTransparency = 0,
+                BackgroundColor3 = u1335(100, 100, 100),
+                Position = u1334(0.25, 0, 0.5, 0),
+                AnchorPoint = v1375,
+                Size = u1334(0, 15, 0, 10),
+            }
+            local v1387 = {
+                Name = 'Arrow',
+                BackgroundTransparency = 1,
+                Position = u1334(1, -40, 0.5, -10),
+                Size = u1334(0, 20, 0, 20),
+                Image = 'rbxassetid://6031091004',
+            }
+            local v1388 = u1344(u1290, 'Select Player')
+
+            while not u1341('IsLoaded') do
+                _Wait9(u1330)
+                if false then break end
             end
-            
-        elseif propType == "Slider" then
-            local container = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 40),
-            })
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.15, 0, 0.335, 0),
-                Size = UDim2.new(0, 100, 0, 10),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            }, container)
-            
-            local valueBox = MakeInstance("TextBox", {
-                Name = "Value",
-                BackgroundTransparency = 0,
-                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
-                Position = UDim2.new(0.8, 0, 0.335, 0),
-                Size = UDim2.new(0, 45, 0, 18),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                ClearTextOnFocus = false,
-                Font = Enum.Font.Gotham,
-                Text = "",
-                TextSize = 12,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-            }, container)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, valueBox)
-            
-            table.insert(self.Strokes, stroke)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 5),
-            }, valueBox)
-            
-            local fill = MakeInstance("Frame", {
-                Name = "Fill",
-                BackgroundTransparency = 0,
-                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-                Position = UDim2.new(0.5, 0, 0.775, 0),
-                Size = UDim2.new(0, 400, 0, 5),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-            }, container)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, fill)
-            
-            local filler = MakeInstance("Frame", {
-                Name = "Filler",
-                BackgroundTransparency = 0,
-                BackgroundColor3 = self.CurrentTheme.UFB,
-                Position = UDim2.new(0, 0, 0.5, 0),
-                Size = UDim2.new(0, 20, 0, 5),
-                AnchorPoint = Vector2.new(0, 0.5),
-            }, fill)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, filler)
-            
-            local button = MakeInstance("ImageButton", {
-                Name = "Button",
-                BackgroundTransparency = 0.8,
-                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0, 20, 0.5, 0),
-                Size = UDim2.new(0, 10, 0, 10),
-            }, filler)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, button)
-            
-            local min = property.Minimum or 0
-            local max = property.Maximum or 100
-            local default = property.Default or 50
-            local current = default
-            
-            local function UpdateSlider(value)
-                value = math.clamp(value, min, max)
-                current = value
-                local percent = (value - min) / (max - min)
-                local pos = percent * 400
-                button.Position = UDim2.new(0, pos, 0.5, 0)
-                filler.Size = UDim2.new(0, pos, 0, 5)
-                valueBox.Text = tostring(math.floor(value))
-                if callback then callback(value) end
-            end
-            
-            UpdateSlider(default)
-            
-            local dragging = false
-            button.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = true
-                    local offset = button.AbsolutePosition.X - button.Position.X.Offset
-                    
-                    local connection
-                    connection = RunService.RenderStepped:Connect(function()
-                        if dragging then
-                            local pos = math.clamp(Mouse.X - offset - 3, 0, 400)
-                            local value = min + (max - min) * (pos / 395)
-                            UpdateSlider(value)
-                        end
-                    end)
-                    
-                    input.Changed:Connect(function()
-                        if input.UserInputState == Enum.UserInputState.End then
-                            dragging = false
-                            connection:Disconnect()
-                        end
-                    end)
-                end
-            end)
-            
-            valueBox.FocusLost:Connect(function()
-                local val = tonumber(valueBox.Text)
-                if val then
-                    UpdateSlider(val)
-                else
-                    UpdateSlider(current)
-                end
-            end)
-            
-            if flag then
-                self.Flags[flag] = UpdateSlider
-            end
-            
-        elseif propType == "Keybind" then
-            local container = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 30),
-            })
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.15, 0, 0.5, 0),
-                Size = UDim2.new(0, 100, 0, 10),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            }, container)
-            
-            local activator = MakeInstance("TextButton", {
-                Name = "Activator",
-                BackgroundTransparency = 0,
-                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
-                Position = UDim2.new(0.8, 0, 0.5, 0),
-                Size = UDim2.new(0, 75, 0, 15),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Font = Enum.Font.Gotham,
-                Text = property.Default or "Press Any Key!",
-                TextSize = 12,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                ClipsDescendants = true,
-            }, container)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, activator)
-            
-            table.insert(self.Strokes, stroke)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, activator)
-            
-            local key = property.Default or ""
-            local listening = false
-            
-            activator.MouseButton1Click:Connect(function()
-                PlayTouchSound()
-                listening = true
-                activator.Text = "Press Any Key!"
-            end)
-            
-            UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if listening and not gameProcessed then
-                    local keyName = UserInputService:GetStringForKeyCode(input.KeyCode)
-                    if keyName ~= "Unknown" then
-                        key = keyName
-                        activator.Text = key
-                        listening = false
-                        if callback then callback() end
-                    end
-                end
-            end)
-            
-        elseif propType == "Dropdown" then
-            local container = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                ClipsDescendants = true,
-                Size = UDim2.new(0, 435, 0, 60),
-            })
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0, 15, 0, 0),
-                Size = UDim2.new(1, 0, 0, 20),
-                RichText = true,
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-            }, container)
-            
-            local button = MakeInstance("TextButton", {
-                Name = "Button",
-                BackgroundTransparency = 0.95,
-                BackgroundColor3 = self.CurrentTheme.UFB,
-                Position = UDim2.new(0, 15, 0, 20),
-                Size = UDim2.new(1, -25, 0, 30),
-                RichText = true,
-                Font = Enum.Font.Gotham,
-                Text = property.Selections and property.Selections[1] or "Select",
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-            }, container)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, button)
-            
-            table.insert(self.Strokes, stroke)
-            
-            MakeInstance("UIPadding", {
-                Name = "UIPadding",
-                PaddingLeft = UDim.new(0, 10),
-            }, button)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 5),
-            }, button)
-            
-            local arrow = MakeInstance("ImageLabel", {
-                Name = "Arrow",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(1, -40, 0.5, -10),
-                Size = UDim2.new(0, 20, 0, 20),
-                Image = "rbxassetid://6031091004",
-            }, button)
-            
-            local menu = MakeInstance("Frame", {
-                Name = "Menu",
-                BackgroundTransparency = 0.95,
-                BackgroundColor3 = self.CurrentTheme.UFB,
-                ClipsDescendants = true,
-                Position = UDim2.new(0, 0, 1, 3),
-                Size = UDim2.new(1, 0, 0, 0),
-                Visible = false,
-            }, button)
-            
-            local menuStroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, menu)
-            
-            table.insert(self.Strokes, menuStroke)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 3),
-            }, menu)
-            
-            local optionContainer = MakeInstance("ScrollingFrame", {
-                Name = "OptionContainer",
-                BackgroundTransparency = 1,
-                CanvasSize = UDim2.new(0, 0, 0, 0),
-                AutomaticCanvasSize = Enum.AutomaticSize.Y,
-                ScrollBarThickness = 0,
-                Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = 10,
-            }, menu)
-            
-            MakeInstance("UIListLayout", {
-                Name = "UIListLayout",
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                SortOrder = Enum.SortOrder.LayoutOrder,
-            }, optionContainer)
-            
-            MakeInstance("UIPadding", {
-                Name = "UIPadding",
-                PaddingTop = UDim.new(0, 5),
-                PaddingBottom = UDim.new(0, 5),
-            }, optionContainer)
-            
-            local selections = property.Selections or {}
-            local selected = selections[1] or ""
-            local open = false
-            
-            for _, option in ipairs(selections) do
-                local optionButton = MakeInstance("TextButton", {
-                    Name = option,
-                    Parent = optionContainer,
-                    BackgroundTransparency = 1,
-                    Size = UDim2.new(1, -10, 0, 25),
-                    RichText = true,
-                    Font = Enum.Font.Gotham,
-                    Text = option,
-                    TextColor3 = Color3.fromRGB(104, 104, 104),
-                    TextSize = 14,
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                })
-                
-                if option == selected then
-                    optionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-                end
-                
-                optionButton.MouseButton1Click:Connect(function()
-                    if open then
-                        selected = option
-                        button.Text = option
-                        for _, child in ipairs(optionContainer:GetChildren()) do
-                            if child:IsA("TextButton") then
-                                child.TextColor3 = Color3.fromRGB(104, 104, 104)
+            while true do
+                _Wait9(u1330)
+
+                for v1638 = 1, #v1329 do
+                    local v1390 = v1329[v1638]
+
+                    if v1390 ~= ' * ' then
+                        local v1391
+
+                        if _t13(v1390) then
+                            local _Type2 = v1390.Type
+                            local _Flag = v1390.Flag
+                            local _Text2 = v1390.Text
+                            local _Callback2 = v1390.Callback
+
+                            if _Type2 == 'Label' then
+                                v1380.Name = _Text2
+                                local u1396 = u1345(u1290, 'TextLabel', v1380)
+                                v1346(u1290, u1396, u1344(u1290, _Text2))
+
+                                if _Flag then
+                                    local u1397 = 'Text'
+                                    v1331[_Flag] = function(p1398)
+                                        if p1398 then
+                                            u1396[u1397] = p1398
+                                        end
+                                    end
+                                    v1391 = v1638
+                                else
+                                    v1391 = v1638
+                                end
+                            elseif _Type2 == 'Header' then
+                                v1381.Name = _Text2
+                                v1382.Size = u1334(0, #_Text2 * 9, 0, 2)
+
+                                local v1399 = u1345(u1290, 'Frame', v1382, u1345(u1290, 'UICorner', v1377), u1345(u1290, 'ImageLabel', v1383))
+
+                                v1346(u1290, u1345(u1290, 'TextLabel', v1381, v1399), u1344(u1290, _Text2))
+                                v1338(v1343, v1399)
+
+                                v1391 = v1638
+                            elseif _Type2 == 'Button' then
+                                local v1400 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    BackgroundColor3 = u1376,
+                                    Size = u1334(0, 435, 0, 30),
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    RichText = true,
+                                })
+                                local v1401 = u1345(u1290, 'UIStroke', v1379)
+                                local v1402 = u1345(u1290, 'ImageButton', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 0.75,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Size = u1334(0, 435, 0, 30),
+                                    ClipsDescendants = true,
+                                }, u1345(u1290, 'UICorner', v1377), v1401, v1400, u1345(u1290, 'ImageLabel', v1384))
+
+                                u1349(v1402.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1352(_Callback2)
+                                end)
+                                v1347(u1290, v1402)
+                                v1346(u1290, v1400, u1344(u1290, _Text2))
+                                v1338(v1340, v1401)
+                                v1338(v1343, v1402)
+
+                                v1391 = v1638
+                            elseif _Type2 == 'ImageButton' then
+                                local v1403 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundColor3 = u1376,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 100, 0, 20),
+                                    Position = u1334(0.45, 0, 0.1, 0),
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 15,
+                                    TextColor3 = u1376,
+                                    AnchorPoint = v1375,
+                                    TextXAlignment = u1336.Left,
+                                })
+                                local _Activator = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 70),
+                                }, u1345(u1290, 'ImageLabel', {
+                                    Name = 'Icon',
+                                    BackgroundTransparency = 1,
+                                    BackgroundColor3 = u1335(0, 0, 0),
+                                    Size = u1334(0, 50, 0, 50),
+                                    Position = u1334(0.15, 0, 0.5, 0),
+                                    Image = 'rbxthumb://type=Asset&id=' .. v1390.Icon .. '&w=150&h=150',
+                                    AnchorPoint = v1375,
+                                }), v1403, u1345(u1290, 'TextButton', {
+                                    Name = 'Activator',
+                                    BackgroundTransparency = 0.8,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Size = u1334(0, 160, 0, 35),
+                                    Position = u1334(0.65, 0, 0.55, 0),
+                                    Font = _Gotham,
+                                    Text = v1390.TextButton,
+                                    TextSize = 13,
+                                    TextColor3 = u1335(225, 225, 225),
+                                    AnchorPoint = v1375,
+                                    ClipsDescendants = true,
+                                }, u1345(u1290, 'UICorner', v1377))).Activator
+
+                                u1349(_Activator.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1352(_Callback2)
+                                end)
+                                v1347(u1290, _Activator)
+                                v1346(u1290, v1403, _Text2)
+                                v1338(v1343, _Activator)
+
+                                v1391 = v1638
+                            elseif _Type2 == 'Toggle' then
+                                local v1405 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0.15, 0, 0.5, 0),
+                                    Size = u1334(0, 100, 0, 10),
+                                    AnchorPoint = v1375,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    RichText = true,
+                                })
+                                local u1406 = u1345(u1290, 'Frame', v1386, u1345(u1290, 'UICorner', v1378))
+                                local v1407 = u1345(u1290, 'UIStroke', v1379)
+                                local u1408 = u1345(u1290, 'ImageButton', v1385, v1407, u1345(u1290, 'UICorner', v1378), u1406)
+
+                                u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 30),
+                                }, v1405, u1408)
+
+                                local u1409, u1410 = _RemoveRichText(u1290, _Text2)
+                                local _Restricted = v1390.Restricted
+                                local _Text3 = v1390.Text
+
+                                if _Restricted == 'Premium' then
+                                    _Text3 = _Text3 .. ' <font color="rgb(0, 0, 255)">(Premium)</font>'
+                                elseif _Restricted == 'Exclusive' then
+                                    _Text3 = _Text3 .. ' <font color="rgb(0, 255, 0)">(Exclusive)</font>'
+                                end
+
+                                v1346(u1290, v1405, u1344(u1290, _Text3))
+
+                                local u1413 = {
+                                    'Is',
+                                    'Only ',
+                                    ' users can use this feature.',
+                                    'BackgroundColor3',
+                                    'Position',
+                                }
+                                local u1414 = u915(0.25)
+
+                                local function u1422()
+                                    local v1415 = u1290
+                                    local v1416 = u1413
+                                    local v1417 = _Restricted
+
+                                    if v1417 and not u1341(v1416[1] .. v1417) then
+                                        _Notify4(v1415, v1416[2] .. u1357(v1417) .. v1416[3])
+                                    else
+                                        local v1418 = u1351
+                                        local v1419 = u1414
+
+                                        u1410 = not u1410
+
+                                        local v1420, v1421
+
+                                        if u1410 then
+                                            v1420 = u1335(0, 255, 0)
+                                            v1421 = u1334(0.75, 0, 0.5, 0)
+                                        else
+                                            v1420 = u1335(255, 0, 0)
+                                            v1421 = u1334(0.25, 0, 0.5, 0)
+                                        end
+
+                                        v1418(v1415, u1408, v1419, {
+                                            [v1416[4]] = v1420,
+                                        })
+                                        v1418(v1415, u1406, v1419, {
+                                            [v1416[5]] = v1421,
+                                        })
+
+                                        _Toggle[u1409] = u1410
+                                        _SaveConfigurations2(v1415)
+                                        u1352(_Callback2, u1410)
+                                    end
+                                end
+
+                                if _Flag then
+                                    v1331[_Flag] = u1422
+                                end
+
+                                u1349(u1408.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1422()
+                                end)
+                                v1338(v1340, v1407)
+
+                                local v1423 = _Toggle[u1409]
+
+                                if v1423 and _b(v1423) then
+                                    if _Restricted and not u1341('Is' .. _Restricted) then
+                                        _Notify4(u1290, 'Only ' .. u1357(_Restricted) .. ' users can use this feature.')
+                                        v1391 = v1638
+                                    else
+                                        u1408.BackgroundColor3 = u1335(0, 255, 0)
+                                        u1406.Position = u1334(0.75, 0, 0.5, 0)
+
+                                        local v1424 = true
+                                        u1240.Spawn = {
+                                            Callback = u1352,
+                                            Args = {_Callback2, v1424},
+                                        }
+                                        v1391 = v1638
+                                    end
+                                else
+                                    _Toggle[u1409] = false
+                                    v1391 = v1638
+                                end
+                            elseif _Type2 == 'Slider' then
+                                local v1425 = u1345(u1290, 'UIStroke', v1379)
+                                local v1426 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0.15, 0, 0.335, 0),
+                                    Size = u1334(0, 100, 0, 10),
+                                    AnchorPoint = v1375,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    RichText = true,
+                                })
+                                local u1427 = u1345(u1290, 'TextBox', {
+                                    Name = 'Value',
+                                    BackgroundTransparency = 0,
+                                    BackgroundColor3 = u1335(255, 0, 0),
+                                    Position = u1334(0.8, 0, 0.335, 0),
+                                    Size = u1334(0, 45, 0, 18),
+                                    AnchorPoint = v1375,
+                                    ClearTextOnFocus = false,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 12,
+                                    TextColor3 = u1376,
+                                }, v1425, u1345(u1290, 'UICorner', v1377))
+                                local u1428 = u1345(u1290, 'ImageButton', {
+                                    Name = 'Button',
+                                    BackgroundTransparency = 0.8,
+                                    BackgroundColor3 = u1376,
+                                    AnchorPoint = v1375,
+                                    Position = u1334(0, 20, 0.5, 0),
+                                    Size = u1334(0, 10, 0, 10),
+                                }, u1345(u1290, 'UICorner', v1377))
+                                local u1429 = u1345(u1290, 'Frame', {
+                                    Name = 'Filler',
+                                    BackgroundTransparency = 0,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Position = u1334(0, 0, 0.5, 0),
+                                    Size = u1334(0, 20, 0, 5),
+                                    AnchorPoint = v1337(0, 0.5),
+                                }, u1428, u1345(u1290, 'UICorner', v1377))
+                                local v1430 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 40),
+                                }, v1426, u1427, u1345(u1290, 'Frame', {
+                                    Name = 'Fill',
+                                    BackgroundTransparency = 0,
+                                    BackgroundColor3 = u1335(60, 60, 60),
+                                    Position = u1334(0.5, 0, 0.775, 0),
+                                    Size = u1334(0, 400, 0, 5),
+                                    AnchorPoint = v1375,
+                                }, u1429, u1345(u1290, 'UICorner', v1377)))
+                                local u1431 = _RemoveRichText(u1290, _Text2)
+                                local _Default = v1390.Default
+                                local _Minimum = v1390.Minimum
+                                local _Maximum = v1390.Maximum
+                                local u1435 = {_Callback2}
+                                local u1436 = {
+                                    Callback = u1352,
+                                    Args = u1435,
+                                }
+
+                                local function u1444(p1437)
+                                    local v1438 = u1334
+                                    local v1439 = _Minimum
+                                    local v1440 = _Maximum
+                                    local v1441 = u1356(p1437) or _Default
+
+                                    if v1440 < v1441 then
+                                        v1441 = v1440
+                                    elseif v1441 < v1439 then
+                                        v1441 = v1439
+                                    end
+
+                                    local v1442 = (v1441 - v1439) / (v1440 - v1439) * 400
+                                    local v1443 = v1442 > 400 and 400 or (v1442 < 0 and 0 or v1442)
+
+                                    u1428.Position = v1438(0, v1443, 0.5, 0)
+                                    u1429.Size = v1438(0, v1443, 0, 5)
+                                    u1427.Text = v1441
+                                    _Slider[u1431] = v1441
+                                    u1435[2] = v1441
+                                    u1240.Spawn = u1436
+
+                                    _SaveConfigurations2(u1290)
+                                end
+
+                                local u1445
+
+                                if _Maximum < _Default then
+                                    _Default = _Maximum
+                                    u1445 = _Default
+                                elseif _Default < _Minimum then
+                                    _Default = _Minimum
+                                    u1445 = _Default
+                                else
+                                    u1445 = _Default
+                                end
+                                if _Flag then
+                                    v1331[_Flag] = u1444
+                                end
+
+                                local u1446 = 'Text'
+
+                                u1349(u1427.FocusLost, function()
+                                    local v1447 = u1356(u1427[u1446])
+                                    if v1447 then
+                                        u1444(v1447)
+                                    else
+                                        u1444(u1445)
+                                    end
+                                end)
+
+                                local u1448 = nil
+                                local u1449 = nil
+
+                                u1349(u1428.InputBegan, function(p1450)
+                                    local v1451 = _UserInputType
+
+                                    if (p1450.UserInputType == v1451.MouseButton1 or p1450.UserInputType == v1451.Touch) and not (u1448 or u1449) then
+                                        local u1452 = u1428
+                                        local v1453 = u1349
+                                        local u1454 = true
+                                        local _ = p1450.Position.X
+                                        local _Offset = u1452.Position.X.Offset
+                                        local u1456 = u1452.AbsolutePosition.X - _Offset
+
+                                        u1448 = v1453(u1330, function()
+                                            if u1454 then
+                                                local v1457 = u1334
+                                                local v1458 = _Minimum
+                                                local v1459 = u134.X - u1456 - 3
+                                                local v1460 = v1459 > 400 and 400 or (v1459 < 0 and 0 or v1459)
+
+                                                u1452.Position = v1457(0, v1460, 0.5, 0)
+                                                u1429.Size = v1457(0, v1460, 0, 5)
+
+                                                local v1461 = _floor(v1458 + (_Maximum - v1458) * v1460 / 395)
+
+                                                if _Maximum >= v1461 then
+                                                    if v1461 >= v1458 then
+                                                        v1458 = v1461
+                                                    end
+                                                else
+                                                    v1458 = _Maximum
+                                                end
+
+                                                u1427.Text = v1458
+
+                                                u1352(_Callback2, v1458)
+
+                                                _Slider[u1431] = v1458
+                                            else
+                                                u1454 = false
+
+                                                if u1448 then
+                                                    u1448:Disconnect()
+                                                    u1448 = nil
+                                                end
+                                                if u1449 then
+                                                    u1449:Disconnect()
+                                                    u1449 = nil
+                                                end
+
+                                                _SaveConfigurations2(u1290)
+                                            end
+                                        end)
+                                        u1449 = v1453(p1450.Changed, function()
+                                            if p1450.UserInputState == _UserInputState.End then
+                                                u1454 = false
+
+                                                if u1448 then
+                                                    u1448:Disconnect()
+                                                    u1448 = nil
+                                                end
+                                                if u1449 then
+                                                    u1449:Disconnect()
+                                                    u1449 = nil
+                                                end
+
+                                                _SaveConfigurations2(u1290)
+                                            end
+                                        end)
+                                    end
+                                end)
+                                v1346(u1290, v1426, u1344(u1290, _Text2))
+                                v1338(v1340, v1425)
+                                v1338(v1343, v1430)
+                                v1338(v1343, u1429)
+
+                                local v1462 = u1356(_Slider[u1431])
+
+                                if v1462 then
+                                    u1444(v1462)
+                                    v1391 = v1638
+                                else
+                                    _Slider[u1431] = u1445
+                                    u1444(u1445)
+                                    v1391 = v1638
+                                end
+                            elseif _Type2 == 'Keybind' then
+                                local v1463 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 30),
+                                }, u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0.15, 0, 0.5, 0),
+                                    Size = u1334(0, 100, 0, 10),
+                                    AnchorPoint = v1375,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    RichText = true,
+                                }), u1345(u1290, 'TextButton', {
+                                    Name = 'Activator',
+                                    BackgroundTransparency = 0,
+                                    BackgroundColor3 = u1335(255, 0, 0),
+                                    Position = u1334(0.8, 0, 0.5, 0),
+                                    Size = u1334(0, 75, 0, 15),
+                                    AnchorPoint = v1375,
+                                    Font = _Gotham,
+                                    Text = v1390.Default or u1358,
+                                    TextSize = 12,
+                                    TextColor3 = u1376,
+                                    ClipsDescendants = true,
+                                }, u1345(u1290, 'UIStroke', v1379), u1345(u1290, 'UICorner', v1377)))
+                                local u1464 = _RemoveRichText(u1290, _Text2)
+                                local _Activator2 = v1463.Activator
+
+                                v1338(u1244, {
+                                    Name = u1464,
+                                    Holder = _Activator2,
+                                    Callback = _Callback2,
+                                })
+
+                                local u1466 = {
+                                    'Text',
+                                    '',
+                                }
+
+                                u1349(_Activator2.MouseButton1Click, function()
+                                    local v1467 = u1466
+                                    local v1468 = u1290
+
+                                    u1348(v1468)
+
+                                    _Activator2[v1467[1] ] = u1358
+                                    _Keybind[u1464] = v1467[2]
+
+                                    _SaveConfigurations2(v1468)
+                                end)
+                                v1346(u1290, v1463.Title, u1344(u1290, _Text2))
+                                v1338(v1340, _Activator2.UIStroke)
+
+                                local v1469 = _Keybind[u1464]
+
+                                if v1469 and _s(v1469) and v1469 ~= '' then
+                                    _Activator2.Text = _Keybind[u1464]
+                                    v1391 = v1638
+                                else
+                                    _Keybind[u1464] = v1390.Default or ''
+                                    v1391 = v1638
+                                end
+                            elseif _Type2 == 'Dropdown' then
+                                local _RemoveRichText2 = u1290.RemoveRichText
+                                local _Selections = v1390.Selections
+                                local _Callback3 = v1390.Callback
+                                local u1473 = _Selections[1]
+                                local u1474 = u1345(u1290, 'ScrollingFrame', {
+                                    Name = 'OptionContainer',
+                                    BackgroundTransparency = 1,
+                                    CanvasSize = u1334(0, 0, 0, 0),
+                                    AutomaticCanvasSize = _AutomaticSize.Y,
+                                    ScrollBarThickness = 0,
+                                    Size = u1334(1, 0, 1, 0),
+                                    ZIndex = 10,
+                                }, u1345(u1290, 'UIListLayout', {
+                                    Name = 'UIListLayout',
+                                    HorizontalAlignment = _HorizontalAlignment.Center,
+                                    SortOrder = _SortOrder.LayoutOrder,
+                                }), u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingTop = u1293(0, 5),
+                                    PaddingBottom = u1293(0, 5),
+                                }))
+                                local v1475 = u1345(u1290, 'UIStroke', v1379)
+                                local u1476 = u1345(u1290, 'Frame', {
+                                    Name = 'Menu',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    ClipsDescendants = true,
+                                    Position = u1334(0, 0, 1, 3),
+                                    Size = u1334(1, 0, 0, 0),
+                                    Visible = false,
+                                }, v1475, u1345(u1290, 'UICorner', v1378), u1474)
+                                local u1477 = u1345(u1290, 'ImageLabel', v1387)
+                                local v1478 = u1345(u1290, 'UIStroke', v1379)
+                                local u1479 = u1345(u1290, 'TextButton', {
+                                    Name = 'Button',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Position = u1334(0, 15, 0, 20),
+                                    Size = u1334(1, -25, 0, 30),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = v1388,
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                }, v1478, u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingLeft = u1293(0, 10),
+                                }), u1345(u1290, 'UICorner', v1377), u1477, u1476)
+                                local v1480 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0, 15, 0, 0),
+                                    Size = u1334(1, 0, 0, 20),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                })
+                                local u1481 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    ClipsDescendants = true,
+                                    Size = u1334(0, 435, 0, 60),
+                                }, v1480, u1479)
+                                local u1482 = _RemoveRichText2(u1290, _Text2)
+                                local u1483 = u1342(#_Selections * 25, 150)
+                                local u1484 = nil
+                                local u1485 = nil
+                                local u1486 = nil
+                                local u1487 = {_Callback3}
+                                local u1488 = {
+                                    Callback = u1352,
+                                    Args = u1487,
+                                }
+
+                                if _Flag then
+                                    v1331[_Flag] = function(p1489)
+                                        local v1490 = u589(u1474, p1489)
+
+                                        if v1490 then
+                                            u1473 = p1489
+                                            u1479.Text = u1344(u1290, p1489)
+                                            u1485.TextColor3 = u1335(104, 104, 104)
+                                            v1490.TextColor3 = u1376
+                                            u1485 = v1490
+                                            u1487[2] = p1489
+                                            u1240.Coroutine = u1488
+                                            _Dropdown[u1482] = _
+
+                                            _SaveConfigurations2(u1290)
+                                        else
+                                            _Notify4(u1290, '<font color="rgb(0, 255, 0)">' .. p1489 .. '</font> is not a valid option.')
+                                        end
+                                    end
+                                end
+
+                                local u1491 = u915(0.25)
+                                local u1492 = {}
+                                local u1493 = {Rotation = 180}
+                                local u1494 = {}
+                                local u1495 = {
+                                    Size = u1334(1, 0, 0, 0),
+                                }
+                                local u1496 = {Rotation = 0}
+                                local u1497 = {
+                                    Size = u1334(0, 435, 0, 60),
+                                }
+
+                                local function u1505()
+                                    if not u1486 then
+                                        u1486 = true
+
+                                        local v1498 = u1290
+                                        local v1499 = u1351
+                                        local _ = Items
+                                        local v1500 = u1491
+
+                                        u1484 = not u1484
+
+                                        if u1484 then
+                                            local v1501 = u1483
+                                            local v1502 = u1492
+                                            local v1503 = u1494
+
+                                            u1476.Visible = true
+                                            v1502.Size = u1334(1, 0, 0, v1501)
+
+                                            v1499(v1498, u1476, v1500, v1502)
+                                            v1499(v1498, u1477, v1500, u1493)
+
+                                            v1503.Size = u1334(0, 435, 0, 60 + v1501)
+
+                                            v1499(v1498, u1481, v1500, v1503).Completed:Wait()
+                                        else
+                                            local v1504 = v1499(v1498, u1476, v1500, u1495)
+
+                                            v1499(v1498, u1477, v1500, u1496)
+                                            v1499(v1498, u1481, v1500, u1497)
+                                            v1504.Completed:Wait()
+
+                                            u1476.Visible = false
+                                        end
+
+                                        u1486 = false
+                                    end
+                                end
+
+                                v1346(u1290, v1480, u1344(u1290, _Text2))
+                                v1338(v1340, v1478)
+                                v1338(v1340, v1475)
+                                v1338(v1343, u1479)
+                                v1338(v1343, u1476)
+                                v1347(u1290, u1479)
+
+                                local v1506 = u1356(_Dropdown[u1482])
+
+                                if v1506 and _Selections[v1506] then
+                                    u1473 = _Selections[v1506]
+                                else
+                                    _Dropdown[u1482] = 1
+                                end
+
+                                u1479.Text = u1473
+
+                                u1349(u1479.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1505()
+                                end)
+
+                                local v1507 = {
+                                    Parent = u1474,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(1, -10, 0, 25),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    TextColor3 = u1335(104, 104, 104),
+                                    TextSize = 14,
+                                    TextXAlignment = u1336.Left,
+                                }
+
+                                v1391 = v1638
+
+                                for v1508 = 1, #_Selections do
+                                    local u1509 = v1508
+                                    local u1510 = _Selections[u1509]
+
+                                    v1507.Name = u1510
+                                    v1507.Text = u1344(u1290, u1510)
+
+                                    local u1511 = u1345(u1290, 'TextButton', v1507)
+
+                                    if u1473 == u1510 then
+                                        u1511.TextColor3 = u1376
+                                        u1485 = u1511
+                                    end
+
+                                    u1349(u1511.MouseButton1Click, function()
+                                        if not u1486 then
+                                            u1473 = u1510
+                                            u1479.Text = u1344(u1290, u1510)
+                                            u1485.TextColor3 = u1335(104, 104, 104)
+                                            u1511.TextColor3 = u1376
+                                            u1485 = u1511
+                                            u1487[2] = u1473
+                                            u1240.Coroutine = u1488
+
+                                            u1348(u1290)
+
+                                            _Dropdown[u1482] = u1509
+
+                                            _SaveConfigurations2(u1290)
+                                            u1505()
+                                        end
+                                    end)
+                                end
+
+                                u1487[2] = u1473
+                                u1240.Coroutine = u1488
+                            elseif _Type2 == 'Dropdown2' then
+                                local _RemoveRichText3 = u1290.RemoveRichText
+                                local _Selections2 = v1390.Selections
+                                local _Callback4 = v1390.Callback
+                                local u1515 = _Selections2[1]
+                                local u1516 = u1345(u1290, 'ScrollingFrame', {
+                                    Name = 'OptionContainer',
+                                    BackgroundTransparency = 1,
+                                    CanvasSize = u1334(0, 0, 0, 0),
+                                    AutomaticCanvasSize = _AutomaticSize.Y,
+                                    ScrollBarThickness = 0,
+                                    Size = u1334(1, 0, 1, 0),
+                                    ZIndex = 10,
+                                }, u1345(u1290, 'UIListLayout', {
+                                    Name = 'UIListLayout',
+                                    HorizontalAlignment = _HorizontalAlignment.Center,
+                                    SortOrder = _SortOrder.LayoutOrder,
+                                }), u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingTop = u1293(0, 5),
+                                    PaddingBottom = u1293(0, 5),
+                                }))
+                                local v1517 = u1345(u1290, 'UIStroke', v1379)
+                                local u1518 = u1345(u1290, 'Frame', {
+                                    Name = 'Menu',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    ClipsDescendants = true,
+                                    Position = u1334(0, 0, 1, 3),
+                                    Size = u1334(1, 0, 0, 0),
+                                    Visible = false,
+                                }, v1517, u1345(u1290, 'UICorner', v1378), u1516)
+                                local u1519 = u1345(u1290, 'ImageLabel', v1387)
+                                local v1520 = u1345(u1290, 'UIStroke', v1379)
+                                local u1521 = u1345(u1290, 'TextButton', {
+                                    Name = 'Button',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Position = u1334(0, 15, 0, 20),
+                                    Size = u1334(1, -25, 0, 30),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = v1388,
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                }, v1520, u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingLeft = u1293(0, 10),
+                                }), u1345(u1290, 'UICorner', v1377), u1519, u1518)
+                                local v1522 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0, 15, 0, 0),
+                                    Size = u1334(1, 0, 0, 20),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                })
+                                local u1523 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    ClipsDescendants = true,
+                                    Size = u1334(0, 435, 0, 60),
+                                }, v1522, u1521)
+                                local u1524 = _RemoveRichText3(u1290, _Text2)
+                                local u1525 = u1342(#_Selections2 * 25, 150)
+                                local u1526 = nil
+                                local u1527 = nil
+                                local u1528 = nil
+                                local u1529 = {_Callback4}
+                                local u1530 = {
+                                    Callback = u1352,
+                                    Args = u1529,
+                                }
+                                local u1531 = u915(0.25)
+                                local u1532 = {}
+                                local u1533 = {Rotation = 180}
+                                local u1534 = {}
+                                local u1535 = {
+                                    Size = u1334(1, 0, 0, 0),
+                                }
+                                local u1536 = {Rotation = 0}
+                                local u1537 = {
+                                    Size = u1334(0, 435, 0, 60),
+                                }
+
+                                local function u1545()
+                                    if not u1528 then
+                                        u1528 = true
+
+                                        local v1538 = u1290
+                                        local v1539 = u1351
+                                        local _ = Items
+                                        local v1540 = u1531
+
+                                        u1526 = not u1526
+
+                                        if u1526 then
+                                            local v1541 = u1525
+                                            local v1542 = u1532
+                                            local v1543 = u1534
+
+                                            u1518.Visible = true
+                                            v1542.Size = u1334(1, 0, 0, v1541)
+
+                                            v1539(v1538, u1518, v1540, v1542)
+                                            v1539(v1538, u1519, v1540, u1533)
+
+                                            v1543.Size = u1334(0, 435, 0, 60 + v1541)
+
+                                            v1539(v1538, u1523, v1540, v1543).Completed:Wait()
+                                        else
+                                            local v1544 = v1539(v1538, u1518, v1540, u1535)
+
+                                            v1539(v1538, u1519, v1540, u1536)
+                                            v1539(v1538, u1523, v1540, u1537)
+                                            v1544.Completed:Wait()
+
+                                            u1518.Visible = false
+                                        end
+
+                                        u1528 = false
+                                    end
+                                end
+
+                                v1346(u1290, v1522, u1344(u1290, _Text2))
+                                v1338(v1340, v1520)
+                                v1338(v1340, v1517)
+                                v1338(v1343, u1521)
+                                v1338(v1343, u1518)
+                                v1347(u1290, u1521)
+
+                                local v1546 = u1356(_Dropdown[u1524])
+
+                                if v1546 and _Selections2[v1546] then
+                                    u1515 = _Selections2[v1546]
+                                else
+                                    _Dropdown[u1524] = 1
+                                end
+
+                                u1521.Text = u1515
+
+                                u1349(u1521.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1545()
+                                end)
+
+                                local v1547 = {
+                                    Parent = u1516,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(1, -10, 0, 25),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    TextColor3 = u1335(104, 104, 104),
+                                    TextSize = 14,
+                                    TextXAlignment = u1336.Left,
+                                }
+
+                                v1391 = v1638
+
+                                local u1548 = u1525
+                                local u1549 = u1528
+
+                                for v1550 = 1, #_Selections2 do
+                                    local u1551 = v1550
+                                    local u1552 = _Selections2[u1551]
+
+                                    v1547.Name = u1552
+                                    v1547.Text = u1344(u1290, u1552)
+
+                                    local u1553 = u1345(u1290, 'TextButton', v1547)
+
+                                    if u1515 == u1552 then
+                                        u1553.TextColor3 = u1376
+                                        u1527 = u1553
+                                    end
+
+                                    u1349(u1553.MouseButton1Click, function()
+                                        if not u1549 then
+                                            u1515 = u1552
+                                            u1521.Text = u1344(u1290, u1552)
+                                            u1527.TextColor3 = u1335(104, 104, 104)
+                                            u1553.TextColor3 = u1376
+                                            u1527 = u1553
+                                            u1529[2] = u1515
+                                            u1240.Coroutine = u1530
+
+                                            u1348(u1290)
+
+                                            _Dropdown[u1524] = u1551
+
+                                            _SaveConfigurations2(u1290)
+                                            u1545()
+                                        end
+                                    end)
+                                end
+
+                                if _Flag then
+                                    local _GetChildren3 = u1516.GetChildren
+                                    local _IsA3 = u1516.IsA
+
+                                    v1331[_Flag] = function(p1556)
+                                        local u1557 = u1290
+                                        local v1558 = u1516
+                                        local v1559 = _IsA3
+                                        local v1560 = u1349
+                                        local v1561 = u1345
+                                        local u1562 = u1335
+                                        local u1563 = u1240
+                                        local v1564 = {
+                                            Parent = v1558,
+                                            BackgroundTransparency = 1,
+                                            Size = u1334(1, -10, 0, 25),
+                                            RichText = true,
+                                            Font = _Gotham,
+                                            TextColor3 = u1562(104, 104, 104),
+                                            TextSize = 14,
+                                            TextXAlignment = u1336.Left,
+                                        }
+                                        local v1565 = _GetChildren3(v1558)
+
+                                        for v1566 = 1, #v1565 do
+                                            local v1567 = v1565[v1566]
+
+                                            if v1559(v1567, 'TextButton') then
+                                                u1563.d = v1567
+                                            end
+                                        end
+
+                                        u1548 = u1342(#p1556 * 25, 150)
+
+                                        for v1568 = 1, #p1556 do
+                                            local u1569 = v1568
+                                            local u1570 = p1556[u1569]
+
+                                            v1564.Name = u1570
+                                            v1564.Text = u1344(u1557, u1570)
+
+                                            local u1571 = v1561(u1557, 'TextButton', v1564)
+
+                                            if u1515 == u1570 then
+                                                u1527 = u1571
+                                                u1571.TextColor3 = u1376
+                                            end
+
+                                            v1560(u1571.MouseButton1Click, function()
+                                                if not u1549 then
+                                                    u1515 = u1570
+                                                    u1521.Text = u1344(u1557, u1570)
+                                                    u1527.TextColor3 = u1562(104, 104, 104)
+                                                    u1571.TextColor3 = u1376
+                                                    u1527 = u1571
+                                                    u1529[2] = u1515
+                                                    u1563.Coroutine = u1530
+
+                                                    u1348(u1557)
+
+                                                    _Dropdown[u1524] = u1569
+
+                                                    _SaveConfigurations2(u1557)
+                                                    u1545()
+                                                end
+                                            end)
+                                        end
+                                    end
+                                end
+
+                                u1529[2] = u1515
+                                u1240.Coroutine = u1530
+                            elseif _Type2 == 'PlayerDropdown' then
+                                local u1572 = u1345(u1290, 'ScrollingFrame', {
+                                    Name = 'OptionContainer',
+                                    BackgroundTransparency = 1,
+                                    CanvasSize = u1334(0, 0, 0, 0),
+                                    AutomaticCanvasSize = _AutomaticSize.Y,
+                                    ScrollBarThickness = 0,
+                                    Size = u1334(1, 0, 1, 0),
+                                    ZIndex = 10,
+                                }, u1345(u1290, 'UIListLayout', {
+                                    Name = 'UIListLayout',
+                                    HorizontalAlignment = _HorizontalAlignment.Center,
+                                    SortOrder = _SortOrder.LayoutOrder,
+                                }), u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingTop = u1293(0, 5),
+                                    PaddingBottom = u1293(0, 5),
+                                }))
+                                local v1573 = u1345(u1290, 'UIStroke', v1379)
+                                local u1574 = u1345(u1290, 'Frame', {
+                                    Name = 'Menu',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    ClipsDescendants = true,
+                                    Position = u1334(0, 0, 1, 3),
+                                    Size = u1334(1, 0, 0, 0),
+                                    Visible = false,
+                                }, v1573, u1345(u1290, 'UICorner', v1378), u1572)
+                                local u1575 = u1345(u1290, 'ImageLabel', v1387)
+                                local v1576 = u1345(u1290, 'UIStroke', v1379)
+                                local u1577 = u1345(u1290, 'TextButton', {
+                                    Name = 'Button',
+                                    BackgroundTransparency = 0.95,
+                                    BackgroundColor3 = v1339.UFB,
+                                    Position = u1334(0, 15, 0, 20),
+                                    Size = u1334(1, -25, 0, 30),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = v1388,
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                }, v1576, u1345(u1290, 'UIPadding', {
+                                    Name = 'UIPadding',
+                                    PaddingLeft = u1293(0, 10),
+                                }), u1345(u1290, 'UICorner', v1377), u1575, u1574)
+                                local v1578 = u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0, 15, 0, 0),
+                                    Size = u1334(1, 0, 0, 20),
+                                    RichText = true,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                })
+                                local u1579 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    ClipsDescendants = true,
+                                    Size = u1334(0, 435, 0, 60),
+                                }, v1578, u1577)
+
+                                _RemoveRichText(u1290, _Text2)
+
+                                local u1580 = nil
+                                local u1581 = nil
+                                local u1582 = nil
+                                local u1583 = nil
+                                local u1584 = nil
+                                local u1585 = u915(0.25)
+                                local u1586 = {}
+                                local u1587 = {Rotation = 180}
+                                local u1588 = {}
+                                local u1589 = {
+                                    Size = u1334(1, 0, 0, 0),
+                                }
+                                local u1590 = {Rotation = 0}
+                                local u1591 = {
+                                    Size = u1334(0, 435, 0, 60),
+                                }
+
+                                local function u1599()
+                                    if not u1584 then
+                                        u1584 = true
+
+                                        local v1592 = u1290
+                                        local v1593 = u1351
+                                        local _ = Items
+                                        local v1594 = u1585
+
+                                        u1581 = not u1581
+
+                                        if u1581 then
+                                            local v1595 = u1580
+                                            local v1596 = u1586
+                                            local v1597 = u1588
+
+                                            u1574.Visible = true
+                                            v1596.Size = u1334(1, 0, 0, v1595)
+
+                                            v1593(v1592, u1574, v1594, v1596)
+                                            v1593(v1592, u1575, v1594, u1587)
+
+                                            v1597.Size = u1334(0, 435, 0, 60 + v1595)
+
+                                            v1593(v1592, u1579, v1594, v1597).Completed:Wait()
+                                        else
+                                            local v1598 = v1593(v1592, u1574, v1594, u1589)
+
+                                            v1593(v1592, u1575, v1594, u1590)
+                                            v1593(v1592, u1579, v1594, u1591)
+                                            v1598.Completed:Wait()
+
+                                            u1574.Visible = false
+                                        end
+
+                                        u1584 = false
+                                    end
+                                end
+
+                                v1346(u1290, v1578, u1344(u1290, _Text2))
+                                v1338(v1340, v1576)
+                                v1338(v1340, v1573)
+                                v1338(v1343, u1577)
+                                v1338(v1343, u1574)
+                                v1347(u1290, u1577)
+                                u1349(u1577.MouseButton1Click, function()
+                                    u1348(u1290)
+                                    u1599()
+                                end)
+
+                                local u1600 = {_Callback2}
+                                local u1601 = {
+                                    Callback = u1352,
+                                    Args = u1600,
+                                }
+                                local _GetChildren4 = u1572.GetChildren
+
+                                local function v1618(p1603)
+                                    local u1604 = u1290
+                                    local v1605 = u1345
+                                    local v1606 = u1572
+                                    local u1607 = u1240
+                                    local v1608 = u1349
+                                    local _IsA4 = v1606.IsA
+
+                                    u1580 = u1342(#p1603 * 25, 150)
+
+                                    local v1610 = _GetChildren4(v1606)
+
+                                    for v1611 = 1, #v1610 do
+                                        local v1612 = v1610[v1611]
+
+                                        if _IsA4(v1612, 'TextButton') then
+                                            u1607.d = v1612
+                                        end
+                                    end
+
+                                    local v1613 = {
+                                        Parent = v1606,
+                                        BackgroundTransparency = 1,
+                                        Size = u1334(1, -10, 0, 25),
+                                        RichText = true,
+                                        Font = _Gotham,
+                                        TextColor3 = u1335(104, 104, 104),
+                                        TextSize = 14,
+                                        TextXAlignment = u1336.Left,
+                                    }
+
+                                    for v1614 = 1, #p1603 do
+                                        local u1615 = p1603[v1614]
+                                        local _Name10 = u1615.Name
+
+                                        v1613.Name = _Name10
+                                        v1613.Text = _Name10
+
+                                        local u1617 = v1605(u1604, 'TextButton', v1613)
+
+                                        if u1583 == u1615 then
+                                            u1582 = u1617
+                                            u1617.TextColor3 = u1376
+                                        end
+
+                                        v1608(u1617.MouseButton1Click, function()
+                                            if not u1584 then
+                                                u1583 = _Name10
+                                                u1577.Text = u1583
+
+                                                if u1582 then
+                                                    u1582.TextColor3 = u1335(104, 104, 104)
+                                                end
+
+                                                u1617.TextColor3 = u1376
+                                                u1582 = u1617
+                                                u1600[2] = u1615
+                                                u1607.Coroutine = u1601
+
+                                                u1348(u1604)
+                                                u1599()
+                                            end
+                                        end)
+                                    end
+                                end
+
+                                v1338(v1350, v1618)
+                                v1618(u591())
+
+                                v1391 = v1638
+                            elseif _Type2 == 'Paragraph' then
+                                local v1619 = u1345(u1290, 'Frame', {
+                                    Name = 'Paragraph',
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 30),
+                                    AutomaticSize = _AutomaticSize.Y,
+                                }, u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0, 15, 0, 7.5),
+                                    Size = u1334(0, 100, 0, 10),
+                                    Font = _Gotham,
+                                    Text = u1344(u1290, v1390.Title),
+                                    TextSize = 15,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    RichText = true,
+                                }), u1345(u1290, 'TextLabel', {
+                                    Name = 'Description',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0, 15, 0, 30),
+                                    Size = u1334(0, 400, 0, 10),
+                                    Font = _Gotham,
+                                    Text = u1344(u1290, v1390.Description) .. '\n',
+                                    TextSize = 13,
+                                    TextWrapped = true,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    TextYAlignment = _TextYAlignment.Top,
+                                    AutomaticSize = _AutomaticSize.Y,
+                                    RichText = true,
+                                }))
+                                local _Title = v1619.Title
+                                local _Description = v1619.Description
+                                local u1622 = {
+                                    'Text',
+                                    '\n',
+                                }
+
+                                if _Flag then
+                                    v1331[_Flag] = function(p1623, p1624)
+                                        local v1625 = u1622
+                                        local v1626 = u1290
+                                        local v1627 = u1344
+                                        local v1628 = v1625[1]
+
+                                        _Title[v1628] = v1627(v1626, p1623)
+                                        _Description[v1628] = v1627(v1626, p1624) .. v1625[2]
+                                    end
+                                    v1391 = v1638
+                                else
+                                    v1391 = v1638
+                                end
+                            elseif _Type2 == 'TextBox' then
+                                local v1629 = u1345(u1290, 'Frame', {
+                                    Name = _Text2,
+                                    Parent = _Sleeker,
+                                    BackgroundTransparency = 1,
+                                    Size = u1334(0, 435, 0, 60),
+                                }, u1345(u1290, 'TextLabel', {
+                                    Name = 'Title',
+                                    BackgroundTransparency = 1,
+                                    Position = u1334(0.15, 0, 0.165, 0),
+                                    Size = u1334(0, 100, 0, 10),
+                                    AnchorPoint = v1375,
+                                    Font = _Gotham,
+                                    Text = '',
+                                    TextSize = 14,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                    RichText = true,
+                                }), u1345(u1290, 'TextBox', {
+                                    Name = 'Box',
+                                    BackgroundTransparency = 0.75,
+                                    BackgroundColor3 = u1335(15, 15, 15),
+                                    Position = u1334(0.5, 0, 0.615, 0),
+                                    Size = u1334(0, 405, 0, 30),
+                                    AnchorPoint = v1375,
+                                    ClipsDescendants = true,
+                                    Font = _Gotham,
+                                    PlaceholderText = u1344(u1290, 'Enter Text...'),
+                                    PlaceholderColor3 = u1335(104, 104, 104),
+                                    Text = v1390.Default,
+                                    TextSize = 13,
+                                    TextColor3 = u1376,
+                                    TextXAlignment = u1336.Left,
+                                }, u1345(u1290, 'UICorner', v1377), u1345(u1290, 'UIStroke', v1379)))
+                                local u1630 = _RemoveRichText(u1290, _Text2)
+                                local _Box3 = v1629.Box
+                                local u1632 = 'BackgroundColor3'
+
+                                u1349(_Box3.Focused, function()
+                                    u1351(u1290, _Box3, u915(1), {
+                                        [u1632] = u1335(70, 70, 70),
+                                    })
+                                end)
+
+                                local u1633 = {
+                                    'Text',
+                                    'BackgroundColor3',
+                                }
+
+                                u1349(_Box3.FocusLost, function()
+                                    local v1634 = u1633
+                                    local v1635 = u1290
+                                    local v1636 = _Box3[v1634[1] ]
+
+                                    u1351(v1635, _Box3, u915(1), {
+                                        [v1634[2]] = u1335(15, 15, 15),
+                                    })
+
+                                    _TextBox[u1630] = u1356(v1636) or v1636
+
+                                    _SaveConfigurations2(v1635)
+                                    u1352(_Callback2, v1636)
+                                end)
+                                v1346(u1290, v1629.Title, u1344(u1290, _Text2))
+                                v1338(v1340, _Box3.UIStroke)
+
+                                local v1637 = _TextBox[u1630]
+
+                                if v1637 and _s(v1637) then
+                                    _Box3.Text = v1355(v1637)
+                                else
+                                    _TextBox[u1630] = Default
+                                end
+
+                                u1240.Spawn = {
+                                    Callback = u1352,
+                                    Args = {
+                                        _Callback2,
+                                        _Box3.Text,
+                                    },
+                                }
+                                v1391 = v1638
+                            else
+                                u1290:Error('invalid property type.')
+                                v1391 = v1638
                             end
+                        else
+                            u1290:Error('argument must be a table value when registering a property.')
+                            v1391 = v1638
                         end
-                        optionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        if callback then callback(option) end
-                        ToggleDropdown()
+
+                        v1329[v1638] = ' * '
+
+                        local v1638 = v1391
                     end
-                end)
-            end
-            
-            local function ToggleDropdown()
-                open = not open
-                local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
-                
-                if open then
-                    menu.Visible = true
-                    local height = math.min(#selections * 25, 150)
-                    PlayTween(menu, tweenInfo, {Size = UDim2.new(1, 0, 0, height)})
-                    PlayTween(arrow, tweenInfo, {Rotation = 180})
-                    PlayTween(container, tweenInfo, {Size = UDim2.new(0, 435, 0, 60 + height)})
-                else
-                    PlayTween(menu, tweenInfo, {Size = UDim2.new(1, 0, 0, 0)})
-                    PlayTween(arrow, tweenInfo, {Rotation = 0})
-                    PlayTween(container, tweenInfo, {Size = UDim2.new(0, 435, 0, 60)})
-                    task.wait(0.25)
-                    menu.Visible = false
                 end
             end
-            
-            button.MouseButton1Click:Connect(function()
-                PlayTouchSound()
-                ToggleDropdown()
-            end)
-            
-        elseif propType == "TextBox" then
-            local container = MakeInstance("Frame", {
-                Name = text,
-                Parent = scroller,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 435, 0, 60),
-            })
-            
-            local title = MakeInstance("TextLabel", {
-                Name = "Title",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.15, 0, 0.165, 0),
-                Size = UDim2.new(0, 100, 0, 10),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-                RichText = true,
-            }, container)
-            
-            local box = MakeInstance("TextBox", {
-                Name = "Box",
-                BackgroundTransparency = 0.75,
-                BackgroundColor3 = Color3.fromRGB(15, 15, 15),
-                Position = UDim2.new(0.5, 0, 0.615, 0),
-                Size = UDim2.new(0, 405, 0, 30),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                ClipsDescendants = true,
-                Font = Enum.Font.Gotham,
-                PlaceholderText = "Enter Text...",
-                PlaceholderColor3 = Color3.fromRGB(104, 104, 104),
-                Text = property.Default or "",
-                TextSize = 13,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextXAlignment = Enum.TextXAlignment.Left,
-            }, container)
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 5),
-            }, box)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0.55,
-                Color = self.CurrentTheme.USC,
-                Thickness = 2,
-                Enabled = true,
-            }, box)
-            
-            table.insert(self.Strokes, stroke)
-            
-            box.Focused:Connect(function()
-                PlayTween(box, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(70, 70, 70)})
-            end)
-            
-            box.FocusLost:Connect(function()
-                PlayTween(box, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(15, 15, 15)})
-                if callback then callback(box.Text) end
-            end)
         end
-        
-        table.insert(tab.Properties, property)
-    end
 
-    -- ============================================
-    -- HELPER FUNCTIONS
-    -- ============================================
+        local u1639 = {
+            'getHUD',
+            'getTheme',
+            'getStrokes',
+            'getFlags',
+            'LoL?',
+        }
+        local _Sleeker2 = u1307.Sleeker
+        local _Kick4 = u1290.Kick
 
-    function PlayTouchSound()
-        -- Play a touch sound effect
-    end
+        local function v1643(_, p1642)
+            if p1642 == u1639[1] then
+                return _Sleeker2
+            end
+            if p1642 == u1639[2] then
+                return u1237
+            end
+            if p1642 == u1639[3] then
+                return u1235
+            end
+            if p1642 == u1639[4] then
+                return u1239
+            end
 
-    function ApplyTouchEffect(button)
-        button.MouseButton1Click:Connect(function()
-            local effect = MakeInstance("Frame", {
-                Name = "TouchEffect",
-                Parent = button,
-                BackgroundTransparency = 0.9999,
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Size = UDim2.new(0, 0, 0, 0),
-            })
-            
-            MakeInstance("UICorner", {
-                CornerRadius = UDim.new(0, 15),
-            }, effect)
-            
-            local stroke = MakeInstance("UIStroke", {
-                Name = "UIStroke",
-                Transparency = 0,
-                Color = Color3.fromRGB(255, 255, 255),
-                Thickness = 1.5,
-                Enabled = true,
-            }, effect)
-            
-            local tweenInfo = TweenInfo.new(0.75, Enum.EasingStyle.Quad)
-            effect.Position = UDim2.new(0, Mouse.X - button.AbsolutePosition.X, 0, Mouse.Y - button.AbsolutePosition.Y)
-            effect.Size = UDim2.new(0, 30, 0, 30)
-            
-            PlayTween(effect, tweenInfo, {Size = UDim2.new(0, 60, 0, 60)})
-            PlayTween(stroke, tweenInfo, {Transparency = 1})
-            
-            task.wait(0.75)
-            effect:Destroy()
-        end)
-    end
-
-    -- ============================================
-    -- TOGGLE UI FUNCTION
-    -- ============================================
-
-    local isOpen = false
-    local toggleTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
-    
-    function State:ToggleUI()
-        PlayTouchSound()
-        isOpen = not isOpen
-        
-        if isOpen then
-            self.MainFrame.Visible = true
-            PlayTween(self.MainFrame, toggleTweenInfo, {
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Size = UDim2.new(0, 600, 0, 300)
-            })
-        else
-            PlayTween(self.MainFrame, toggleTweenInfo, {
-                Position = UDim2.new(0.5, 0, -0.5, 0),
-                Size = UDim2.new(0, 30, 0, 30)
-            })
-            task.wait(0.25)
-            self.MainFrame.Visible = false
+            _Kick4(u1290, u1639[5])
         end
-    end
 
-    -- ============================================
-    -- NOTIFICATION SYSTEM
-    -- ============================================
+        local u1644 = {
+            'registerProperty',
+            'fireProperty',
+            'Spawn',
+            'Callback',
+            'Args',
+            "'",
+            "' is not a valid flag property.",
+            'invalid value type',
+        }
+        local _t14 = u77.t
+        local _Error2 = u1290.Error
 
-    function State:Notify(message)
-        local notification = MakeInstance("Frame", {
-            Name = "Notification",
-            Parent = self.NotificationContainer,
-            BackgroundTransparency = 1,
-            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-            Size = UDim2.new(0, 250, 0, 0),
-            ClipsDescendants = true,
+        return u16(u1327, {
+            __tostring = function()
+                return u1328
+            end,
+            __index = v1643,
+            __newindex = function(_, p1647, p1648)
+                local v1649 = u1644
+
+                if p1647 ~= v1649[1] then
+                    if p1647 ~= v1649[2] then
+                        _Error2(u1290, v1649[6] .. p1647 .. v1649[7])
+                    elseif _t14(p1648) then
+                        local v1650 = u1309[p1648[1] ]
+
+                        if v1650 then
+                            local v1651 = #p1648
+
+                            if v1651 > 1 then
+                                local v1652 = u1298
+                                local v1653 = {}
+
+                                for v1654 = 2, v1651 do
+                                    v1652(v1653, p1648[v1654])
+                                end
+
+                                u1240[v1649[3] ] = {
+                                    [v1649[4]] = v1650,
+                                    [v1649[5]] = v1653,
+                                }
+                            else
+                                u1240[v1649[3] ] = v1650
+                            end
+                        else
+                            _Error2(u1290, v1649[6] .. p1648[1] .. v1649[7])
+                        end
+                    else
+                        _Error2(u1290, v1649[8])
+                    end
+                else
+                    u1298(u1326, p1648)
+                end
+            end,
         })
-        
-        MakeInstance("UICorner", {
-            CornerRadius = UDim.new(0, 5),
-        }, notification)
-        
-        local stroke = MakeInstance("UIStroke", {
-            Name = "UIStroke",
-            Transparency = 0.55,
-            Color = self.CurrentTheme.USC,
-            Thickness = 2,
-            Enabled = true,
-        }, notification)
-        
-        local title = MakeInstance("TextLabel", {
-            Name = "Title",
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0, 10, 0, 5),
-            Size = UDim2.new(1, -20, 0, 25),
-            RichText = true,
-            Font = Enum.Font.Gotham,
-            Text = "Overdrive H Says:",
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            TextXAlignment = Enum.TextXAlignment.Left,
-        }, notification)
-        
-        local desc = MakeInstance("TextLabel", {
-            Name = "Description",
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0, 10, 0, 30),
-            Size = UDim2.new(1, -20, 0, 0),
-            RichText = true,
-            Font = Enum.Font.Gotham,
-            Text = message,
-            TextSize = 11,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            TextWrapped = true,
-            TextXAlignment = Enum.TextXAlignment.Left,
-            TextYAlignment = Enum.TextYAlignment.Top,
-        }, notification)
-        
-        -- Animate in
-        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quint)
-        notification.Size = UDim2.new(0, 250, 0, 40 + desc.TextBounds.Y)
-        PlayTween(notification, tweenInfo, {BackgroundTransparency = 0.5})
-        
-        -- Auto hide after 5 seconds
-        task.wait(5)
-        PlayTween(notification, tweenInfo, {BackgroundTransparency = 1, Size = UDim2.new(0, 250, 0, 0)})
-        task.wait(0.5)
-        notification:Destroy()
     end
 
-    -- ============================================
-    -- SETUP COMPLETE
-    -- ============================================
+    v926.Frame = u1238
+    v926.StarterFrame = v1232
 
-    -- Setup minimize button
-    MinimizeButton.MouseButton1Click:Connect(function()
-        State:ToggleUI()
-    end)
-
-    -- Open UI initially
-    task.wait(0.5)
-    State:ToggleUI()
-
-    return State
+    return v926
 end
-
--- ============================================
--- LIBRARY EXPORT
--- ============================================
-
-function Library:Create()
-    return CreateUI()
-end
-
-return Library
