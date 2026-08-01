@@ -1,0 +1,1266 @@
+-- ============================================
+-- OVERDRIVE UI LIBRARY
+-- Complete UI System with Same Calling Method
+-- ============================================
+
+local Library = {}
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local Heartbeat = RunService.Heartbeat
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+-- ============================================
+-- UTILITY FUNCTIONS
+-- ============================================
+
+local function MakeInstance(className, properties, parent, ...)
+    local instance = Instance.new(className)
+    for prop, value in pairs(properties) do
+        instance[prop] = value
+    end
+    if parent then
+        instance.Parent = parent
+    end
+    local args = {...}
+    for i = 1, #args do
+        args[i].Parent = instance
+    end
+    return instance
+end
+
+local function PlayTween(obj, info, properties)
+    local tween = TweenService:Create(obj, info, properties)
+    tween:Play()
+    return tween
+end
+
+local function RandomString(length)
+    length = length or 10
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    local result = ""
+    for i = 1, length do
+        result = result .. string.sub(chars, math.random(1, #chars), math.random(1, #chars))
+    end
+    return result
+end
+
+-- ============================================
+-- UI THEMES
+-- ============================================
+
+local Themes = {
+    Amethyst = {
+        MBG = Color3.fromRGB(0, 0, 225),
+        MTG = Color3.fromRGB(0, 0, 225),
+        USC = Color3.fromRGB(0, 0, 225),
+        UFB = Color3.fromRGB(0, 0, 225),
+    },
+    Amoled = {
+        MBG = Color3.fromRGB(35, 35, 35),
+        MTG = Color3.fromRGB(35, 35, 35),
+        USC = Color3.fromRGB(35, 35, 35),
+        UFB = Color3.fromRGB(40, 40, 40),
+    },
+    Crimson = {
+        MBG = Color3.fromRGB(220, 20, 60),
+        MTG = Color3.fromRGB(225, 20, 60),
+        USC = Color3.fromRGB(230, 20, 60),
+        UFB = Color3.fromRGB(220, 25, 60),
+    },
+    Dark = {
+        MBG = Color3.fromRGB(60, 60, 60),
+        MTG = Color3.fromRGB(60, 60, 60),
+        USC = Color3.fromRGB(60, 60, 60),
+        UFB = Color3.fromRGB(60, 60, 60),
+    },
+    NEO = {
+        MBG = Color3.fromRGB(220, 20, 60),
+        MTG = Color3.fromRGB(225, 20, 60),
+        USC = Color3.fromRGB(230, 20, 60),
+        UFB = Color3.fromRGB(220, 25, 60),
+    },
+}
+
+local CurrentTheme = Themes.Amethyst
+local ThemeList = {"Amethyst", "Amoled", "Crimson", "Dark", "NEO"}
+
+-- ============================================
+-- MAIN UI CREATION
+-- ============================================
+
+local function CreateUI()
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "OverdriveUI"
+    ScreenGui.Parent = CoreGui
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    -- Minimize Button
+    local MinimizeButton = MakeInstance("TextButton", {
+        Name = "MinimizeButton",
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0.005, 0, 0.05, 0),
+        Size = UDim2.new(0, 35, 0, 35),
+        Font = Enum.Font.GothamBold,
+        Text = "ODH",
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextSize = 14,
+        TextWrapped = true,
+        Draggable = true,
+        Active = true,
+        Visible = false,
+    }, ScreenGui)
+    
+    MakeInstance("UICorner", {
+        CornerRadius = UDim.new(0, 20),
+    }, MinimizeButton)
+    
+    MakeInstance("UIStroke", {
+        Transparency = 0.55,
+        Color = Color3.fromRGB(0, 0, 255),
+        ApplyStrokeMode = "Border",
+        Thickness = 2,
+        Enabled = true,
+    }, MinimizeButton)
+
+    -- Notification Container
+    local NotificationContainer = MakeInstance("Frame", {
+        Name = "NotificationContainer",
+        BackgroundTransparency = 1,
+        AnchorPoint = Vector2.new(0, 1),
+        Position = UDim2.new(0, 10, 1, -10),
+        Size = UDim2.new(0, 250, 0, 0),
+    }, ScreenGui)
+    
+    MakeInstance("UIListLayout", {
+        Name = "Layout",
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        VerticalAlignment = Enum.VerticalAlignment.Bottom,
+        Padding = UDim.new(0, 5),
+    }, NotificationContainer)
+
+    -- Drawing Folder
+    local DrawingFolder = MakeInstance("ScreenGui", {
+        Name = "ODHDrawingFolder",
+        Parent = ScreenGui,
+        IgnoreGuiInset = true,
+    })
+
+    -- Main Frame
+    local MainFrame = MakeInstance("CanvasGroup", {
+        Name = "StarterFrame",
+        Parent = ScreenGui,
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 1,
+        ClipsDescendants = true,
+        GroupColor3 = Color3.fromRGB(255, 255, 255),
+        GroupTransparency = 0,
+        Position = UDim2.new(0.5, 0, -0.5, 0),
+        Size = UDim2.new(0, 30, 0, 30),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Draggable = true,
+        Active = true,
+    })
+    
+    local UIScale = MakeInstance("UIScale", {
+        Name = "UIScale",
+        Scale = 1,
+    }, MainFrame)
+    
+    MakeInstance("UICorner", {
+        CornerRadius = UDim.new(0, 10),
+    }, MainFrame)
+    
+    local MainStroke = MakeInstance("UIStroke", {
+        Name = "UIStroke",
+        Transparency = 0.55,
+        Color = Color3.fromRGB(0, 0, 255),
+        Thickness = 2,
+        Enabled = true,
+    }, MainFrame)
+
+    local MainContainer = MakeInstance("ImageLabel", {
+        Name = "MainFrame",
+        BackgroundTransparency = 0.5,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        Size = UDim2.new(1, 0, 1, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+    }, MainFrame)
+    
+    local Title = MakeInstance("TextLabel", {
+        Name = "Title",
+        BackgroundTransparency = 0.8,
+        BackgroundColor3 = Color3.fromRGB(0, 0, 225),
+        Position = UDim2.new(0.5, 0, 0.045, 0),
+        Size = UDim2.new(0, 600, 0, 20),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Font = Enum.Font.Gotham,
+        Text = "",
+        TextSize = 12,
+        TextTransparency = 1,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        RichText = true,
+        TextXAlignment = Enum.TextXAlignment.Left,
+    }, MainContainer)
+    
+    MakeInstance("UICorner", {
+        CornerRadius = UDim.new(0, 10),
+    }, Title)
+
+    local TabFrame = MakeInstance("ScrollingFrame", {
+        Name = "TabFrame",
+        BackgroundTransparency = 0.95,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        Position = UDim2.new(0.125, 0, 1.5, 0),
+        Size = UDim2.new(0, 140, 0, 270),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        Visible = false,
+        ScrollBarThickness = 0,
+    }, MainContainer)
+    
+    MakeInstance("UICorner", {
+        CornerRadius = UDim.new(0, 5),
+    }, TabFrame)
+    
+    MakeInstance("UIListLayout", {
+        Name = "UIListLayout",
+        HorizontalAlignment = Enum.HorizontalAlignment.Center,
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Padding = UDim.new(0, 8),
+    }, TabFrame)
+
+    local State = {
+        ScreenGui = ScreenGui,
+        MinimizeButton = MinimizeButton,
+        NotificationContainer = NotificationContainer,
+        DrawingFolder = DrawingFolder,
+        MainFrame = MainFrame,
+        UIScale = UIScale,
+        MainStroke = MainStroke,
+        MainContainer = MainContainer,
+        Title = Title,
+        TabFrame = TabFrame,
+        CurrentTheme = CurrentTheme,
+        ThemeList = ThemeList,
+        Tabs = {},
+        CurrentTab = nil,
+        IsOpen = false,
+        Strokes = {MainStroke, MinimizeButton:FindFirstChild("UIStroke")},
+        Flags = {},
+        Bindables = {},
+    }
+
+    -- ============================================
+    -- UI METHODS
+    -- ============================================
+
+    function State:ApplySetting(setting, value)
+        if setting == "GuiScale" then
+            self.UIScale.Scale = value
+        elseif setting == "Theme" then
+            local theme = Themes[value]
+            if theme then
+                self.CurrentTheme = theme
+                self.MainStroke.Color = theme.USC
+                self.Title.BackgroundColor3 = theme.MTG
+                self.MainContainer.BackgroundColor3 = theme.MBG
+                
+                for _, stroke in pairs(self.Strokes) do
+                    if stroke and stroke:IsA("UIStroke") then
+                        stroke.Color = theme.USC
+                    end
+                end
+            end
+        end
+    end
+
+    function State:AddTab(name, icon)
+        local tab = {}
+        
+        -- Tab Button
+        local tabButton = MakeInstance("ImageButton", {
+            Name = RandomString(3) .. "Tab",
+            Parent = self.TabFrame,
+            BackgroundTransparency = 0.75,
+            BackgroundColor3 = self.CurrentTheme.UFB,
+            Size = UDim2.new(0, 130, 0, 40),
+            ClipsDescendants = true,
+        })
+        
+        MakeInstance("UICorner", {
+            CornerRadius = UDim.new(0, 5),
+        }, tabButton)
+        
+        local tabStroke = MakeInstance("UIStroke", {
+            Name = "UIStroke",
+            Transparency = 0.55,
+            Color = self.CurrentTheme.USC,
+            Thickness = 2,
+            Enabled = true,
+        }, tabButton)
+        
+        table.insert(self.Strokes, tabStroke)
+        
+        MakeInstance("ImageLabel", {
+            Name = "Icon",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0.15, 0, 0.5, 0),
+            Size = UDim2.new(0, 28, 0, 28),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Image = icon or "",
+            Rotation = 0,
+        }, tabButton)
+        
+        local tabTitle = MakeInstance("TextLabel", {
+            Name = "Title",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0.525, 0, 0.5, 0),
+            Size = UDim2.new(0, 100, 0, 20),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Font = Enum.Font.Gotham,
+            Text = name,
+            TextSize = 11,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+        }, tabButton)
+
+        -- Tab Content
+        local tabContent = MakeInstance("CanvasGroup", {
+            Name = name .. "Group",
+            Parent = self.TabFrame.Parent,
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1,
+            GroupColor3 = Color3.fromRGB(255, 255, 255),
+            GroupTransparency = 1,
+            Position = UDim2.new(0.6115, 0, 0.535, 0),
+            Size = UDim2.new(0, 455, 0, 270),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Visible = false,
+        })
+        
+        local contentScroller = MakeInstance("ScrollingFrame", {
+            Name = "Sleeker",
+            BackgroundTransparency = 0.95,
+            BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+            Position = UDim2.new(0.51, 0, 0.5, 0),
+            Size = UDim2.new(0, 455, 0, 270),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            ScrollBarThickness = 0,
+        }, tabContent)
+        
+        MakeInstance("UICorner", {
+            CornerRadius = UDim.new(0, 5),
+        }, contentScroller)
+        
+        local headerLabel = MakeInstance("TextLabel", {
+            Name = name,
+            BackgroundTransparency = 0.65,
+            BackgroundColor3 = Color3.fromRGB(0, 255, 15),
+            Size = UDim2.new(0, 435, 0, 25),
+            Font = Enum.Font.Gotham,
+            Text = name,
+            TextSize = 14,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            RichText = true,
+        }, contentScroller)
+        
+        MakeInstance("UICorner", {
+            CornerRadius = UDim.new(0, 5),
+        }, headerLabel)
+        
+        MakeInstance("UIListLayout", {
+            Name = "UIListLayout",
+            HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            SortOrder = Enum.SortOrder.LayoutOrder,
+            Padding = UDim.new(0, 8),
+        }, contentScroller)
+
+        tab.Button = tabButton
+        tab.Content = tabContent
+        tab.Scroller = contentScroller
+        tab.Properties = {}
+        tab.Icon = tabButton.Icon
+
+        table.insert(self.Tabs, tab)
+
+        -- Tab Click Handler
+        tabButton.MouseButton1Click:Connect(function()
+            PlayTouchSound()
+            self:SelectTab(tab)
+        end)
+
+        -- Touch Effect
+        ApplyTouchEffect(tabButton)
+
+        if not self.CurrentTab then
+            self:SelectTab(tab)
+        end
+
+        return tab
+    end
+
+    function State:SelectTab(tab)
+        if self.CurrentTab == tab then return end
+        
+        local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine)
+        
+        if self.CurrentTab then
+            local oldTab = self.CurrentTab
+            PlayTween(oldTab.Button, tweenInfo, {BackgroundTransparency = 0.75})
+            PlayTween(oldTab.Button.Title, tweenInfo, {Position = UDim2.new(0.525, 0, 0.5, 0)})
+            PlayTween(oldTab.Button.Icon, tweenInfo, {Position = UDim2.new(0.15, 0, 0.5, 0)})
+            
+            oldTab.Content.GroupTransparency = 1
+            oldTab.Content.Visible = false
+            oldTab.Content.Parent = nil
+        end
+        
+        self.CurrentTab = tab
+        
+        tab.Content.Parent = self.TabFrame.Parent
+        tab.Content.Visible = true
+        
+        PlayTween(tab.Button, tweenInfo, {BackgroundTransparency = 0})
+        PlayTween(tab.Button.Title, tweenInfo, {Position = UDim2.new(0.55, 0, 0.5, 0)})
+        PlayTween(tab.Button.Icon, tweenInfo, {Position = UDim2.new(0.175, 0, 0.5, 0)})
+        
+        PlayTween(tab.Content, tweenInfo, {GroupTransparency = 0})
+    end
+
+    function State:RegisterProperty(tab, property)
+        if not tab then return end
+        
+        local propType = property.Type
+        local callback = property.Callback
+        local flag = property.Flag
+        local text = property.Text or ""
+        
+        local scroller = tab.Scroller
+        
+        if propType == "Label" then
+            local label = MakeInstance("TextLabel", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 415, 0, 25),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 13,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            })
+            
+            if flag then
+                self.Flags[flag] = function(value)
+                    label.Text = value
+                end
+            end
+            
+        elseif propType == "Header" then
+            local header = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 25),
+            })
+            
+            local glow = MakeInstance("ImageLabel", {
+                Name = "Glow",
+                BackgroundTransparency = 1,
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Size = UDim2.new(1, 10, 1, 10),
+                Image = "rbxassetid://6014261993",
+                ImageColor3 = self.CurrentTheme.UFB,
+                ImageTransparency = 0.7,
+                ScaleType = Enum.ScaleType.Slice,
+                SliceCenter = Rect.new(49, 49, 450, 450),
+            }, header)
+            
+            local underline = MakeInstance("Frame", {
+                Name = "Underline",
+                BackgroundColor3 = self.CurrentTheme.UFB,
+                Position = UDim2.new(0, 0, 1, 0),
+                Size = UDim2.new(0, #text * 9, 0, 2),
+            }, header)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 5),
+            }, underline)
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 400, 0, 35),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 20,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            }, header)
+            
+        elseif propType == "Button" then
+            local button = MakeInstance("ImageButton", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 0.75,
+                BackgroundColor3 = self.CurrentTheme.UFB,
+                Size = UDim2.new(0, 435, 0, 30),
+                ClipsDescendants = true,
+            })
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 5),
+            }, button)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, button)
+            
+            table.insert(self.Strokes, stroke)
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 30),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                RichText = true,
+            }, button)
+            
+            MakeInstance("ImageLabel", {
+                Name = "Click",
+                BackgroundTransparency = 1,
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.9, 0, 0.5, 0),
+                Size = UDim2.new(0, 20, 0, 20),
+                Image = "rbxassetid://109049639340001",
+                ImageColor3 = Color3.fromRGB(255, 255, 255),
+            }, button)
+            
+            button.MouseButton1Click:Connect(function()
+                PlayTouchSound()
+                if callback then callback() end
+            end)
+            
+            ApplyTouchEffect(button)
+            
+        elseif propType == "Toggle" then
+            local container = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 30),
+            })
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.15, 0, 0.5, 0),
+                Size = UDim2.new(0, 100, 0, 10),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            }, container)
+            
+            local toggleFrame = MakeInstance("Frame", {
+                Name = "Toggle",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+                Position = UDim2.new(0.25, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Size = UDim2.new(0, 15, 0, 10),
+            }, container)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, toggleFrame)
+            
+            local activator = MakeInstance("ImageButton", {
+                Name = "Activator",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
+                Position = UDim2.new(0.8, 0, 0.5, 0),
+                Size = UDim2.new(0, 45, 0, 13),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                ClipsDescendants = true,
+            }, container)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, activator)
+            
+            table.insert(self.Strokes, stroke)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, activator)
+            
+            local state = false
+            
+            activator.MouseButton1Click:Connect(function()
+                PlayTouchSound()
+                state = not state
+                
+                local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
+                if state then
+                    activator.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                    toggleFrame.Position = UDim2.new(0.75, 0, 0.5, 0)
+                else
+                    activator.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                    toggleFrame.Position = UDim2.new(0.25, 0, 0.5, 0)
+                end
+                
+                if callback then callback(state) end
+            end)
+            
+            if flag then
+                self.Flags[flag] = function(value)
+                    state = value
+                    if state then
+                        activator.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                        toggleFrame.Position = UDim2.new(0.75, 0, 0.5, 0)
+                    else
+                        activator.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                        toggleFrame.Position = UDim2.new(0.25, 0, 0.5, 0)
+                    end
+                end
+            end
+            
+        elseif propType == "Slider" then
+            local container = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 40),
+            })
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.15, 0, 0.335, 0),
+                Size = UDim2.new(0, 100, 0, 10),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            }, container)
+            
+            local valueBox = MakeInstance("TextBox", {
+                Name = "Value",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
+                Position = UDim2.new(0.8, 0, 0.335, 0),
+                Size = UDim2.new(0, 45, 0, 18),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                ClearTextOnFocus = false,
+                Font = Enum.Font.Gotham,
+                Text = "",
+                TextSize = 12,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+            }, container)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, valueBox)
+            
+            table.insert(self.Strokes, stroke)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 5),
+            }, valueBox)
+            
+            local fill = MakeInstance("Frame", {
+                Name = "Fill",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+                Position = UDim2.new(0.5, 0, 0.775, 0),
+                Size = UDim2.new(0, 400, 0, 5),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+            }, container)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, fill)
+            
+            local filler = MakeInstance("Frame", {
+                Name = "Filler",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = self.CurrentTheme.UFB,
+                Position = UDim2.new(0, 0, 0.5, 0),
+                Size = UDim2.new(0, 20, 0, 5),
+                AnchorPoint = Vector2.new(0, 0.5),
+            }, fill)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, filler)
+            
+            local button = MakeInstance("ImageButton", {
+                Name = "Button",
+                BackgroundTransparency = 0.8,
+                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0, 20, 0.5, 0),
+                Size = UDim2.new(0, 10, 0, 10),
+            }, filler)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, button)
+            
+            local min = property.Minimum or 0
+            local max = property.Maximum or 100
+            local default = property.Default or 50
+            local current = default
+            
+            local function UpdateSlider(value)
+                value = math.clamp(value, min, max)
+                current = value
+                local percent = (value - min) / (max - min)
+                local pos = percent * 400
+                button.Position = UDim2.new(0, pos, 0.5, 0)
+                filler.Size = UDim2.new(0, pos, 0, 5)
+                valueBox.Text = tostring(math.floor(value))
+                if callback then callback(value) end
+            end
+            
+            UpdateSlider(default)
+            
+            local dragging = false
+            button.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    local offset = button.AbsolutePosition.X - button.Position.X.Offset
+                    
+                    local connection
+                    connection = RunService.RenderStepped:Connect(function()
+                        if dragging then
+                            local pos = math.clamp(Mouse.X - offset - 3, 0, 400)
+                            local value = min + (max - min) * (pos / 395)
+                            UpdateSlider(value)
+                        end
+                    end)
+                    
+                    input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            dragging = false
+                            connection:Disconnect()
+                        end
+                    end)
+                end
+            end)
+            
+            valueBox.FocusLost:Connect(function()
+                local val = tonumber(valueBox.Text)
+                if val then
+                    UpdateSlider(val)
+                else
+                    UpdateSlider(current)
+                end
+            end)
+            
+            if flag then
+                self.Flags[flag] = UpdateSlider
+            end
+            
+        elseif propType == "Keybind" then
+            local container = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 30),
+            })
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.15, 0, 0.5, 0),
+                Size = UDim2.new(0, 100, 0, 10),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            }, container)
+            
+            local activator = MakeInstance("TextButton", {
+                Name = "Activator",
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromRGB(255, 0, 0),
+                Position = UDim2.new(0.8, 0, 0.5, 0),
+                Size = UDim2.new(0, 75, 0, 15),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Font = Enum.Font.Gotham,
+                Text = property.Default or "Press Any Key!",
+                TextSize = 12,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                ClipsDescendants = true,
+            }, container)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, activator)
+            
+            table.insert(self.Strokes, stroke)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, activator)
+            
+            local key = property.Default or ""
+            local listening = false
+            
+            activator.MouseButton1Click:Connect(function()
+                PlayTouchSound()
+                listening = true
+                activator.Text = "Press Any Key!"
+            end)
+            
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if listening and not gameProcessed then
+                    local keyName = UserInputService:GetStringForKeyCode(input.KeyCode)
+                    if keyName ~= "Unknown" then
+                        key = keyName
+                        activator.Text = key
+                        listening = false
+                        if callback then callback() end
+                    end
+                end
+            end)
+            
+        elseif propType == "Dropdown" then
+            local container = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                ClipsDescendants = true,
+                Size = UDim2.new(0, 435, 0, 60),
+            })
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0, 15, 0, 0),
+                Size = UDim2.new(1, 0, 0, 20),
+                RichText = true,
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+            }, container)
+            
+            local button = MakeInstance("TextButton", {
+                Name = "Button",
+                BackgroundTransparency = 0.95,
+                BackgroundColor3 = self.CurrentTheme.UFB,
+                Position = UDim2.new(0, 15, 0, 20),
+                Size = UDim2.new(1, -25, 0, 30),
+                RichText = true,
+                Font = Enum.Font.Gotham,
+                Text = property.Selections and property.Selections[1] or "Select",
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+            }, container)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, button)
+            
+            table.insert(self.Strokes, stroke)
+            
+            MakeInstance("UIPadding", {
+                Name = "UIPadding",
+                PaddingLeft = UDim.new(0, 10),
+            }, button)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 5),
+            }, button)
+            
+            local arrow = MakeInstance("ImageLabel", {
+                Name = "Arrow",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(1, -40, 0.5, -10),
+                Size = UDim2.new(0, 20, 0, 20),
+                Image = "rbxassetid://6031091004",
+            }, button)
+            
+            local menu = MakeInstance("Frame", {
+                Name = "Menu",
+                BackgroundTransparency = 0.95,
+                BackgroundColor3 = self.CurrentTheme.UFB,
+                ClipsDescendants = true,
+                Position = UDim2.new(0, 0, 1, 3),
+                Size = UDim2.new(1, 0, 0, 0),
+                Visible = false,
+            }, button)
+            
+            local menuStroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, menu)
+            
+            table.insert(self.Strokes, menuStroke)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 3),
+            }, menu)
+            
+            local optionContainer = MakeInstance("ScrollingFrame", {
+                Name = "OptionContainer",
+                BackgroundTransparency = 1,
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                ScrollBarThickness = 0,
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = 10,
+            }, menu)
+            
+            MakeInstance("UIListLayout", {
+                Name = "UIListLayout",
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+                SortOrder = Enum.SortOrder.LayoutOrder,
+            }, optionContainer)
+            
+            MakeInstance("UIPadding", {
+                Name = "UIPadding",
+                PaddingTop = UDim.new(0, 5),
+                PaddingBottom = UDim.new(0, 5),
+            }, optionContainer)
+            
+            local selections = property.Selections or {}
+            local selected = selections[1] or ""
+            local open = false
+            
+            for _, option in ipairs(selections) do
+                local optionButton = MakeInstance("TextButton", {
+                    Name = option,
+                    Parent = optionContainer,
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, -10, 0, 25),
+                    RichText = true,
+                    Font = Enum.Font.Gotham,
+                    Text = option,
+                    TextColor3 = Color3.fromRGB(104, 104, 104),
+                    TextSize = 14,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                })
+                
+                if option == selected then
+                    optionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+                end
+                
+                optionButton.MouseButton1Click:Connect(function()
+                    if open then
+                        selected = option
+                        button.Text = option
+                        for _, child in ipairs(optionContainer:GetChildren()) do
+                            if child:IsA("TextButton") then
+                                child.TextColor3 = Color3.fromRGB(104, 104, 104)
+                            end
+                        end
+                        optionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        if callback then callback(option) end
+                        ToggleDropdown()
+                    end
+                end)
+            end
+            
+            local function ToggleDropdown()
+                open = not open
+                local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
+                
+                if open then
+                    menu.Visible = true
+                    local height = math.min(#selections * 25, 150)
+                    PlayTween(menu, tweenInfo, {Size = UDim2.new(1, 0, 0, height)})
+                    PlayTween(arrow, tweenInfo, {Rotation = 180})
+                    PlayTween(container, tweenInfo, {Size = UDim2.new(0, 435, 0, 60 + height)})
+                else
+                    PlayTween(menu, tweenInfo, {Size = UDim2.new(1, 0, 0, 0)})
+                    PlayTween(arrow, tweenInfo, {Rotation = 0})
+                    PlayTween(container, tweenInfo, {Size = UDim2.new(0, 435, 0, 60)})
+                    task.wait(0.25)
+                    menu.Visible = false
+                end
+            end
+            
+            button.MouseButton1Click:Connect(function()
+                PlayTouchSound()
+                ToggleDropdown()
+            end)
+            
+        elseif propType == "TextBox" then
+            local container = MakeInstance("Frame", {
+                Name = text,
+                Parent = scroller,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 435, 0, 60),
+            })
+            
+            local title = MakeInstance("TextLabel", {
+                Name = "Title",
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.15, 0, 0.165, 0),
+                Size = UDim2.new(0, 100, 0, 10),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Font = Enum.Font.Gotham,
+                Text = text,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                RichText = true,
+            }, container)
+            
+            local box = MakeInstance("TextBox", {
+                Name = "Box",
+                BackgroundTransparency = 0.75,
+                BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+                Position = UDim2.new(0.5, 0, 0.615, 0),
+                Size = UDim2.new(0, 405, 0, 30),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                ClipsDescendants = true,
+                Font = Enum.Font.Gotham,
+                PlaceholderText = "Enter Text...",
+                PlaceholderColor3 = Color3.fromRGB(104, 104, 104),
+                Text = property.Default or "",
+                TextSize = 13,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextXAlignment = Enum.TextXAlignment.Left,
+            }, container)
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 5),
+            }, box)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0.55,
+                Color = self.CurrentTheme.USC,
+                Thickness = 2,
+                Enabled = true,
+            }, box)
+            
+            table.insert(self.Strokes, stroke)
+            
+            box.Focused:Connect(function()
+                PlayTween(box, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(70, 70, 70)})
+            end)
+            
+            box.FocusLost:Connect(function()
+                PlayTween(box, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(15, 15, 15)})
+                if callback then callback(box.Text) end
+            end)
+        end
+        
+        table.insert(tab.Properties, property)
+    end
+
+    -- ============================================
+    -- HELPER FUNCTIONS
+    -- ============================================
+
+    function PlayTouchSound()
+        -- Play a touch sound effect
+    end
+
+    function ApplyTouchEffect(button)
+        button.MouseButton1Click:Connect(function()
+            local effect = MakeInstance("Frame", {
+                Name = "TouchEffect",
+                Parent = button,
+                BackgroundTransparency = 0.9999,
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Size = UDim2.new(0, 0, 0, 0),
+            })
+            
+            MakeInstance("UICorner", {
+                CornerRadius = UDim.new(0, 15),
+            }, effect)
+            
+            local stroke = MakeInstance("UIStroke", {
+                Name = "UIStroke",
+                Transparency = 0,
+                Color = Color3.fromRGB(255, 255, 255),
+                Thickness = 1.5,
+                Enabled = true,
+            }, effect)
+            
+            local tweenInfo = TweenInfo.new(0.75, Enum.EasingStyle.Quad)
+            effect.Position = UDim2.new(0, Mouse.X - button.AbsolutePosition.X, 0, Mouse.Y - button.AbsolutePosition.Y)
+            effect.Size = UDim2.new(0, 30, 0, 30)
+            
+            PlayTween(effect, tweenInfo, {Size = UDim2.new(0, 60, 0, 60)})
+            PlayTween(stroke, tweenInfo, {Transparency = 1})
+            
+            task.wait(0.75)
+            effect:Destroy()
+        end)
+    end
+
+    -- ============================================
+    -- TOGGLE UI FUNCTION
+    -- ============================================
+
+    local isOpen = false
+    local toggleTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Sine)
+    
+    function State:ToggleUI()
+        PlayTouchSound()
+        isOpen = not isOpen
+        
+        if isOpen then
+            self.MainFrame.Visible = true
+            PlayTween(self.MainFrame, toggleTweenInfo, {
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Size = UDim2.new(0, 600, 0, 300)
+            })
+        else
+            PlayTween(self.MainFrame, toggleTweenInfo, {
+                Position = UDim2.new(0.5, 0, -0.5, 0),
+                Size = UDim2.new(0, 30, 0, 30)
+            })
+            task.wait(0.25)
+            self.MainFrame.Visible = false
+        end
+    end
+
+    -- ============================================
+    -- NOTIFICATION SYSTEM
+    -- ============================================
+
+    function State:Notify(message)
+        local notification = MakeInstance("Frame", {
+            Name = "Notification",
+            Parent = self.NotificationContainer,
+            BackgroundTransparency = 1,
+            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+            Size = UDim2.new(0, 250, 0, 0),
+            ClipsDescendants = true,
+        })
+        
+        MakeInstance("UICorner", {
+            CornerRadius = UDim.new(0, 5),
+        }, notification)
+        
+        local stroke = MakeInstance("UIStroke", {
+            Name = "UIStroke",
+            Transparency = 0.55,
+            Color = self.CurrentTheme.USC,
+            Thickness = 2,
+            Enabled = true,
+        }, notification)
+        
+        local title = MakeInstance("TextLabel", {
+            Name = "Title",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 10, 0, 5),
+            Size = UDim2.new(1, -20, 0, 25),
+            RichText = true,
+            Font = Enum.Font.Gotham,
+            Text = "Overdrive H Says:",
+            TextSize = 14,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            TextXAlignment = Enum.TextXAlignment.Left,
+        }, notification)
+        
+        local desc = MakeInstance("TextLabel", {
+            Name = "Description",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 10, 0, 30),
+            Size = UDim2.new(1, -20, 0, 0),
+            RichText = true,
+            Font = Enum.Font.Gotham,
+            Text = message,
+            TextSize = 11,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            TextWrapped = true,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            TextYAlignment = Enum.TextYAlignment.Top,
+        }, notification)
+        
+        -- Animate in
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quint)
+        notification.Size = UDim2.new(0, 250, 0, 40 + desc.TextBounds.Y)
+        PlayTween(notification, tweenInfo, {BackgroundTransparency = 0.5})
+        
+        -- Auto hide after 5 seconds
+        task.wait(5)
+        PlayTween(notification, tweenInfo, {BackgroundTransparency = 1, Size = UDim2.new(0, 250, 0, 0)})
+        task.wait(0.5)
+        notification:Destroy()
+    end
+
+    -- ============================================
+    -- SETUP COMPLETE
+    -- ============================================
+
+    -- Setup minimize button
+    MinimizeButton.MouseButton1Click:Connect(function()
+        State:ToggleUI()
+    end)
+
+    -- Open UI initially
+    task.wait(0.5)
+    State:ToggleUI()
+
+    return State
+end
+
+-- ============================================
+-- LIBRARY EXPORT
+-- ============================================
+
+function Library:Create()
+    return CreateUI()
+end
+
+return Library
