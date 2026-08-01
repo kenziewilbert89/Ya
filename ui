@@ -1,12 +1,2352 @@
 -- ============================================
--- OVERDRIVE H UI LIBRARY (EXACT COPY)
--- Complete UI System - Same as Original
+-- OVERDRIVE H UI - COMPLETE VERSION
 -- ============================================
 
-local Library = {}
+-- Setup environment
+local u1 = game
+local u2 = tostring
+local u3 = tonumber
+local _min = math.min
+local _max = math.max
+local _rad = math.rad
+local _floor = math.floor
+local _random = math.random
+local _insert = table.insert
+local _remove = table.remove
+local _concat = table.concat
+local u12 = unpack or table.unpack
+local u13 = type
+local u14 = typeof
+local u15 = pcall
+local u16 = setmetatable
+local v17 = getmetatable
+local _wrap = coroutine.wrap
+local v19 = print
+local u20 = error
+local v21 = getgenv
+
+if v21 then
+    v21 = getgenv()
+end
+
+local u22 = tick
+local _date = os.date
+local _time = os.time
+local u25 = pairs
+local _char = string.char
+local _sub = string.sub
+local _len = string.len
+local _format = string.format
+local _gsub = string.gsub
+local _find = string.find
+local _match = string.match
+local _lower = string.lower
+local _upper = string.upper
+local _byte = string.byte
+local _gmatch = string.gmatch
+local u37 = {}
+
+u22()
+
+local u38 = {}
+local u39 = {}
+local u40 = {}
+local u41 = nil
+local u42 = debug
+local u43 = 'function'
+
+local function u45(p44)
+    return u13(p44) == u43
+end
+
+local u46 = 'table'
+
+local function u48(p47)
+    return u13(p47) == u46
+end
+
+local u49 = 'number'
+
+local function v51(p50)
+    return u13(p50) == u49
+end
+
+local u52 = 'string'
+
+local function v54(p53)
+    return u13(p53) == u52
+end
+
+local u55 = 'boolean'
+
+local function v57(p56)
+    return u13(p56) == u55
+end
+
+local u58 = 'userdata'
+
+local function v60(p59)
+    return u14(p59) == u58
+end
+
+local u61 = {
+    '[^',
+    ']+',
+}
+
+local function v70(p62, p63)
+    local v64 = _insert
+    local v65 = u61
+    local v66, v67, v68 = _gmatch(p62, v65[1] .. p63 .. v65[2])
+    local v69 = {}
+
+    while true do
+        v68 = v66(v67, v68)
+
+        if v68 == nil then
+            break
+        end
+
+        v64(v69, v68)
+    end
+
+    return v69
+end
+
+if not (v21 and u77) then
+    return
+end
+
+v21.OVERDRIVE_H_IS_HERE = true
+
+local _RunService = u1:GetService('RunService')
+local _ReplicatedStorage = u1:GetService('ReplicatedStorage')
+local _TextChatService = u1:GetService('TextChatService')
+local _UserInputService = u1:GetService('UserInputService')
+local _MarketplaceService = u1:GetService('MarketplaceService')
+local _VirtualInputManager = u1:GetService('VirtualInputManager')
+local _GuiService = u1:GetService('GuiService')
+local _CoreGui = u1:GetService('CoreGui')
+local _VirtualUser = u1:GetService('VirtualUser')
+local _Lighting = u1:GetService('Lighting')
+local _Stats = u1:GetService('Stats')
+local _Players = u1:GetService('Players')
+local _Heartbeat = _RunService.Heartbeat
+local _RenderStepped = _RunService.RenderStepped
+local _Stepped = _RunService.Stepped
+local u94 = workspace
+local v95 = Vector3
+local v96 = CFrame
+local _new = v95.new
+local _zero = v95.zero
+local u99 = _new(math.huge, math.huge, math.huge)
+local _new2 = v96.new
+local _Angles = v96.Angles
+local _lookAt = v96.lookAt
+local _new3 = Vector2.new
+local _new4 = UDim2.new
+local _new5 = UDim.new
+local _new6 = TweenInfo.new
+local _fromRGB = Color3.fromRGB
+local _Platform = Enum.Platform
+local _Font = Enum.Font
+local _TextXAlignment = Enum.TextXAlignment
+local _TextYAlignment = Enum.TextYAlignment
+local _HumanoidStateType = Enum.HumanoidStateType
+local _ZIndexBehavior = Enum.ZIndexBehavior
+local _HighlightDepthMode = Enum.HighlightDepthMode
+local _RaycastFilterType = Enum.RaycastFilterType
+local _ = Enum.UserInputState
+local _KeyCode = Enum.KeyCode
+local _EasingStyle = Enum.EasingStyle
+local _EasingDirection = Enum.EasingDirection
+local _AutomaticSize = Enum.AutomaticSize
+local _PartType = Enum.PartType
+local _Material = Enum.Material
+local _SortOrder = Enum.SortOrder
+local _HorizontalAlignment = Enum.HorizontalAlignment
+local _new7 = RaycastParams.new
+local _new8 = PhysicalProperties.new
+local _CurrentCamera = u94.CurrentCamera
+local _WorldToViewportPoint = _CurrentCamera.WorldToViewportPoint
+local _WorldToScreenPoint = _CurrentCamera.WorldToScreenPoint
+local _DataPing = _Stats.Network.ServerStatsItem['Data Ping']
+local u130 = task and task.spawn or spawn
+local u131 = task and task.wait or wait
+local _LocalPlayer = _Players.LocalPlayer
+local _Name = _LocalPlayer.Name
+local u134, u135 = _LocalPlayer:GetMouse()
+local _UserId = _LocalPlayer.UserId
+local u137 = nil
+local u138 = nil
+local u139 = nil
+
+repeat
+    u131()
+    local v140 = u22()
+until u1:IsLoaded()
+
+local u141 = not (setclipboard or toclipboard) and (not set_clipboard and Clipboard)
+if u141 then
+    u141 = Clipboard.set
+end
+
+if not getconnections then
+    local _ = get_signal_cons
+end
+
+local _ = hookfunction
+local _ = isfolder
+local u146 = delfolder or deletefolder
+
+local function u153(p151, p152)
+    if p151 then
+        u150[p151] = p152
+    end
+end
+
+local function u155(p154)
+    if p154 then
+        return u150[p154]
+    end
+end
+
+local u158 = {
+    'FeaturesDebugging',
+    'Notify',
+    'Callback Error: <font color="rgb(255, 0, 0)">',
+    '</font>',
+}
+local _f = u77.f
+
+local u165 = '%x'
+
+local function u167(p166)
+    return _format(u165, _byte(p166) * 2)
+end
+
+local u168 = '.'
+
+function u40.HexEncode(_, p169)
+    return _gsub(p169, u168, u167)
+end
+
+local u170 = 'Overdrive H: '
+
+function u40.Error(_, p171)
+    return u20(u170 .. p171)
+end
+
+function u40.DestroyGui(_)
+    local _ScreenGui = u155('ScreenGui')
+    if _ScreenGui then
+        u41.d = _ScreenGui
+        u153('ScreenGui')
+    end
+end
+
+local _DestroyGui = u40.DestroyGui
+local _Kick = _LocalPlayer.Kick
+local _WaitForChild = _LocalPlayer.WaitForChild
+
+local u184 = {
+    'Sound Effect',
+    'Play',
+}
+
+function u40.PlayTouchSoundEffect()
+    local v185 = u184
+    local v186 = u155(v185[1])
+    if v186 then
+        v186[v185[2]](v186)
+    end
+end
+
+local u187 = 'Using Http Spy'
+local _HttpGet = u1.HttpGet
+
+local u194 = 'string'
+local u195 = u13
+local u196 = u14
+
+local u199 = ''
+local u200 = v17
+
+local u202 = not (request or http_request or (http and http.request or syn and syn.request)) and (not HttpPost and Xeno)
+if u202 then
+    u202 = Xeno.request
+end
+
+local u203 = {
+    'Url',
+    'Method',
+    'Headers',
+    'Body',
+}
+local _t = u77.t
+
+local u215 = 'Parent'
+local _new9 = Instance.new
+
+function u40.MakeInstance(_, p217, p218, p219, ...)
+    if p217 and p218 then
+        local v220 = _new9(p217)
+        local v221 = u25
+        local v222, v223, v224 = v221(p218)
+
+        while true do
+            local v225
+            v224, v225 = v222(v223, v224)
+            if v224 == nil then break end
+            v220[v224] = v225
+        end
+
+        if p219 then
+            local v226 = u215
+            local v227, v228, v229 = v221({p219, ...})
+
+            while true do
+                local v230
+                v229, v230 = v227(v228, v229)
+                if v229 == nil then break end
+                v230[v226] = v220
+            end
+        end
+
+        return v220
+    end
+end
+
+function u40.AppendInstance(_, p231, p232)
+    if p231 and p232 then
+        local v233, v234, v235 = u25(p232)
+
+        while true do
+            local v236
+            v235, v236 = v233(v234, v235)
+            if v235 == nil then break end
+            p231[v235] = v236
+        end
+        return p231
+    end
+end
+
+function u40.AnimateRichText(_, p237, p238)
+    if p237 and p238 then
+        local u239 = {
+            '<[^<>]->',
+            '/',
+            '([</>])',
+            '',
+            ' ',
+            '</',
+            '>',
+            'Text',
+        }
+
+        function u41.Coroutine()
+            local v240 = u239
+            local v241 = _len
+            local v242 = p238
+            local v243 = p237
+            local v244 = u131
+            local v245 = _find
+            local v246 = _match
+            local v247 = _sub
+            local v248 = _gsub
+            local v249 = _remove
+            local v250 = _insert
+            local v251 = v240[1]
+            local v252 = v240[2]
+            local v253 = v240[3]
+            local v254 = v240[4]
+            local v255 = v240[5]
+            local v256 = v240[6]
+            local v257 = v240[7]
+            local v258 = v240[8]
+            local v259 = v241(v242)
+            local v260 = 1
+            local v261 = {}
+            local v262 = nil
+            local v263 = nil
+
+            while v260 <= v259 do
+                local v264, v265 = v245(v242, v251, v260)
+
+                if v264 or v265 then
+                    if v264 == v262 or v265 == v263 then
+                        v265 = v263
+                        v264 = v262
+                    else
+                        v261[v264] = {
+                            v246(v247(v242, v264, v265), v252) and true or false,
+                            v248(v247(v242, v264, v265), v253, v254),
+                        }
+                    end
+                else
+                    v260 = v259
+                    v265 = v263
+                    v264 = v262
+                end
+
+                v260 = v260 + 1
+                v263 = v265
+                v262 = v264
+            end
+
+            v244(0.05)
+
+            local v266 = 1
+            local v267 = {}
+
+            while true do
+                if v266 > v259 then
+                    v244()
+                    v243[v258] = v242
+                    return
+                end
+
+                local v268 = v261[v266]
+
+                if not v268 then
+                    break
+                end
+
+                if v268[1] then
+                    v249(v267, v268[3])
+                    v266 = v266 + v241(v268[2]) + 1
+                else
+                    local v269 = v266 + 1
+                    local v270
+
+                    while true do
+                        local v271 = v261[v269]
+                        if v271 then break end
+                        v270 = v254
+                        v269 = v269 + 1
+                        v254 = v270
+                    end
+
+                    local v272 = v268[2]
+
+                    if v272 then
+                        local v273 = v241(v272)
+                        v270 = v254
+                        local v274 = 1
+
+                        while v274 <= v273 do
+                            local v275 = v247(v272, v274, v274)
+
+                            if v275 == v255 then
+                                v274 = v273
+                            else
+                                v254 = v254 .. v275
+                            end
+
+                            v274 = v274 + 1
+                        end
+                    else
+                        v270 = v254
+                        v254 = nil
+                    end
+
+                    if v271[2] ~= v254 or not v271[1] then
+                    end
+
+                    v250(v267, v254)
+                    v271[3] = #v267
+                    v266 = v266 + v241(v268[2]) + 1
+                    v254 = v270
+                end
+
+                v266 = v266 + 1
+            end
+
+            if not v261[v266 + 1] then
+                local v276 = v247(v242, 1, v266)
+
+                for v277 = #v267, 1, -1 do
+                    v276 = v276 .. v256 .. v267[v277] .. v257
+                end
+
+                v244(0.07)
+                v243[v258] = v276
+            end
+        end
+    end
+end
+
+local u278 = {
+    '<br%s*/>',
+    '\n',
+    '<[^<>]->',
+    '',
+}
+
+function u40.RemoveRichText(_, p279)
+    local v280 = u278
+    local v281 = _gsub
+    local v282 = v281(p279, v280[1], v280[2]) and v281(p279, v280[3], v280[4])
+    if v282 then
+        return v282
+    end
+end
+
+local u283 = {
+    ' ',
+    '\n',
+    '\t',
+}
+
+function u40.RemoveIndent(_, p284)
+    local v285 = u283
+    local v286 = _len
+    local v287 = _sub
+    local v288 = v285[1]
+    local v289 = v285[2]
+    local v290 = v285[3]
+    local v291 = v286(p284)
+    local v292 = p284
+
+    for v293 = 1, v291 do
+        local v294 = v287(p284, v293, v293)
+
+        if v294 ~= v288 and v294 ~= v289 and v294 ~= v290 then
+            break
+        end
+
+        v292 = v287(p284, v293 + 1, v291)
+    end
+
+    local v295 = v292
+
+    for v296 = v286(v292), 1, -1 do
+        local v297 = v287(v292, v296, v296)
+
+        if v297 ~= v288 and v297 ~= v289 and v297 ~= v290 then
+            break
+        end
+
+        v295 = v287(v292, 1, v296 - 1)
+    end
+
+    return v295
+end
+
+local _month = _date('*t', _time()).month
+local v299 = _month == 11 and 'Halloween' or (_month == 12 and 'Christmas' or (_month == 2 and 'Valentine' or nil))
+
+u40.ThemeList = v299 and {
+    v299,
+    'Amethyst',
+    'Amoled',
+    'Crimson',
+    'Dark',
+    'NEO',
+} or {
+    'Amethyst',
+    'Amoled',
+    'Crimson',
+    'Dark',
+    'NEO',
+}
+
+local _DestroyGui3 = u40.DestroyGui
+local _shutdown = u1.shutdown
+
+function u40.ForceShutdown(p302)
+    local v303 = u15
+    local v304 = u1
+    local v305 = _DestroyGui3
+    local v306 = _shutdown
+
+    v305(p302)
+    v303(v306, v304)
+    u131(3)
+
+    while true do
+        v305(p302)
+        v303(v306, v304)
+    end
+end
+
+function u40.RandomString(_, p307)
+    local v308 = _random
+    local v309 = _char
+    local v310 = {}
+
+    for v311 = 1, p307 or v308(1, 10) do
+        v310[v311] = v309(v308(32, 126))
+    end
+
+    return _concat(v310)
+end
+
+-- UI COMPONENTS
+local u312 = {
+    Name = 'Notification',
+    BackgroundTransparency = 1,
+    BackgroundColor3 = _fromRGB(20, 20, 20),
+    Size = _new4(0, 250, 0, 0),
+    ClipsDescendants = true,
+}
+local u313 = {
+    Name = 'UICorner',
+    CornerRadius = _new5(0, 5),
+}
+local u314 = {
+    Name = 'UIStroke',
+    Transparency = 0.55,
+    ApplyStrokeMode = 'Border',
+    Thickness = 2,
+    Enabled = true,
+}
+local u315 = {
+    Name = 'Title',
+    BackgroundTransparency = 1,
+    Position = _new4(0, 10, 0, 5),
+    Size = _new4(1, -20, 0, 25),
+    RichText = true,
+    Font = _Font.Gotham,
+    Text = '<font color="rgb(0, 0, 255)">Overdrive H</font> Says:',
+    TextSize = 14,
+    TextColor3 = _fromRGB(255, 255, 255),
+    TextXAlignment = _TextXAlignment.Left,
+}
+local u316 = {
+    Name = 'Description',
+    BackgroundTransparency = 1,
+    Position = _new4(0, 10, 0, 30),
+    Size = _new4(1, -20, 0, 0),
+    RichText = true,
+    Font = _Font.Gotham,
+    TextSize = 11,
+    TextColor3 = _fromRGB(255, 255, 255),
+    TextWrapped = true,
+    TextXAlignment = _TextXAlignment.Left,
+    TextYAlignment = _TextYAlignment.Top,
+}
+local u317 = _new6(1, _EasingStyle.Quint)
+local u318 = {
+    BackgroundTransparency = 1,
+    Size = _new4(0, 250, 0, 0),
+}
+
+function u40.Notify(p319, p320)
+    local _ScreenGui2 = u155('ScreenGui')
+
+    if _ScreenGui2 then
+        local v322 = _fromRGB
+        local u323 = _new4
+        local v324 = u139
+        local v325 = u312
+        local v326 = u314
+        local v327 = u316
+        local u328 = u317
+        local _MakeInstance = p319.MakeInstance
+        local _PlayTween = p319.PlayTween
+
+        v325.Parent = _ScreenGui2.NotificationContainer
+        v326.Color = v324 and v324.getTheme.USC or v322(20, 20, 20)
+        v327.Text = p319:TranslateMatchs(p320)
+
+        local u331 = _MakeInstance(p319, 'Frame', v325, _MakeInstance(p319, 'UICorner', u313), _MakeInstance(p319, 'UIStroke', v326), _MakeInstance(p319, 'TextLabel', u315), _MakeInstance(p319, 'TextLabel', v327))
+        local u332 = {
+            'Description',
+            'Size',
+            'TextBounds',
+            'Y',
+        }
+        local u338 = u157(u331.Description:GetPropertyChangedSignal('TextBounds'), function()
+            local v333 = u332
+            local v334 = u323
+            local v335 = u331[v333[1] ]
+            local v336 = v335[v333[3] ][v333[4] ]
+            local v337 = v333[2]
+
+            v335[v337] = v334(1, -20, 0, v336)
+
+            _PlayTween(p319, u331, u328, {
+                [v337] = v334(0, 250, 0, 40 + v336),
+            })
+        end)
+
+        _PlayTween(p319, u331, u328, {
+            BackgroundTransparency = 0.5,
+            Size = u323(0, 250, 0, 40 + u331.Description.TextBounds.Y),
+        })
+
+        local u339 = {
+            'd',
+            'Disconnect',
+        }
+
+        function u41.Coroutine()
+            local v340 = u339
+            local v341 = u331
+            local v342 = u131
+
+            v342(5)
+            _PlayTween(p319, v341, u328, u318)
+            v342(0.5)
+
+            u41[v340[1] ] = v341
+
+            if u338 then
+                u338[v340[2] ](u338)
+                u338 = nil
+            end
+        end
+    end
+end
+
+function u40.CheckDirFile(_, p343, p344)
+    if p343 and (p344 and not u145(p343)) then
+        u142(p343, p344)
+    end
+end
+
+local u345 = '/signature.txt'
+local _CheckDirFile = u40.CheckDirFile
+local _RandomString = u40.RandomString
+
+function u40.CheckDirFolder(p348, p349)
+    if p349 then
+        u143(p349)
+        _CheckDirFile(p348, p349 .. u345, _RandomString(p348, 60))
+    end
+end
+
+function u40.RemoveDirFile(_, p350)
+    if p350 and u145(p350) then
+        u146(p350)
+    end
+end
+
+local u351 = {
+    'Overdrive-H',
+    'Overdrive-H/Users',
+    'Overdrive-H/Users/',
+    '/',
+    'GameConfig',
+    '-configs.json',
+    'JSEncode',
+}
+local _CheckDirFolder = u40.CheckDirFolder
+
+function u40.SaveConfigurations(p353)
+    local v354 = u351
+    local v355 = _CheckDirFolder
+    local v356 = v354[3] .. _Name
+
+    v355(p353, v354[1])
+    v355(p353, v354[2])
+    v355(p353, v356)
+    u142(v356 .. v354[4] .. p353[v354[5] ] .. v354[6], p353[v354[7] ](p353, u38))
+end
+
+local u357 = {
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+}
+local _CheckDirFolder2 = u40.CheckDirFolder
+
+function u40.Debug(p359, p360, p361)
+    _CheckDirFolder2(p359, 'Overdrive-H')
+
+    local _t2 = _date('*t', _time())
+    local _hour = _t2.hour
+    local v364 = nil
+
+    if _hour == 12 then
+        v364 = true
+    elseif _hour > 12 then
+        _hour = _hour - 12
+        v364 = true
+    end
+
+    _insert(u37, {
+        Type = p360,
+        Text = '[' .. u357[_t2.month] .. ' ' .. _t2.day .. ', ' .. _t2.year .. ' at ' .. _hour .. ':' .. _t2.min .. ':' .. _t2.sec .. ' ' .. (v364 and 'PM' or 'AM') .. ']: ' .. p361,
+    })
+end
+
+local u372 = nil
+local u373 = nil
+local u374 = {
+    '@everyone',
+    'xlp1c2',
+    '@',
+    '<font color="rgb(0, 255, 0)">',
+    '</font>',
+}
+
+local function u378(p375)
+    local v376 = u374
+    local v377 = v376[1]
+
+    if p375 == v377 and u372 ~= v376[2] then
+        return p375
+    end
+    if p375 == v376[3] .. _Name or p375 == v377 then
+        u373 = true
+    end
+
+    return v376[4] .. p375 .. v376[5]
+end
+
+local u379 = '@[%w_]+'
+
+function u40.CheckForMentions(_, p380, p381)
+    u372 = p381
+    u373 = false
+
+    return _gsub(p380, u379, u378), u373
+end
+
+function u40.ApplyTouchEffect(_, p382)
+    local _MakeInstance2 = u40.MakeInstance
+    local _PlayTween2 = u40.PlayTween
+    local _Wait = _Heartbeat.Wait
+    local u386 = {
+        Name = 'TouchEffect',
+        Parent = p382,
+        BackgroundTransparency = 0.9999,
+        AnchorPoint = _new3(0.5, 0.5),
+        Size = _new4(0, 0, 0, 0),
+    }
+    local u387 = {
+        Name = 'UICorner',
+        CornerRadius = _new5(0, 15),
+    }
+    local u388 = {
+        Name = 'UIStroke',
+        Transparency = 0,
+        Color = _fromRGB(255, 255, 255),
+        Thickness = 1.5,
+        Enabled = true,
+    }
+    local u389 = _new6(0.75, _EasingStyle.Quad)
+    local u390 = {Transparency = 1}
+    local u391 = {}
+    local u392 = {
+        'Position',
+        'X',
+        'AbsolutePosition',
+        'Y',
+        'Frame',
+        'UICorner',
+        'Size',
+        'UIStroke',
+        'Offset',
+        'Completed',
+        'd',
+    }
+
+    u157(p382.MouseButton1Click, function()
+        local v393 = u40
+        local v394 = u392
+        local v395 = u134
+        local v396 = _MakeInstance2
+        local v397 = _PlayTween2
+        local v398 = _new4
+        local v399 = p382
+        local v400 = u386
+        local v401 = u389
+        local v402 = u391
+        local v403 = v394[2]
+        local v404 = v394[4]
+        local v405 = v394[7]
+        local v406 = v394[9]
+        local v407 = v399[v394[3] ]
+        local v408 = v399[v405]
+        local v409 = v395[v403]
+        local v410 = v395[v404]
+
+        v400[v394[1] ] = v398(0, v409 - v407[v403], 0, v410 - v407[v404])
+
+        local v411 = v396(v393, v394[8], u388)
+        local v412 = v396(v393, v394[5], v400, v396(v393, v394[6], u387), v411)
+
+        v397(v393, v411, v401, u390)
+
+        v402[v405] = v398(0, v408[v403][v406] + v409, 0, v408[v404][v406] + v410)
+
+        _Wait(v397(v393, v412, v401, v402)[v394[10] ])
+
+        u41[v394[11] ] = v412
+    end)
+end
+
+local _Debug = u40.Debug
+local u414 = {}
+
+_Debug(u40, 'Neutral', 'Fetching Module Scripts...')
+
+function u40.RegisterModule(p415, p416, p417)
+    local v418 = _Debug
+    local v419 = u414[p416]
+
+    if v419 then
+        local v420 = u77
+
+        if p417 and v420.t(p417) then
+            v418(p415, 'Neutral', "pairing '" .. p416 .. "' module script...")
+
+            local _f2 = v420.f
+            local _c = v420.c
+
+            for v423 = 1, #p417 do
+                local v424 = p417[v423]
+
+                if v424 then
+                    local v425 = v419[v424]
+
+                    if not (v425 and _f2(v425)) or _c(v425) then
+                        v418(p415, 'Failure', '[' .. p416 .. "]: '" .. v424 .. "' must be a function, got " .. u13(v425) .. '!')
+                        return
+                    end
+
+                    p415[v424] = v425
+                end
+            end
+
+            v418(p415, 'Success', "'" .. p416 .. "' module has been loaded!")
+        else
+            v418(p415, 'Failure', "Couldn't load '" .. p416 .. "' module!")
+        end
+    else
+        v418(p415, 'Failure', "'" .. p416 .. "' module is missing!")
+    end
+end
+
+local _CheckDirFile2 = u40.CheckDirFile
+local _RemoveDirFile = u40.RemoveDirFile
+local _HttpRequest = u40.HttpRequest
+local _ls = u77.ls
+local _t4 = u77.t
+local v431 = 'https://raw.githubusercontent.com/ItsJiDy/Overdrive-H/main/Modules/'
+local v432 = _HttpRequest(u40, v431 .. '/moduleList.txt')
+local v433 = u77.sp(v432, '\n')
+
+_Debug(u40, 'Success', 'Found ' .. #v433 .. ' Module Scripts!')
+
+local v434 = u414
+
+for v435 = 1, #v433 do
+    local v436 = v433[v435]
+
+    if v436 then
+        if v436 ~= '' then
+            local v437 = _HttpRequest(u40, v431 .. '/' .. v436 .. '.lua')
+
+            if v437 then
+                local v438, v439 = _ls(v437)
+
+                if v438 and not v439 then
+                    _CheckDirFile2(u40, 'Overdrive-H/Modules/' .. v436 .. '.lua', v437)
+
+                    local v440 = v438()
+
+                    if v440 and _t4(v440) then
+                        v434[v440.ClassName or 'Untitled Module'] = v440
+                    else
+                        _Debug(u40, 'Failure', "Invalid module type, expected: 'table' got '" .. u13(v440) .. "'!")
+                    end
+                else
+                    local v441 = _gsub(v436, v436, '^%l', _upper)
+
+                    _RemoveDirFile(u40, 'Overdrive-H/Modules/' .. v436 .. '.lua')
+                    _Debug(u40, 'Failure', "An error occurred on module '" .. v441 .. "', expected error: " .. v439 .. '!')
+                end
+            end
+        end
+    end
+end
+
+local _RegisterModule = u40.RegisterModule
+
+_RegisterModule(u40, 'JSON', {
+    'JSEncode',
+    'JSDecode',
+})
+_RegisterModule(u40, 'Tasker', {
+    'IsExistingTask',
+    'MakeTask',
+    'RemoveTask',
+})
+_RegisterModule(u40, 'PlayTween', {
+    'PlayTween',
+})
+
+_Debug(u40, 'Neutral', 'Fetching HWID...')
+
+local u443 = u40:HexEncode(u2(_UserId))
+
+u39[u443] = {
+    Toggle = {},
+    TextBox = {},
+    Keybind = {},
+    Dropdown = {},
+    Slider = {},
+}
+
+_Debug(u40, 'Success', "HWID Fetched Successfully '" .. u443 .. "'!")
+_Debug(u40, 'Neutral', 'Fetching Game...')
+
+local _PlaceId = u1.PlaceId
+
+if _PlaceId ~= 142823291 then
+    if _PlaceId ~= 70876832253163 then
+        if _PlaceId ~= 16732694052 then
+            local _GetProductInfo = _MarketplaceService.GetProductInfo
+            local v446 = nil
+
+            while true do
+                local v447, v448 = u15(_GetProductInfo, _MarketplaceService, _PlaceId)
+
+                if v447 and v448 then
+                    v446 = v448.Name
+                    break
+                end
+
+                u131()
+
+                if false then
+                    break
+                end
+            end
+
+            if _match(v446, 'Blade Ball') then
+                u40.Game = 'Blade Ball'
+                u40.GameConfig = 'bladeball'
+                _Debug(u40, 'Success', "Game Fetched Successfully '" .. v446 .. "'")
+            else
+                _Debug(u40, 'Failure', "'" .. v446 .. "' is not supported :(")
+            end
+
+            u40.GameConfig = 'unsupported'
+        else
+            u40.Game = 'Fisch'
+            u40.GameConfig = 'fisch'
+            _Debug(u40, 'Success', "Game Fetched Successfully '" .. u40.Game .. "'")
+        end
+    else
+        u40.Game = 'Dead Rails'
+        u40.GameConfig = 'deadrails'
+        _Debug(u40, 'Success', "Game Fetched Successfully '" .. u40.Game .. "'")
+    end
+else
+    u40.Game = 'Murder Mystery 2'
+    u40.GameConfig = 'mm2'
+    _Debug(u40, 'Success', "Game Fetched Successfully '" .. u40.Game .. "'")
+end
+
+_Debug(u40, 'Neutral', 'Welcome ' .. _Name .. '!')
+
+local _CheckDirFolder3 = u40.CheckDirFolder
+local _CheckDirFile3 = u40.CheckDirFile
+local _Debug2 = u40.Debug
+local _t5 = u77.t
+
+_CheckDirFolder3(u40, 'Overdrive-H')
+_CheckDirFolder3(u40, 'Overdrive-H/Users')
+_CheckDirFolder3(u40, 'Overdrive-H/Plugins')
+_CheckDirFolder3(u40, 'Overdrive-H/Analysis')
+_CheckDirFolder3(u40, 'Overdrive-H/Modules')
+_CheckDirFolder3(u40, 'Overdrive-H/Language')
+_CheckDirFolder3(u40, 'Overdrive-H/Users/' .. _Name)
+_CheckDirFile3(u40, 'Overdrive-H/important.txt', 'This script project is owned by @elfandtears_ndk!\n\nScript Id: 3114683f-c570-4046-bae1-3c56dd8a04b2')
+_CheckDirFile3(u40, 'Overdrive-H/version-resolver.txt', 'path=.../Modules/{$MODULE_NAME}.lua\nversion=null')
+
+local v453 = u40
+
+_CheckDirFile3(u40, 'Overdrive-H/realtime-api.txt', 'url={$URL}\napi-key=' .. u40.RandomString(v453, 40) .. '\nprocessor=c++')
+_CheckDirFile3(u40, 'Overdrive-H/Analysis/modulescript.txt', 'yes')
+_CheckDirFile3(u40, 'Overdrive-H/Language/en-us.json', '[]')
+_CheckDirFile3(u40, 'Overdrive-H/Language/preference.txt', 'en-us')
+_CheckDirFile3(u40, 'Overdrive-H/Plugins/README.txt', 'this thing is fake fr')
+_CheckDirFile3(u40, 'Overdrive-H/Plugins/start.lua', "loadmodules()\nloadconfigs()\nloadgui()\n\nif not lowPerformanceMode then\n\tsetawaitrendering(true)\nend\n\nif getProperty('isDeviceCanHandleUltraGraphics') then\n\tloadadaptivegraphics()\nend")
+_CheckDirFile3(u40, 'Overdrive-H/Plugins/discord.lua', '--[=[\n\treturn {\n\t\t{\n\t\t\tName = "Join Discord",\n\t\t\tType = "Button",\n\t\t\tCallback = function()\n\t\t\t\tscript:LoadDiscordGui()\n\t\t\tend\n\t\t}\n\t}\n]=]\n\nreturn')
+_CheckDirFile3(u40, 'Overdrive-H/suslogs.txt', '[#]: This is the start of your suspicious logs :P')
+_CheckDirFile3(u40, 'Overdrive-H/cache.lua', "-- This file is licensed with Luarmor. You must use the actual loadstring to execute this script. Do not run this file directly. Always use the loadstring.\n\nif not is_from_loader then\n\twarn('Use the loadstring, do not run this directly')\n\treturn\nend;\n\nif LRM_LOAD then\n\tLRM_LOAD()\nelse\n\tLRM_CLEARCACHE()\nend")
+_CheckDirFile3(u40, 'Overdrive-H/Users/' .. _Name .. '/data.txt', 'ClientId=' .. u443 .. '\nExecutor=' .. v148)
+
+local v454 = u40
+
+_CheckDirFile3(u40, 'Overdrive-H/Users/' .. _Name .. '/' .. u40.GameConfig .. '-configs.json', u40.JSEncode(v454, u39))
+
+local v455 = u40
+local v456 = u40.JSDecode(v455, u144('Overdrive-H/Users/' .. _Name .. '/' .. u40.GameConfig .. '-configs.json'))
+local v457, u458
+
+if v456 then
+    v457 = v456
+
+    if v457[u443] and _t5(v457[u443]) then
+        u153('Configurations', v457[u443])
+
+        local _Configurations = u155('Configurations')
+
+        if _Configurations.Toggle and _t5(_Configurations.Toggle) and (_Configurations.TextBox and _t5(_Configurations.TextBox)) and (_Configurations.Dropdown and _t5(_Configurations.Dropdown and (_Configurations.Keybind and _t5(_Configurations.Keybind)))) and (_Configurations.Slider and _t5(_Configurations.Slider)) then
+            u458 = v457
+        else
+            u153('Configurations', u39[u443])
+            v457 = u39
+            local v460 = u40
+            u40.SaveConfigurations(v460)
+            _Debug2(u40, 'Neutral', _Name .. "'s configuration has been revoked due to a decompiling failure!")
+            u458 = v457
+        end
+    else
+        u153('Configurations', u39[u443])
+        v457 = u39
+        local v461 = u40
+        u40.SaveConfigurations(v461)
+        _Debug2(u40, 'Neutral', _Name .. "'s configuration has been revoked due to a decompiling failure!")
+        u458 = v457
+    end
+else
+    u153('Configurations', u39[u443])
+    v457 = u39
+    local v462 = u40
+    u40.SaveConfigurations(v462)
+    _Debug2(u40, 'Neutral', _Name .. "'s configuration has been revoked due to a decompiling failure!")
+    u458 = v457
+end
+
+_Debug2(u40, 'Success', _Name .. "'s Configuration has been loaded!")
+
+_Debug2(u40, 'Success', 'Your executor (' .. v148 .. ') is supported!')
+
+local u464 = {
+    'Callback',
+    'Args',
+    'Coroutine',
+    'Spawn',
+    'Invalid Args Type!',
+    'Invalid Callback Closure!',
+    'd',
+    'Invalid Closure Type!',
+}
+local _t6 = u77.t
+local _f3 = u77.f
+local _Error = u40.Error
+local _GetDescendants = _LocalPlayer.GetDescendants
+local _Destroy = _LocalPlayer.Destroy
+local u479 = u16({}, {
+    __newindex = function(_, p470, p471)
+        local v472 = u464
+
+        if p471 then
+            local v473 = _t6
+
+            if v473(p471) then
+                local v474 = p471[v472[1] ]
+
+                if v474 and _f3(v474) then
+                    local v475 = p471[v472[2] ]
+
+                    if v475 and v473(v475) then
+                        if p470 ~= v472[3] then
+                            if p470 == v472[4] then
+                                u130(v474, u12(v475))
+                            end
+                        else
+                            _wrap(v474)(u12(v475))
+                        end
+                    else
+                        _Error(u40, v472[5])
+                    end
+                else
+                    Args = nil
+
+                    _Error(u40, v472[6])
+                end
+            elseif _f3(p471) then
+                if p470 ~= v472[3] then
+                    if p470 == v472[4] then
+                        u130(p471)
+                    end
+                else
+                    _wrap(p471)()
+                end
+            elseif p470 ~= v472[7] then
+                _Error(u40, v472[8])
+            elseif p471 then
+                local v476 = _Destroy
+                local v477 = _GetDescendants(p471)
+
+                for v478 = 1, #v477 do
+                    v476(v477[v478])
+                end
+
+                v476(p471)
+            end
+        end
+    end,
+})
+
+local _HttpRequest2 = u40.HttpRequest
+local _JSDecode = u40.JSDecode
+local _Debug3 = u40.Debug
+local u483 = {
+    'en-us',
+    'pt-br',
+    'es-hn',
+}
+local u484 = {}
+
+for v485 = 1, #u483 do
+    local v486 = u483[v485]
+
+    if v486 then
+        local v487 = _HttpRequest2(u40, 'https://raw.githubusercontent.com/ItsJiDy/Overdrive-H/refs/heads/main/lang/' .. v486 .. '.json')
+
+        if v487 then
+            local v488 = _JSDecode(u40, v487)
+
+            if v488 then
+                u484[v486] = v488
+                _Debug3(u40, 'Success', "'" .. v486 .. "' language has been loaded!")
+            end
+        else
+            _Debug3(u40, 'Failure', "Failed to load '" .. v486 .. "' language.")
+        end
+    end
+end
+
+local u489 = 'en-us'
+local u490 = 'en-us'
+
+function u40.SelectLanguage(_, p491)
+    local v492 = u483
+
+    for v493 = 1, #v492 do
+        local v494 = v492[v493]
+
+        if v494 == p491 then
+            u489 = v494
+            return
+        end
+    end
+
+    u489 = u490
+end
+
+local u495 = {
+    '%.',
+    '-.',
+    '%f[%w]',
+    '%f[%W]',
+}
+
+function u40.TranslateMatchs(_, p496)
+    local v497 = u484[u489]
+    local v498 = v497[p496]
+
+    if v498 then
+        return v498
+    end
+
+    local v499 = _gsub
+    local v500 = u495[1]
+    local v501 = u495[2]
+    local v502 = u495[3]
+    local v503 = u495[4]
+    local v504, v505, v506 = u25(v497)
+
+    while true do
+        local v507
+        v506, v507 = v504(v505, v506)
+
+        if v506 == nil then
+            break
+        end
+
+        p496 = v499(p496, v502 .. v499(v506, v500, v501) .. v503, v507)
+    end
+
+    return p496
+end
+
+local _CheckDirFolder4 = u40.CheckDirFolder
+
+_CheckDirFolder4(u40, 'Overdrive-H')
+_CheckDirFolder4(u40, 'Overdrive-H/Language')
+
+local _, v509 = u15(u144, 'Overdrive-H/Language/preference.txt')
+
+if v509 and u77.s(v509) then
+    u40:SelectLanguage(v509)
+end
+
+local _MakeInstance3 = u40.MakeInstance
+local u511 = _MakeInstance3(u40, 'RemoteEvent', {})
+local u512 = _MakeInstance3(u40, 'RemoteFunction', {})
+local u513 = 'Using Remote Spy'
+
+do
+    local u519 = UpvalueString
+    local _FireServer = u511.FireServer
+    local _InvokeServer = u512.InvokeServer
+
+    function u40.Fire(_, p522, ...)
+        return _FireServer(p522, ...)
+    end
+
+    function u40.Invoke(_, p523, ...)
+        return _InvokeServer(p523, ...)
+    end
+end
+
+local _MakeInstance4 = u40.MakeInstance
+local _Debug4 = u40.Debug
+local v531 = _MakeInstance4(u40, 'ScreenGui', {
+    Name = '\2\1Unproxified\0; \nRagnarok Envy\0' .. u40:RandomString(25),
+    ZIndexBehavior = _ZIndexBehavior.Sibling,
+}, _MakeInstance4(u40, 'TextButton', {
+    Name = 'Shindeiru p\0\1AxueoNe',
+    BackgroundColor3 = _fromRGB(255, 255, 255),
+    BackgroundTransparency = 1,
+    Position = _new4(0.005, 0, 0.05, 0),
+    Size = _new4(0, 35, 0, 35),
+    Font = _Font.GothamBold,
+    Text = 'ODH',
+    TextColor3 = _fromRGB(255, 255, 255),
+    TextSize = 14,
+    TextWrapped = true,
+    Draggable = true,
+    Active = true,
+    Visible = false,
+}, _MakeInstance4(u40, 'UICorner', {
+    Name = 'UICorner',
+    CornerRadius = _new5(0, 20),
+}), _MakeInstance4(u40, 'UIStroke', {
+    Name = 'UIStroke',
+    Transparency = 0.55,
+    Color = _fromRGB(0, 0, 255),
+    ApplyStrokeMode = 'Border',
+    Thickness = 2,
+    Enabled = true,
+})), _MakeInstance4(u40, 'Frame', {
+    Name = 'NotificationContainer',
+    BackgroundTransparency = 1,
+    AnchorPoint = _new3(0, 1),
+    Position = _new4(0, 10, 1, -10),
+    Size = _new4(0, 250, 0, 0),
+}, _MakeInstance4(u40, 'UIListLayout', {
+    Name = 'Layout',
+    SortOrder = _SortOrder.LayoutOrder,
+    VerticalAlignment = Enum.VerticalAlignment.Bottom,
+    Padding = _new5(0, 5),
+})))
+
+u153('Sound Effect', _MakeInstance4(u40, 'Sound', {
+    Name = '\2\3\0\2\bAshyejpNec; \0absolute Awndo',
+    Parent = u94,
+    SoundId = 'rbxassetid://3868133279',
+}))
+_MakeInstance4(u40, 'Folder', {
+    Name = 'if you are reading this, go fuck yourself -- Reina',
+    Parent = u94,
+})
+
+do
+    local u532 = {
+        'StarterFrame',
+        'UIScale',
+        'Visible',
+        'Scale',
+        'UIStroke',
+        'Transparency',
+        'GroupTransparency',
+        'Completed',
+    }
+end
+
+local _PlayTouchSoundEffect = u40.PlayTouchSoundEffect
+local _PlayTween3 = u40.PlayTween
+local _Wait2 = _Heartbeat.Wait
+local u536 = false
+local u537 = _new6(0.25)
+
+function u40.ToggleGUI()
+    _PlayTouchSoundEffect(u40)
+
+    if not u536 then
+        local v538 = u532
+        local v539 = u40
+        local v540 = v538[3]
+        local v541 = v538[4]
+        local v542 = u138[v538[1] ]
+
+        u536 = true
+
+        local v543 = v542[v538[2] ]
+        local v544 = v542[v540]
+        local v545, v546, v547
+
+        if v544 then
+            v545 = v543[v541] - 0.15
+            v546 = 1
+            v547 = 1
+        else
+            v545 = v543[v541] + 0.15
+            v546 = 0.55
+            v547 = 0
+        end
+        if not v544 then
+            v542[v540] = true
+        end
+
+        _PlayTween3(v539, v543, u537, {[v541] = v545})
+        _PlayTween3(v539, v542[v538[5] ], u537, {
+            [v538[6]] = v546,
+        })
+        _Wait2(_PlayTween3(v539, v542, u537, {
+            [v538[7]] = v547,
+        })[v538[8] ])
+
+        if v544 then
+            v542[v540] = false
+        end
+
+        u536 = false
+    end
+end
+
+u157(v531['Shindeiru p\0\1AxueoNe'].MouseButton1Click, u40.ToggleGUI)
+u153('ScreenGui', v531)
+u153('DrawingFolderGui', _MakeInstance4(u40, 'ScreenGui', {
+    Name = 'ODH Drawing Folder (\0fuck you; do not touch\0)',
+    Parent = v531,
+    IgnoreGuiInset = true,
+}))
+_Debug4(u40, 'Success', 'Gui & Touch (Splash and Sound) Effect has been loaded!')
+_Debug4(u40, 'Success', 'Overdrive UI has been loaded!')
+
+local v548 = {
+    Failure = 0,
+    Success = 0,
+    Neutral = 0,
+}
+local v549 = 'Contact Owner on Discord: @elfandtears_ndk!\nOverdrive H Debugs Loader ---------->'
+
+if #u37 <= 0 then
+    v549 = v549 .. '\nNo debug logs have been captured!'
+else
+    for v550 = 1, #u37 do
+        local v551 = u37[v550]
+
+        if v551 then
+            local _Type = v551.Type
+            local _Text = v551.Text
+
+            v548[_Type] = v548[_Type] + 1
+
+            if _Type then
+                if _Text then
+                    v549 = v549 .. '\n[' .. _Type .. '] ' .. _Text
+                end
+            end
+        end
+    end
+end
+
+local v554 = v549 .. '\n<----------\nDebug Stats:'
+local v555, v556, v557 = u25(v548)
+
+while true do
+    local v558
+    v557, v558 = v555(v556, v557)
+
+    if v557 == nil then
+        break
+    end
+
+    v554 = v554 .. '\n\t' .. v557 .. ': ' .. v558
+end
+
+if v548.Failure > 0 then
+    v19(v554 .. '\nmaybe show this to the owner?\nExit Code: ' .. v548.Failure)
+    u40:DestroyGui()
+    return
+end
+
+v19(v554)
+
+local _t7 = u77.t
+local _MakeInstance5 = u40.MakeInstance
+local u561 = {}
+
+u153('Bindables', u561)
+
+local function u570(p562, p563)
+    if p562 and _t7(p563) then
+        local u564 = u40
+        local v565 = _fromRGB
+        local v566 = _MakeInstance5
+        local v567 = v566(u564, 'TextButton', {
+            Name = '\1\0AxyPed028+\0',
+            Parent = u155('ScreenGui'),
+            BackgroundColor3 = v565(255, 255, 255),
+            BackgroundTransparency = 0.99,
+            AnchorPoint = _new3(0.5, 0.5),
+            Position = p563.Position,
+            Size = _new4(0, 35, 0, 35),
+            Font = _Font.Gotham,
+            Text = p563.OriginalName,
+            TextSize = 10,
+            TextWrapped = true,
+            TextColor3 = v565(255, 255, 255),
+            Active = true,
+            Draggable = not u155('UndraggableBindableButtons'),
+        }, v566(u564, 'UIStroke', {
+            Name = 'UIStroke',
+            Transparency = 0.55,
+            Color = u137.getTheme.USC,
+            Thickness = 2,
+            ApplyStrokeMode = 'Border',
+            Enabled = true,
+        }), v566(u564, 'UICorner', {
+            Name = 'UICorner',
+            CornerRadius = _new5(0, 20),
+        }))
+        local _PlayTouchSoundEffect2 = u564.PlayTouchSoundEffect
+        local _Callback = p563.Callback
+
+        u157(v567.MouseButton1Click, function()
+            _PlayTouchSoundEffect2(u564)
+            _Callback()
+        end)
+
+        u561[p562] = v567
+
+        _insert(u137.getStrokes, v567.UIStroke)
+    end
+end
+
+local u571 = 'd'
+
+local function u574(p572)
+    local v573 = u561[p572]
+
+    if v573 then
+        u479[u571] = v573
+    end
+end
+
+local u575 = {
+    'Name',
+    'ClassName',
+}
+local _GetChildren = _LocalPlayer.GetChildren
+
+local function u589(p577, p578, p579)
+    local v580 = u575
+    local v581 = v580[1]
+
+    if p579 then
+        local v582 = v580[2]
+        local v583 = _GetChildren(p577)
+
+        for v584 = 1, #v583 do
+            local v585 = v583[v584]
+
+            if v585[v581] == p578 then
+                if v585[v582] == p579 then
+                    return v585
+                end
+            end
+        end
+    else
+        local v586 = _GetChildren(p577)
+
+        for v587 = 1, #v586 do
+            local v588 = v586[v587]
+
+            if v588[v581] == p578 then
+                return v588
+            end
+        end
+    end
+end
+
+local _GetPlayers = _Players.GetPlayers
+
+local function u591()
+    return _GetPlayers(_Players)
+end
+
+local u592 = firetouchinterest
+
+local function u596(p593, p594)
+    if p593 and p594 then
+        local v595 = u592
+
+        v595(p593, p594, 0)
+        v595(p594, p593, 0)
+        v595(p593, p594, 1)
+        v595(p594, p593, 1)
+    end
+end
+
+local u597 = {
+    'Spawn',
+    'Callback',
+    'Args',
+}
+
+local function u599(...)
+    local v598 = u597
+
+    u479[v598[1] ] = {
+        [v598[2]] = u596,
+        [v598[3]] = {...},
+    }
+end
+
+local v600 = u589(_TextChatService, 'TextChannels')
+local u601
+
+if v600 then
+    local _RBXGeneral = v600.RBXGeneral
+    local _SendAsync = _RBXGeneral.SendAsync
+
+    u601 = function(p604)
+        _SendAsync(_RBXGeneral, p604)
+    end
+else
+    u601 = nil
+end
+
+local u605 = 'HumanoidRootPart'
+
+local function u607(p606)
+    return p606[u605]
+end
+
+local u608 = 'Character'
+
+local function u613(p609)
+    local v610 = p609[u608]
+
+    if v610 then
+        local v611, v612 = u15(u607, v610)
+
+        if v611 then
+            return v612
+        end
+    end
+end
+
+local u614 = 'Magnitude'
+
+local function u617(p615, p616)
+    return (p615 - p616)[u614]
+end
+
+local u618 = 'Unit'
+
+local function u621(p619, p620)
+    return (p619 - p620)[u618]
+end
+
+local u622 = {
+    'BasePart',
+    'Transparency',
+    'Position',
+}
+local _GetDescendants2 = _LocalPlayer.GetDescendants
+local _IsA = _LocalPlayer.IsA
+
+local function u639(p625, p626)
+    local v627 = u622
+    local v628 = _IsA
+    local v629 = u617
+    local v630 = v627[1]
+    local v631 = v627[2]
+    local v632 = v627[3]
+    local v633 = _GetDescendants2(p626)
+    local v634 = math.huge
+    local v635 = nil
+
+    for v636 = 1, #v633 do
+        local v637 = v633[v636]
+
+        if v628(v637, v630) then
+            if v637[v631] ~= 1 then
+                local v638 = v629(p625, v637[v632])
+
+                if v638 < v634 then
+                    v635 = v637
+                    v634 = v638
+                end
+            end
+        end
+    end
+
+    return v635
+end
+
+local u640 = {
+    '',
+    'Name',
+}
+
+local function u653(p641, p642)
+    local v643 = u640
+
+    if p641 and (p641 ~= v643[1] and not u3(p641)) then
+        local v644 = v643[2]
+
+        if p642 then
+            local v645 = u591()
+
+            for v646 = 1, #v645 do
+                local v647 = v645[v646]
+
+                if v647[v644] == p641 then
+                    return v647
+                end
+            end
+        else
+            local v648 = _match
+            local v649 = _lower
+            local v650 = u591()
+
+            for v651 = 1, #v650 do
+                local v652 = v650[v651]
+
+                if v648(v649(v652[v644]), v649(p641)) then
+                    return v652
+                end
+            end
+        end
+    end
+end
+
+local function u664(p654, p655)
+    if p654 and p655 then
+        local u656 = {
+            'Backpack',
+            'Character',
+        }
+        local _WaitForChild2 = _LocalPlayer.WaitForChild
+        local _Wait3 = _Heartbeat.Wait
+
+        u40:MakeTask(p654, _LocalPlayer.CharacterAdded, function()
+            local v659 = u656
+            local v660 = _Wait3
+            local v661 = _Heartbeat
+            local v662 = v659[2]
+
+            _WaitForChild2(_LocalPlayer, v659[1], 10)
+
+            while true do
+                local v663 = _LocalPlayer[v662]
+
+                if v663 then
+                    break
+                end
+
+                v660(v661)
+
+                if false then
+                    break
+                end
+            end
+
+            u135 = v663
+
+            p655(v663)
+        end)
+    end
+end
+
+local _ScreenGui3 = u155('ScreenGui')
+local v666 = get_hidden_gui or gethui
+local v667 = syn
+
+if _ScreenGui3 then
+    if v666 then
+        _ScreenGui3.Parent = v666()
+    elseif is_sirhurt_closure or not v667 or not (v667.protect_gui and u77.f(v667.protect_gui)) then
+        local v668 = u589(_CoreGui, 'RobloxGui')
+
+        if v668 then
+            _ScreenGui3.Parent = v668
+        else
+            _ScreenGui3.Parent = _CoreGui
+        end
+    else
+        v667.protect_gui(_ScreenGui3)
+
+        _ScreenGui3.Parent = _CoreGui
+    end
+end
+
+function u40.RequireDrawing(p669, p670)
+    local u671 = {
+        Box = {},
+        Tracer = {},
+        ESP = {},
+        Skeleton = {},
+    }
+    local u672 = {
+        Name = '\nSnxUnedPak\n',
+        Parent = u155('DrawingFolderGui'),
+        BackgroundTransparency = 0,
+        BorderSizePixel = 0,
+        AnchorPoint = _new3(0.5, 0.5),
+        ZIndex = 0,
+        Visible = false,
+    }
+    local _MakeInstance6 = p669.MakeInstance
+    local _deg = math.deg
+    local _atan2 = math.atan2
+    local u676 = _new2
+    local _Position = u676(2.4975, 4.725, 0).Position
+    local _Position2 = u676(-2.4975, 4.725, 0).Position
+    local _Position3 = u676(2.4975, -4.725, 0).Position
+    local _Position4 = u676(-2.4975, -4.725, 0).Position
+    local u681 = {
+        'Character',
+        'Position',
+        'CFrame',
+        'X',
+        'Y',
+        'BackgroundColor3',
+        'Rotation',
+        'Size',
+        'Magnitude',
+        'Visible',
+    }
+    local _Box = u671.Box
+
+    local function v737(p683)
+        local v684 = _Box
+        local _Name2 = p683.Name
+
+        if not v684[_Name2] then
+            local _ = AH
+            local u686 = _MakeInstance6(p669, 'Frame', u672)
+            local u687 = _MakeInstance6(p669, 'Frame', u672)
+            local u688 = _MakeInstance6(p669, 'Frame', u672)
+            local u689 = _MakeInstance6(p669, 'Frame', u672)
+
+            v684[_Name2] = {
+                TopLeft = u686,
+                TopRight = u687,
+                BottomLeft = u688,
+                BottomRight = u689,
+                Service = u157(_Heartbeat, function()
+                    local v690 = u686
+                    local v691 = u687
+                    local v692 = u688
+                    local v693 = u689
+
+                    if v690 and (v691 and v692) and v693 then
+                        local v694 = u681
+                        local v695 = v694[10]
+
+                        if p683 and p683[v694[1] ] then
+                            local v696 = u613(p683)
+
+                            if v696 then
+                                local v697 = v694[2]
+                                local v698 = v694[3]
+                                local v699 = v694[4]
+                                local v700 = v694[5]
+                                local v701 = v694[6]
+                                local v702 = v694[7]
+                                local v703 = v694[8]
+                                local v704 = v694[9]
+                                local v705 = _WorldToViewportPoint
+                                local v706 = _CurrentCamera
+                                local v707 = _new3
+                                local v708 = _deg
+                                local v709 = _atan2
+                                local v710 = _new4
+                                local v711 = _lookAt(v696[v697], v706[v698][v697])
+                                local v712, v713 = v705(v706, v711 * _Position)
+                                local v714, v715 = v705(v706, v711 * _Position2)
+                                local v716, v717 = v705(v706, v711 * _Position3)
+                                local v718, v719 = v705(v706, v711 * _Position4)
+                                local v720 = p670(p683)
+
+                                if v713 then
+                                    local v721 = v707(v712[v699], v712[v700])
+                                    local v722 = v707(v714[v699], v714[v700])
+                                    local v723 = v722 - v721
+                                    local v724 = (v722 + v721) / 2
+
+                                    v690[v701] = v720
+                                    v690[v697] = v710(0, v724[v699], 0, v724[v700])
+                                    v690[v702] = v708(v709(v723[v700], v723[v699]))
+                                    v690[v703] = v710(0, v723[v704], 0, 1)
+                                end
+
+                                v690[v695] = v713
+
+                                if v715 then
+                                    local v725 = v707(v714[v699], v714[v700])
+                                    local v726 = v707(v718[v699], v718[v700])
+                                    local v727 = v726 - v725
+                                    local v728 = (v726 + v725) / 2
+
+                                    v691[v701] = v720
+                                    v691[v697] = v710(0, v728[v699], 0, v728[v700])
+                                    v691[v702] = v708(v709(v727[v700], v727[v699]))
+                                    v691[v703] = v710(0, v727[v704], 0, 1)
+                                end
+
+                                v691[v695] = v715
+
+                                if v717 then
+                                    local v729 = v707(v716[v699], v716[v700])
+                                    local v730 = v707(v712[v699], v712[v700])
+                                    local v731 = v730 - v729
+                                    local v732 = (v730 + v729) / 2
+
+                                    v692[v701] = v720
+                                    v692[v697] = v710(0, v732[v699], 0, v732[v700])
+                                    v692[v702] = v708(v709(v731[v700], v731[v699]))
+                                    v692[v703] = v710(0, v731[v704], 0, 1)
+                                end
+
+                                v692[v695] = v717
+
+                                if v719 then
+                                    local v733 = v707(v718[v699], v718[v700])
+                                    local v734 = v707(v716[v699], v716[v700])
+                                    local v735 = v734 - v733
+                                    local v736 = (v734 + v733) / 2
+
+                                    v693[v701] = v720
+                                    v693[v697] = v710(0, v736[v699], 0, v736[v700])
+                                    v693[v702] = v708(v709(v735[v700], v735[v699]))
+                                    v693[v703] = v710(0, v735[v704], 0, 1)
+                                end
+
+                                v693[v695] = v719
+                            else
+                                v690[v695] = false
+                                v691[v695] = false
+                                v692[v695] = false
+                                v693[v695] = false
+                            end
+                        else
+                            v690[v695] = false
+                            v691[v695] = false
+                            v692[v695] = false
+                            v693[v695] = false
+                        end
+                    end
+                end),
+            }
+        end
+    end
+
+    local function v743(p738)
+        local _Box2 = u671.Box
+        local _Name3 = p738.Name
+        local v741 = _Box2[_Name3]
+
+        if v741 then
+            local v742 = u479
+
+            v741.Service:Disconnect()
+
+            v742.d = v741.TopLeft
+            v742.d = v741.TopRight
+            v742.d = v741.BottomLeft
+            v742.d = v741.BottomRight
+            _Box2[_Name3] = nil
+        end
+    end
+
+    local u744 = {
+        'Character',
+        'Position',
+        'ViewportSize',
+        'X',
+        'Y',
+        'BackgroundColor3',
+        'Rotation',
+        'Size',
+        'Magnitude',
+        'Visible',
+    }
+    local _Tracer = u671.Tracer
+
+    local function v766(p746)
+        local v747 = _Tracer
+        local _Name4 = p746.Name
+
+        if not v747[_Name4] then
+            local u749 = _MakeInstance6(p669, 'Frame', u672)
+
+            v747[_Name4] = {
+                Line = u749,
+                Service = u157(_Heartbeat, function()
+                    local v750 = u749
+
+                    if v750 then
+                        local v751 = u744
+
+                        if p746 and p746[v751[1] ] then
+                            local v752 = u613(p746)
+
+                            if v752 then
+                                local v753 = _CurrentCamera
+                                local v754 = v751[2]
+                                local v755, v756 = _WorldToViewportPoint(v753, v752[v754])
+
+                                if v756 then
+                                    local v757 = _new3
+                                    local v758 = _new4
+                                    local v759 = v751[4]
+                                    local v760 = v751[5]
+                                    local v761 = v753[v751[3] ]
+                                    local v762 = v757(v761[v759] / 2, v761[v760])
+                                    local v763 = v757(v755[v759], v755[v760])
+                                    local v764 = v763 - v762
+                                    local v765 = (v763 + v762) / 2
+
+                                    v750[v751[6] ] = p670(p746)
+                                    v750[v754] = v758(0, v765[v759], 0, v765[v760])
+                                    v750[v751[7] ] = _deg(_atan2(v764[v760], v764[v759]))
+                                    v750[v751[8] ] = v758(0, v764[v751[9] ], 0, 1)
+                                end
+
+                                v750[v751[10] ] = v756
+                            else
+                                v750[v751[10] ] = false
+                            end
+                        else
+                            v750[v751[10] ] = false
+                        end
+                    end
+                end),
+            }
+        end
+    end
+
+    local function v771(p767)
+        local _Tracer2 = u671.Tracer
+        local _Name5 = p767.Name
+        local v770 = _Tracer2[_Name5]
+
+        if v770 then
+            v770.Service:Disconnect()
+
+            u479.d = v770.Line
+            _Tracer2[_Name5] = nil
+        end
+    end
+
+    local _ESP = u671.ESP
+    local u773 = {
+        Name = '\n\nPawjN\n\n\n\0\n',
+        Parent = u94,
+        AlwaysOnTop = true,
+        ExtentsOffset = _new(0, 3.5, 0),
+        Size = _new4(0, 200, 0, 50),
+    }
+    local u774 = {
+        Name = 'TXT',
+        BackgroundTransparency = 1,
+        Size = _new4(0, 200, 0, 50),
+        Font = _Font.Code,
+        TextSize = 13,
+        TextColor3 = _fromRGB(255, 255, 255),
+    }
+    local u775 = {
+        Name = 'UIStroke',
+        Transparency = 0.55,
+        Thickness = 2,
+        Enabled = true,
+    }
+
+    local function v790(p776)
+        local v777 = _ESP
+        local _Name6 = p776.Name
+
+        if not v777[_Name6] then
+            local v779 = u40
+            local v780 = _MakeInstance6
+            local v781 = u774
+
+            v781.Text = _Name6
+
+            local u782 = v780(v779, 'UIStroke', u775)
+            local u783 = v780(v779, 'TextLabel', v781, u782)
+            local u784 = v780(v779, 'BillboardGui', u773, u783)
+
+            v777[_Name6] = {
+                Text = u784,
+                Service = u157(_Heartbeat, function()
+                    local v785 = u784
+
+                    if v785 then
+                        local v786 = p776
+
+                        if v786 and v786.Character then
+                            local v787 = u613
+                            local v788 = v787(v786)
+
+                            if v788 then
+                                u782.Color = p670(v786)
+
+                                if u155('DisplayDistanceOnESP') then
+                                    local v789 = v787(_LocalPlayer)
+
+                                    if v789 then
+                                        u783.Text = _Name6 .. '\nDistance: ' .. _floor(u617(v789.Position, v788.Position))
+                                    end
+                                else
+                                    u783.Text = _Name6
+                                end
+
+                                v785.Adornee = v788
+                            end
+                        end
+                    end
+                end),
+            }
+        end
+    end
+
+    local function v795(p791)
+        local _ESP2 = u671.ESP
+        local _Name7 = p791.Name
+        local v794 = _ESP2[_Name7]
+
+        if v794 then
+            v794.Service:Disconnect()
+
+            u479.d = v794.Text
+            _ESP2[_Name7] = nil
+        end
+    end
+
+    local v796 = _LocalPlayer
+    local u797 = {
+        'Visible',
+        'Character',
+        'Name',
+        'HumanoidRootPart',
+        'BasePart',
+        'Motor6D',
+        'Part0',
+        'Part1',
+        'Position',
+        'X',
+        'Y',
+        'BackgroundColor3',
+        'Rotation',
+        'Size',
+        'Magnitude',
+        'Frame',
+    }
+    local _Skeleton = u671.Skeleton
+    local _GetChildren2 = v796.GetChildren
+    local _IsA2 = v796.IsA
+
+    return {
+        CreateBox = v737,
+        ClearBox = v743,
+        CreateTracer = v766,
+        ClearTracer = v771,
+        CreateESP = v790,
+        ClearESP = v795,
+        CreateSkeleton = function(p801)
+            local v802 = _Skeleton
+            local _Name8 = p801.Name
+
+            if not v802[_Name8] then
+                local v804 = u157
+                local u805 = _GetChildren2
+                local u806 = _IsA2
+                local u807 = {}
+
+                v802[_Name8] = {
+                    Lines = u807,
+                    Service = v804(_Heartbeat, function()
+                        local v808 = u807
+
+                        if v808 then
+                            local v809 = u797[1]
+                            local v810 = p801[u797[2] ]
+
+                            if v810 then
+                                local v811 = u805
+                                local v812 = u806
+                                local v813 = u672
+                                local v814 = _CurrentCamera
+                                local v815 = p670
+                                local v816 = _WorldToViewportPoint
+                                local v817 = _new3
+                                local v818 = _new4
+                                local v819 = _deg
+                                local v820 = _atan2
+                                local v821 = u797[3]
+                                local v822 = u797[4]
+                                local v823 = u797[5]
+                                local v824 = u797[6]
+                                local v825 = u797[7]
+                                local v826 = u797[8]
+                                local v827 = u797[9]
+                                local v828 = u797[10]
+                                local v829 = u797[11]
+                                local v830 = u797[12]
+                                local v831 = u797[13]
+                                local v832 = u797[14]
+                                local v833 = u797[15]
+                                local v834 = u797[16]
+                                local v835 = v811(v810)
+
+                                for v836 = 1, #v835 do
+                                    local v837 = v835[v836]
+
+                                    if v837[v821] ~= v822 then
+                                        if v812(v837, v823) then
+                                            local v838 = v815(p801)
+                                            local v839 = v811(v837)
+
+                                            for v840 = 1, #v839 do
+                                                local v841 = v839[v840]
+
+                                                if v812(v841, v824) then
+                                                    local v842 = v808[v841]
+
+                                                    if v842 then
+                                                        local v843 = v841[v825]
+                                                        local v844 = v841[v826]
+
+                                                        if v843 and v844 then
+                                                            local v845, v846 = v816(v814, v843[v827])
+
+                                                            if v846 then
+                                                                local v847, v848 = v816(v814, v844[v827])
+
+                                                                if v848 then
+                                                                    local v849 = v817(v845[v828], v845[v829])
+                                                                    local v850 = v817(v847[v828], v847[v829])
+                                                                    local v851 = v850 - v849
+                                                                    local v852 = (v850 + v849) / 2
+
+                                                                    v842[v830] = v838
+                                                                    v842[v827] = v818(0, v852[v828], 0, v852[v829])
+                                                                    v842[v831] = v819(v820(v851[v829], v851[v828]))
+                                                                    v842[v832] = v818(0, v851[v833], 0, 1)
+                                                                end
+
+                                                                v842[v809] = v848
+                                                            else
+                                                                v842[v809] = false
+                                                            end
+                                                        else
+                                                            v842[v809] = false
+                                                        end
+                                                    else
+                                                        v808[v841] = _MakeInstance6(p669, v834, v813)
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            else
+                                local v853, v854, v855 = u25(v808)
+
+                                while true do
+                                    local v856
+                                    v855, v856 = v853(v854, v855)
+
+                                    if v855 == nil then
+                                        break
+                                    end
+                                    if v856 then
+                                        v856[v809] = false
+                                    end
+                                end
+                            end
+                        end
+                    end),
+                    Service2 = v804(p801.CharacterAdded, function()
+                        local v857 = u807
+
+                        if v857 then
+                            local v858, v859, v860 = u25(v857)
+
+                            while true do
+                                local v861
+                                v860, v861 = v858(v859, v860)
+
+                                if v860 == nil then
+                                    break
+                                end
+
+                                v861:Remove()
+
+                                v857[v860] = nil
+                            end
+                        end
+                    end),
+                }
+            end
+        end,
+        ClearSkeleton = function(p862)
+            local _Skeleton2 = u671.Skeleton
+            local _Name9 = p862.Name
+            local v865 = _Skeleton2[_Name9]
+
+            if v865 then
+                local v866 = u479
+
+                v865.Service:Disconnect()
+                v865.Service2:Disconnect()
+
+                local v867, v868, v869 = u25(v865.Lines)
+
+                while true do
+                    local v870
+                    v869, v870 = v867(v868, v869)
+
+                    if v869 == nil then
+                        break
+                    end
+                    if v870 then
+                        v866.d = v870
+                    end
+                end
+
+                _Skeleton2[_Name9] = nil
+            end
+        end,
+        Settings = u671,
+    }
+end
+
+local _HttpRequest3 = u40.HttpRequest
+local _JSDecode2 = u40.JSDecode
+local u873 = _new6(0.5, _EasingStyle.Sine)
 
 -- ============================================
--- ORIGINAL UI CODE (COPIED VERBATIM)
+-- CORE UI FUNCTION
 -- ============================================
 
 local function v1655()
@@ -184,6 +2524,7 @@ local function v1655()
         while true do
             repeat
                 v941(0.0055)
+
                 local v946 = u933
             until v946 and (u937 and v942[v943])
 
@@ -233,6 +2574,7 @@ local function v1655()
     function v926.ApplySetting(p964, p965, p966)
         if p965 == 'GuiScale' then
             local v967 = u589(u921, 'UIScale')
+
             if v967 then
                 v967.Scale = p966
             end
@@ -240,15 +2582,18 @@ local function v1655()
             u936 = p966
         elseif p965 == 'SpinningTabIcons' then
             u937 = p966
+
             if u933 then
                 u933.Rotation = 0
             end
         elseif p965 == 'Theme' and u932 ~= p966 then
             local u968 = u906
+
             u935 = u923[p966]
 
             if not u935 then
                 p964:ApplySetting(p965, u968.ThemeList[1])
+
                 return
             end
 
@@ -265,6 +2610,7 @@ local function v1655()
 
             if p966 == 'Amethyst' or p966 == 'Crimson' or (p966 == 'Dark' or p966 == 'NEO') then
                 local _t8 = _date('*t', _time())
+
                 u969.ImageRectSize = u973(0, 0)
                 u969.ImageRectOffset = u973(0, 0)
                 u969.ImageTransparency = 0
@@ -283,11 +2629,13 @@ local function v1655()
 
                         while u932 == 'Amethyst' or (u932 == 'Crimson' or u932 == 'Dark') or p966 == 'NEO' do
                             v978(0.1)
+
                             local v981 = 0
                             local v982 = 0
 
                             for _ = 1, 54 do
                                 v978(0.015)
+
                                 v980.ImageRectOffset = v979(140 * v981, v982)
 
                                 if v981 == 6 then
@@ -302,6 +2650,7 @@ local function v1655()
                 end
             elseif p966 == 'Amoled' then
                 local v983 = nil
+
                 u969.ImageTransparency = 0.1
                 u969.ImageRectSize = u973(200, 112)
 
@@ -312,6 +2661,7 @@ local function v1655()
 
                     if _httpsrawgithubusercontentcomItsJiDyOverdriveHrefsheadsmainimagesAmoled_Theme_Spritesrv then
                         local u986 = 'ODH-' .. _random(1, 9999999) * 9999 .. '.png'
+
                         u142(u986, _httpsrawgithubusercontentcomItsJiDyOverdriveHrefsheadsmainimagesAmoled_Theme_Spritesrv)
 
                         local v987, v988 = u15(function()
@@ -320,8 +2670,10 @@ local function v1655()
 
                         if v987 and v988 and u77.s(v988) then
                             local v989 = deletefile or delfile
+
                             if v989 then
                                 v989(u986)
+
                                 v983 = v988
                             else
                                 v983 = v988
@@ -346,6 +2698,7 @@ local function v1655()
                             end
 
                             v990()
+
                             local v992 = 0
                             local v993 = 0
                             local v994 = 5
@@ -400,6 +2753,7 @@ local function v1655()
 
                         while u932 == 'Christmas' do
                             v996(v997(1, 50) / 100)
+
                             local v1005 = v997(8, 19)
                             local v1006 = v997(10, 95)
                             local v1007 = v997(3, 8)
@@ -436,6 +2790,7 @@ local function v1655()
 
                         while u932 == 'Valentine' do
                             v1009(v1010(1, 50) / 100)
+
                             local v1018 = v1010(8, 19)
                             local v1019 = v1010(10, 95)
                             local v1020 = v1010(3, 8)
@@ -462,6 +2817,7 @@ local function v1655()
             v972(u968, u969, v1023, v1024)
 
             v1024.BackgroundColor3 = u935.MTG
+
             v972(u968, u969.Title, v1023, v1024)
 
             local v1025 = _remove
@@ -487,11 +2843,17 @@ local function v1655()
 
                 while true do
                     local v1036
+
                     v1034, v1036 = v1032(v1033, v1034)
-                    if v1034 == nil then break end
+
+                    if v1034 == nil then
+                        break
+                    end
                     if v1036 then
                         v1031.Parent = v1036
+
                         u974(u968, 'UIGradient', v1031)
+
                         if v1036.Color ~= _USC then
                             v972(u968, v1036, v1023, v1035)
                         end
@@ -505,11 +2867,17 @@ local function v1655()
 
                 while true do
                     local v1041
+
                     v1039, v1041 = v1037(v1038, v1039)
-                    if v1039 == nil then break end
+
+                    if v1039 == nil then
+                        break
+                    end
                     if v1041 then
                         v1031.Parent = v1041
+
                         u974(u968, 'UIGradient', v1031)
+
                         if v1041.BackgroundColor3 ~= _UFB then
                             v972(u968, v1041, v1023, v1040)
                         end
@@ -519,13 +2887,19 @@ local function v1655()
                 end
 
                 local u1042 = u907
+
                 if not u1042('IsLoaded') then
                     function u975.Coroutine()
                         while not u1042('IsLoaded') do
                             u908()
-                            if false then break end
+
+                            if false then
+                                break
+                            end
                         end
+
                         local _ApplySetting = p964.ApplySetting
+
                         u908(3)
                         _ApplySetting(p964, p965, 'Crimson')
                         _ApplySetting(p964, p965, 'NEO')
@@ -537,10 +2911,15 @@ local function v1655()
 
                 while true do
                     local v1048
+
                     v1046, v1048 = v1044(v1045, v1046)
-                    if v1046 == nil then break end
+
+                    if v1046 == nil then
+                        break
+                    end
                     if v1048 then
                         local v1049 = v976(v1048, 'UIGradient')
+
                         if v1049 then
                             u975.d = v1049
                         end
@@ -557,10 +2936,15 @@ local function v1655()
 
                 while true do
                     local v1054
+
                     v1052, v1054 = v1050(v1051, v1052)
-                    if v1052 == nil then break end
+
+                    if v1052 == nil then
+                        break
+                    end
                     if v1054 then
                         local v1055 = v976(v1054, 'UIGradient')
+
                         if v1055 then
                             u975.d = v1055
                         end
@@ -602,17 +2986,21 @@ local function v1655()
                         for v1073 = 1, #v1064 do
                             if v1064[v1073].Holder.Text == v1066 then
                                 v1072(v1065, 'The keybind <font color="rgb(0, 255, 0)">' .. v1066 .. '</font> is already taken.')
+
                                 return
                             end
                         end
 
                         _Holder.Text = v1066
                         _Configurations3.Keybind[v1070.Name] = v1066
+
                         _SaveConfigurations(v1065)
+
                         return
                     end
                     if v1070.Holder.Text == v1066 then
                         v1068 = v1070.Callback
+
                         break
                     end
                 end
@@ -698,8 +3086,13 @@ local function v1655()
 
         while true do
             v1098(0.005)
+
             local v1099 = _LoadingCircle
-            if not v1099 then break end
+
+            if not v1099 then
+                break
+            end
+
             v1099[v1097] = v1099[v1097] + 2
         end
     end
@@ -713,12 +3106,14 @@ local function v1655()
     local _HttpRequest4 = u906.HttpRequest
 
     local v1107 = u906
+
     u906.WebServerSend(v1107, 'disconnect')
 
     u906.WebServerSend(v1110, u1109)
     u908(1)
 
     _Connectingtoserver.StatusText.Text = 'Waiting for the server to respond...'
+
     u908(1)
 
     local function u1165(p1111, p1112, p1113, p1114, p1115, p1116, p1117)
@@ -763,6 +3158,7 @@ local function v1655()
 
         if _t10.day ~= _t9.day or _t10.month ~= _t9.month or _t10.year ~= _t9.year then
             local _t11 = v1119('*t', v1137 - 86400)
+
             v1139 = _t11.day == _t9.day and _t11.month == _t9.month and _t11.year == _t9.year and 'Yesterday at ' or _t9.month .. '/' .. _t9.day .. '/' .. _t9.year .. ' at '
         else
             v1139 = 'Today at '
@@ -863,6 +3259,7 @@ local function v1655()
             if u1146 then
                 local v1148 = u1147
                 local v1149 = v1148[1]
+
                 u1146[v1149] = u1146[v1149] .. v1148[2] .. p1111 .. v1148[3]
             end
         end)
@@ -915,12 +3312,14 @@ local function v1655()
 
                 while v1156 and v1157 do
                     v1155()
+
                     if not v1159(v1161) then
                         local v1163 = 0
                         local v1164 = 0
 
                         for _ = 1, v1158 do
                             v1155(0.015)
+
                             if v1157 then
                                 if v1156 then
                                     v1156[v1162] = v1160(143 * v1164, v1163)
@@ -935,6 +3334,7 @@ local function v1655()
                             end
                         end
                     end
+
                     v1155()
                 end
             end
@@ -980,9 +3380,16 @@ local function v1655()
     if not u135 then
         while true do
             u135 = _LocalPlayer.Character
-            if u135 then break end
+
+            if u135 then
+                break
+            end
+
             u1245()
-            if false then break end
+
+            if false then
+                break
+            end
         end
     end
 
@@ -1024,6 +3431,7 @@ local function v1655()
 
         u157(v1249.MouseButton1Click, function()
             local v1250 = u141
+
             if v1250 then
                 v1250('https://overdrivehub.xyz/whitelist/selections?HWID=' .. u443)
                 u906:Notify('Link copied to clipboard | Paste it on your browser.')
@@ -1031,10 +3439,12 @@ local function v1655()
         end)
 
         local v1251 = u915(0.5)
+
         _PlayTween5(u906, v1249, v1251, {
             BackgroundTransparency = 0.85,
             TextTransparency = 0,
         })
+
         _PlayTween5(u906, v1249, v1251, {
             BackgroundTransparency = 1,
             TextTransparency = 1,
@@ -1066,6 +3476,7 @@ local function v1655()
 
             if v1258 then
                 u153('IsMobile', not u589(v1258, 'Inventory'))
+
                 break
             end
         else
@@ -1155,6 +3566,7 @@ local function v1655()
         if _ThemeList[1] ~= 'Christmas' then
             if _ThemeList[1] ~= 'Valentine' then
                 local _t12 = _date('*t', _time())
+
                 v1271 = _t12.month == 4 and _t12.day == 1 and '<font color="rgb(0, 255, 0)">[APRIL FOOLS]</font> ' or v1270
             else
                 v1271 = '<font color="rgb(255, 105, 190)">[VALENTINE]</font> '
@@ -1179,6 +3591,7 @@ local function v1655()
         while true do
             repeat
                 v1274(10)
+
                 local v1279 = _HttpRequest6(v1273, 'https://raw.githubusercontent.com/ItsJiDy/Overdrive-H/refs/heads/main/current%20version.json')
             until v1279
 
@@ -1536,7 +3949,10 @@ local function v1655()
 
             while not u1341('IsLoaded') do
                 _Wait9(u1330)
-                if false then break end
+
+                if false then
+                    break
+                end
             end
             while true do
                 _Wait9(u1330)
@@ -1555,11 +3971,14 @@ local function v1655()
 
                             if _Type2 == 'Label' then
                                 v1380.Name = _Text2
+
                                 local u1396 = u1345(u1290, 'TextLabel', v1380)
+
                                 v1346(u1290, u1396, u1344(u1290, _Text2))
 
                                 if _Flag then
                                     local u1397 = 'Text'
+
                                     v1331[_Flag] = function(p1398)
                                         if p1398 then
                                             u1396[u1397] = p1398
@@ -1738,6 +4157,7 @@ local function v1655()
                                         })
 
                                         _Toggle[u1409] = u1410
+
                                         _SaveConfigurations2(v1415)
                                         u1352(_Callback2, u1410)
                                     end
@@ -1758,12 +4178,14 @@ local function v1655()
                                 if v1423 and _b(v1423) then
                                     if _Restricted and not u1341('Is' .. _Restricted) then
                                         _Notify4(u1290, 'Only ' .. u1357(_Restricted) .. ' users can use this feature.')
+
                                         v1391 = v1638
                                     else
                                         u1408.BackgroundColor3 = u1335(0, 255, 0)
                                         u1406.Position = u1334(0.75, 0, 0.5, 0)
 
                                         local v1424 = true
+
                                         u1240.Spawn = {
                                             Callback = u1352,
                                             Args = {_Callback2, v1424},
@@ -1885,6 +4307,7 @@ local function v1655()
 
                                 u1349(u1427.FocusLost, function()
                                     local v1447 = u1356(u1427[u1446])
+
                                     if v1447 then
                                         u1444(v1447)
                                     else
@@ -1936,10 +4359,12 @@ local function v1655()
 
                                                 if u1448 then
                                                     u1448:Disconnect()
+
                                                     u1448 = nil
                                                 end
                                                 if u1449 then
                                                     u1449:Disconnect()
+
                                                     u1449 = nil
                                                 end
 
@@ -1952,10 +4377,12 @@ local function v1655()
 
                                                 if u1448 then
                                                     u1448:Disconnect()
+
                                                     u1448 = nil
                                                 end
                                                 if u1449 then
                                                     u1449:Disconnect()
+
                                                     u1449 = nil
                                                 end
 
@@ -1973,10 +4400,13 @@ local function v1655()
 
                                 if v1462 then
                                     u1444(v1462)
+
                                     v1391 = v1638
                                 else
                                     _Slider[u1431] = u1445
+
                                     u1444(u1445)
+
                                     v1391 = v1638
                                 end
                             elseif _Type2 == 'Keybind' then
@@ -2894,10 +5324,12 @@ local function v1655()
                                 v1391 = v1638
                             else
                                 u1290:Error('invalid property type.')
+
                                 v1391 = v1638
                             end
                         else
                             u1290:Error('argument must be a table value when registering a property.')
+
                             v1391 = v1638
                         end
 
@@ -2999,3 +5431,13 @@ local function v1655()
 
     return v926
 end
+
+-- ============================================
+-- EXPORT
+-- ============================================
+
+local UI = v1655()
+
+print("Overdrive H UI Loaded Successfully!")
+
+return UI
