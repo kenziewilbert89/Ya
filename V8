@@ -2411,7 +2411,7 @@ end
 
     C.v1655 = function()
     C.u41 = C.u41 or {}
-    C.u41.d = nil
+    -- V8.2 FIX: keep shared dispatcher state alive after loading.
         local u906 = C.u40
         local u907 = C.u155
         local u908 = C.u131
