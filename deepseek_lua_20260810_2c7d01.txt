@@ -1,0 +1,3200 @@
+--[[
+    OVERDRIVE H - Clean Version
+    Game: Murder Mystery 2 & Blade Ball
+    Author: @elfandtears_ndk
+--]]
+
+-- ============================================
+-- 1. KONFIGURASI DASAR
+-- ============================================
+
+local Config = {
+    Version = "1.0.0",
+    Game = game:GetService("Players").LocalPlayer:GetAttribute("Game") or "Murder Mystery 2",
+    DebugMode = false,
+    LowPerformanceMode = false
+}
+
+-- ============================================
+-- 2. SERVICE REFERENCES
+-- ============================================
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+local VirtualUser = game:GetService("VirtualUser")
+local HttpService = game:GetService("HttpService")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Character = nil
+local Humanoid = nil
+local HumanoidRootPart = nil
+
+-- ============================================
+-- 3. UTILITY FUNCTIONS
+-- ============================================
+
+local Utilities = {}
+
+function Utilities:GetCharacter()
+    local char = LocalPlayer.Character
+    if char and char.Parent then
+        Character = char
+        Humanoid = char:FindFirstChildOfClass("Humanoid")
+        HumanoidRootPart = char:FindFirstChild("HumanoidRootPart")
+        return char
+    end
+    return nil
+end
+
+function Utilities:WaitForCharacter()
+    return LocalPlayer.CharacterAdded:Wait()
+end
+
+function Utilities:GetClosestPlayer(ignoreTeam)
+    local closest = nil
+    local closestDist = math.huge
+    local localPos = HumanoidRootPart and HumanoidRootPart.Position or Vector3.new()
+    
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            if ignoreTeam and player.Team == LocalPlayer.Team then continue end
+            
+            local char = player.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local root = char.HumanoidRootPart
+                local dist = (root.Position - localPos).Magnitude
+                if dist < closestDist then
+                    closestDist = dist
+                    closest = player
+                end
+            end
+        end
+    end
+    return closest
+end
+
+function Utilities:GetPlayersByRole(role)
+    local result = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local char = player.Character
+            if char then
+                -- Check role via attributes or game-specific methods
+                if char:GetAttribute("Role") == role then
+                    table.insert(result, player)
+                end
+            end
+        end
+    end
+    return result
+end
+
+function Utilities:GetRemotes()
+    local remoteFolder = ReplicatedStorage:FindFirstChild("Remotes")
+    if not remoteFolder then
+        remoteFolder = ReplicatedStorage:FindFirstChild("RemoteEvent")
+    end
+    return remoteFolder
+end
+
+function Utilities:FireRemote(remoteName, ...)
+    local remotes = Utilities:GetRemotes()
+    if remotes then
+        local remote = remotes:FindFirstChild(remoteName)
+        if remote then
+            remote:FireServer(...)
+            return true
+        end
+    end
+    return false
+end
+
+function Utilities:InvokeRemote(remoteName, ...)
+    local remotes = Utilities:GetRemotes()
+    if remotes then
+        local remote = remotes:FindFirstChild(remoteName)
+        if remote and remote:IsA("RemoteFunction") then
+            return remote:InvokeServer(...)
+        end
+    end
+    return nil
+end
+
+function Utilities:GetDistance(pos1, pos2)
+    return (pos1 - pos2).Magnitude
+end
+
+function Utilities:IsInRange(pos1, pos2, range)
+    return Utilities:GetDistance(pos1, pos2) <= range
+end
+
+function Utilities:CreateTween(object, properties, duration, style, direction)
+    local tweenInfo = TweenInfo.new(
+        duration or 0.5,
+        Enum.EasingStyle[style or "Quad"],
+        Enum.EasingDirection[direction or "Out"]
+    )
+    local tween = TweenService:Create(object, tweenInfo, properties)
+    return tween
+end
+
+function Utilities:Notify(title, message, duration)
+    -- Simple notification using a GUI or chat
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = title or "Overdrive H",
+        Text = message or "",
+        Duration = duration or 3
+    })
+end
+
+function Utilities:GetRandomString(length)
+    length = length or 10
+    local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local result = ""
+    for i = 1, length do
+        result = result .. chars:sub(math.random(1, #chars), math.random(1, #chars))
+    end
+    return result
+end
+
+-- ============================================
+-- 4. PROPERTY SYSTEM
+-- ============================================
+
+local PropertySystem = {
+    Properties = {},
+    Listeners = {},
+    Defaults = {}
+}
+
+-- Define all available properties
+function PropertySystem:DefineProperties()
+    -- Combat Properties
+    self.Defaults.AutoParry = false
+    self.Defaults.AutoForcefield = false
+    self.Defaults.AutoRagingDeflection = false
+    self.Defaults.AutoInfinity = false
+    self.Defaults.AutoPhantom = false
+    self.Defaults.AutoFracture = false
+    self.Defaults.AutoSingularity = false
+    self.Defaults.AutoDeathSlash = false
+    self.Defaults.AutoSwap = false
+    self.Defaults.AutoFlashCounter = false
+    self.Defaults.AutoAerodynamicSlash = false
+    self.Defaults.AutoCalmingDeflection = false
+    self.Defaults.AutoHellHook = false
+    self.Defaults.AutoPull = false
+    self.Defaults.AutoTelekinesis = false
+    self.Defaults.AutoAbsoluteConfidence = false
+    self.Defaults.AutoRapture = false
+    self.Defaults.AutoSlashesOfFury = false
+    self.Defaults.AutoSlashOfDuality = false
+    self.Defaults.AutoCounterTelekinesis = false
+    self.Defaults.AutoPerfectDeathSlash = false
+    self.Defaults.AutoNotifyClashing = false
+    self.Defaults.HitsBeforeClashing = 3
+    self.Defaults.ClashRange = 32
+    self.Defaults.AutoParryLegitMode = false
+    
+    -- Gun Silent Aim
+    self.Defaults.GunSilentAimPrediction = "Revert"
+    self.Defaults.PredictionPing = 100
+    self.Defaults.PredictionVerticalMultiplier = 100
+    self.Defaults.PredictionHorizontalMultiplier = 100
+    self.Defaults.PredictionInterval = 20
+    self.Defaults.PredictionWallCheck = true
+    self.Defaults.PredictJump = false
+    self.Defaults.SimulationDivider = 20
+    
+    -- Hitbox Expander
+    self.Defaults.HitboxExpander = false
+    self.Defaults.HitboxSize = 2
+    self.Defaults.HitboxTransparency = 70
+    self.Defaults.HitboxColorR = 250
+    self.Defaults.HitboxColorG = 250
+    self.Defaults.HitboxColorB = 250
+    
+    -- Aura
+    self.Defaults.GunAura = false
+    self.Defaults.GunAuraRange = 5
+    self.Defaults.KnifeAura = false
+    self.Defaults.KnifeAuraRange = 5
+    
+    -- Visual Properties
+    self.Defaults.ESPBox = false
+    self.Defaults.ESPBoxEveryone = false
+    self.Defaults.ESPBoxMurdererOnly = false
+    self.Defaults.ESPBoxSheriffOnly = false
+    self.Defaults.ESPBoxHostileMobs = false
+    self.Defaults.ESPBoxCorpses = false
+    self.Defaults.ESPBoxItems = false
+    
+    self.Defaults.Tracers = false
+    self.Defaults.TracersEveryone = false
+    self.Defaults.TracersMurdererOnly = false
+    self.Defaults.TracersSheriffOnly = false
+    self.Defaults.TracersCorpses = false
+    self.Defaults.TracersItems = false
+    self.Defaults.TracersDroppedGun = false
+    
+    self.Defaults.Chams = false
+    self.Defaults.ChamsEveryone = false
+    self.Defaults.ChamsMurdererOnly = false
+    self.Defaults.ChamsSheriffOnly = false
+    self.Defaults.ChamsHostileMobs = false
+    self.Defaults.ChamsCorpses = false
+    self.Defaults.ChamsItems = false
+    self.Defaults.ChamsTrain = false
+    
+    self.Defaults.Outlines = false
+    self.Defaults.OutlinesEveryone = false
+    self.Defaults.OutlinesMurdererOnly = false
+    self.Defaults.OutlinesSheriffOnly = false
+    self.Defaults.OutlinesHostileMobs = false
+    self.Defaults.OutlinesCorpses = false
+    self.Defaults.OutlinesItems = false
+    
+    self.Defaults.DisplayDistance = false
+    self.Defaults.DisplayHealth = false
+    
+    -- ESP Skeleton
+    self.Defaults.ESPSkeletonEveryone = false
+    self.Defaults.ESPSkeletonMurdererOnly = false
+    self.Defaults.ESPSkeletonSheriffOnly = false
+    
+    -- Self Modifications
+    self.Defaults.WalkSpeed = 16
+    self.Defaults.JumpPower = 50
+    self.Defaults.Noclip = false
+    self.Defaults.Fly = false
+    self.Defaults.FlySpeed = 15
+    self.Defaults.Invisible = false
+    self.Defaults.AntiAFK = false
+    self.Defaults.AntiVoid = false
+    self.Defaults.AntiFling = false
+    self.Defaults.InfiniteJump = false
+    self.Defaults.XRay = false
+    self.Defaults.XRayTransparency = 75
+    
+    -- Auto Farm
+    self.Defaults.AutoFarm = false
+    self.Defaults.AutoCollectCoins = false
+    self.Defaults.AutoCollectEggs = false
+    self.Defaults.AutoCollectBandage = false
+    self.Defaults.AutoCollectBond = false
+    self.Defaults.AutoCollectMoneybag = false
+    self.Defaults.AutoCollectAmmo = false
+    self.Defaults.AutoCollectSnakeOil = false
+    self.Defaults.AutoUnbox = false
+    self.Defaults.AutoReel = false
+    self.Defaults.AutoCast = false
+    self.Defaults.AutoCastPower = 100
+    self.Defaults.AutoReelAccuracy = 100
+    self.Defaults.AutoShake = false
+    self.Defaults.AutoSellAllFish = false
+    self.Defaults.AutoSellHeldFish = false
+    self.Defaults.AutoEquipRod = false
+    self.Defaults.AutoStoreItems = false
+    self.Defaults.AutoStoreRange = 5
+    
+    -- MM2 Specific
+    self.Defaults.AutoShootMurderer = false
+    self.Defaults.AutoShootMurdererCondition = "Auto"
+    self.Defaults.AutoGrabGun = false
+    self.Defaults.AutoNotifyRoles = false
+    self.Defaults.AutoNotifyMurdererPerk = false
+    self.Defaults.AutoExposeRoles = false
+    self.Defaults.AutoExposeMurdererPerk = false
+    self.Defaults.IndicateChatRoles = false
+    self.Defaults.ShowMurdererChance = false
+    self.Defaults.InstantRoleNotify = false
+    
+    -- Misc
+    self.Defaults.AntiLagServer = false
+    self.Defaults.LagServerIntensity = 3
+    self.Defaults.LowPerformanceMode = false
+    self.Defaults.Disable3DRendering = false
+    self.Defaults.DisableAnimatedDecorations = false
+    self.Defaults.RemoveChromaEffects = false
+    self.Defaults.RemovePetsDisplay = false
+    self.Defaults.MuteCoinSound = false
+    self.Defaults.OptimizeCoins = false
+    self.Defaults.FullBright = false
+    self.Defaults.NoShadows = false
+    self.Defaults.FaceBall = false
+    self.Defaults.LockBall = false
+    self.Defaults.AntiPulse = false
+    self.Defaults.FakeBombClutch = false
+    
+    -- Initialize properties with defaults
+    for name, value in pairs(self.Defaults) do
+        self.Properties[name] = value
+    end
+end
+
+function PropertySystem:RegisterProperty(name, initialValue)
+    self.Properties[name] = initialValue or self.Defaults[name] or false
+end
+
+function PropertySystem:GetProperty(name)
+    return self.Properties[name]
+end
+
+function PropertySystem:SetProperty(name, value)
+    if self.Properties[name] ~= nil then
+        self.Properties[name] = value
+        if self.Listeners[name] then
+            self.Listeners[name](value)
+        end
+        return true
+    end
+    return false
+end
+
+function PropertySystem:ListenProperty(name, callback)
+    self.Listeners[name] = callback
+end
+
+function PropertySystem:ToggleProperty(name)
+    local current = self:GetProperty(name)
+    self:SetProperty(name, not current)
+    return not current
+end
+
+-- Global shortcuts
+function GetProperty(name) return PropertySystem:GetProperty(name) end
+function SetProperty(name, value) return PropertySystem:SetProperty(name, value) end
+function ToggleProperty(name) return PropertySystem:ToggleProperty(name) end
+function ListenProperty(name, callback) PropertySystem:ListenProperty(name, callback) end
+
+-- ============================================
+-- 5. TASK SYSTEM
+-- ============================================
+
+local TaskSystem = {
+    Tasks = {},
+    Running = true
+}
+
+function TaskSystem:CreateTask(name, callback, interval)
+    if self.Tasks[name] then
+        self:RemoveTask(name)
+    end
+    
+    local task = {
+        Name = name,
+        Callback = callback,
+        Running = true,
+        Interval = interval or 0.016,
+        LastRun = 0,
+        Connection = nil
+    }
+    
+    self.Tasks[name] = task
+    
+    task.Connection = RunService.Heartbeat:Connect(function(deltaTime)
+        if not self.Running then return end
+        if not task.Running then return end
+        
+        task.LastRun = task.LastRun + deltaTime
+        if task.LastRun >= task.Interval then
+            task.LastRun = 0
+            local success, err = pcall(task.Callback)
+            if not success and Config.DebugMode then
+                warn("Task error [" .. name .. "]: " .. tostring(err))
+            end
+        end
+    end)
+    
+    return task
+end
+
+function TaskSystem:RemoveTask(name)
+    local task = self.Tasks[name]
+    if task then
+        task.Running = false
+        if task.Connection then
+            task.Connection:Disconnect()
+        end
+        self.Tasks[name] = nil
+        return true
+    end
+    return false
+end
+
+function TaskSystem:ToggleTask(name, enabled, callback, interval)
+    if enabled then
+        return self:CreateTask(name, callback, interval)
+    else
+        return self:RemoveTask(name)
+    end
+end
+
+function TaskSystem:IsTaskRunning(name)
+    return self.Tasks[name] ~= nil and self.Tasks[name].Running
+end
+
+function TaskSystem:GetAllTasks()
+    local result = {}
+    for name, _ in pairs(self.Tasks) do
+        table.insert(result, name)
+    end
+    return result
+end
+
+-- Global shortcuts
+function MakeTask(name, callback, interval) return TaskSystem:CreateTask(name, callback, interval) end
+function RemoveTask(name) return TaskSystem:RemoveTask(name) end
+function IsTaskRunning(name) return TaskSystem:IsTaskRunning(name) end
+
+-- ============================================
+-- 6. GAME DETECTION
+-- ============================================
+
+local GameDetector = {}
+
+function GameDetector:DetectGame()
+    local placeId = game.PlaceId
+    
+    -- Murder Mystery 2
+    if placeId == 142823291 then
+        return "Murder Mystery 2"
+    end
+    
+    -- Blade Ball
+    if placeId == 13772394625 then
+        return "Blade Ball"
+    end
+    
+    -- Dead Rails
+    if placeId == 116495829188952 then
+        return "Dead Rails"
+    end
+    
+    -- Fisch
+    if placeId == 16732694052 then
+        return "Fisch"
+    end
+    
+    return "Unknown"
+end
+
+local CurrentGame = GameDetector:DetectGame()
+
+-- ============================================
+-- 7. COMBAT FEATURES
+-- ============================================
+
+local Combat = {}
+
+-- 7.1 Auto Parry
+function Combat:AutoParry()
+    MakeTask("AutoParry", function()
+        if not GetProperty("AutoParry") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not Humanoid then return end
+        
+        -- Check if clashing
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        -- If using legit mode
+        if GetProperty("AutoParryLegitMode") then
+            -- Random delay before parrying
+            local delay = math.random(100, 300) / 1000
+            task.wait(delay)
+        end
+        
+        -- Check for incoming attacks
+        -- Implementation depends on game
+        if CurrentGame == "Murder Mystery 2" then
+            self:MM2Parry()
+        elseif CurrentGame == "Blade Ball" then
+            self:BladeBallParry()
+        end
+    end)
+end
+
+function Combat:MM2Parry()
+    -- MM2 specific parry logic
+    local remotes = Utilities:GetRemotes()
+    if remotes then
+        local parryRemote = remotes:FindFirstChild("Parry")
+        if parryRemote then
+            parryRemote:FireServer()
+        end
+    end
+end
+
+function Combat:BladeBallParry()
+    -- Blade Ball specific parry logic
+    -- Check for ball approaching
+    local ball = workspace:FindFirstChild("Ball")
+    if ball then
+        local char = Utilities:GetCharacter()
+        if char and HumanoidRootPart then
+            local distance = (ball.Position - HumanoidRootPart.Position).Magnitude
+            if distance < 30 then
+                -- Parry the ball
+                local remotes = Utilities:GetRemotes()
+                if remotes then
+                    local parryRemote = remotes:FindFirstChild("Parry")
+                    if parryRemote then
+                        parryRemote:FireServer()
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- 7.2 Auto Forcefield
+function Combat:AutoForcefield()
+    MakeTask("AutoForcefield", function()
+        if not GetProperty("AutoForcefield") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        -- Check if clashing
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing and not char:FindFirstChild("ForceField") then
+            -- Activate forcefield
+            local forcefield = Instance.new("ForceField")
+            forcefield.Parent = char
+            
+            -- Remove after clash ends
+            task.wait(0.5)
+            if forcefield and forcefield.Parent then
+                forcefield:Destroy()
+            end
+        end
+    end)
+end
+
+-- 7.3 Auto Raging Deflection
+function Combat:AutoRagingDeflection()
+    MakeTask("AutoRagingDeflection", function()
+        if not GetProperty("AutoRagingDeflection") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        -- Check if ability is ready
+        local abilityReady = char:GetAttribute("RagingDeflectionReady") or false
+        
+        if abilityReady then
+            -- Activate ability
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("RagingDeflection")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.4 Auto Infinity
+function Combat:AutoInfinity()
+    MakeTask("AutoInfinity", function()
+        if not GetProperty("AutoInfinity") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Infinity")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.5 Auto Phantom
+function Combat:AutoPhantom()
+    MakeTask("AutoPhantom", function()
+        if not GetProperty("AutoPhantom") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        -- Check if ability is ready
+        local abilityReady = char:GetAttribute("PhantomReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Phantom")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.6 Auto Fracture
+function Combat:AutoFracture()
+    MakeTask("AutoFracture", function()
+        if not GetProperty("AutoFracture") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Fracture")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.7 Auto Singularity
+function Combat:AutoSingularity()
+    MakeTask("AutoSingularity", function()
+        if not GetProperty("AutoSingularity") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("SingularityReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Singularity")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.8 Auto Death Slash
+function Combat:AutoDeathSlash()
+    MakeTask("AutoDeathSlash", function()
+        if not GetProperty("AutoDeathSlash") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("DeathSlash")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.9 Auto Perfect Death Slash
+function Combat:AutoPerfectDeathSlash()
+    MakeTask("AutoPerfectDeathSlash", function()
+        if not GetProperty("AutoPerfectDeathSlash") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            -- Wait for perfect timing
+            local timing = math.random(2, 4) / 10
+            task.wait(timing)
+            
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("PerfectDeathSlash")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end)
+end
+
+-- 7.10 Auto Swap
+function Combat:AutoSwap()
+    MakeTask("AutoSwap", function()
+        if not GetProperty("AutoSwap") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("SwapReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Swap")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.11 Auto Flash Counter
+function Combat:AutoFlashCounter()
+    MakeTask("AutoFlashCounter", function()
+        if not GetProperty("AutoFlashCounter") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("FlashCounter")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.12 Auto Aerodynamic Slash
+function Combat:AutoAerodynamicSlash()
+    MakeTask("AutoAerodynamicSlash", function()
+        if not GetProperty("AutoAerodynamicSlash") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("AerodynamicSlash")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.13 Auto Calming Deflection
+function Combat:AutoCalmingDeflection()
+    MakeTask("AutoCalmingDeflection", function()
+        if not GetProperty("AutoCalmingDeflection") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("CalmingDeflectionReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("CalmingDeflection")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.14 Auto Hell Hook
+function Combat:AutoHellHook()
+    MakeTask("AutoHellHook", function()
+        if not GetProperty("AutoHellHook") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("HellHookReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("HellHook")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.15 Auto Pull
+function Combat:AutoPull()
+    MakeTask("AutoPull", function()
+        if not GetProperty("AutoPull") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Pull")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.16 Auto Telekinesis
+function Combat:AutoTelekinesis()
+    MakeTask("AutoTelekinesis", function()
+        if not GetProperty("AutoTelekinesis") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("TelekinesisReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Telekinesis")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.17 Auto Counter Telekinesis
+function Combat:AutoCounterTelekinesis()
+    MakeTask("AutoCounterTelekinesis", function()
+        if not GetProperty("AutoCounterTelekinesis") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("CounterTelekinesis")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.18 Auto Absolute Confidence
+function Combat:AutoAbsoluteConfidence()
+    MakeTask("AutoAbsoluteConfidence", function()
+        if not GetProperty("AutoAbsoluteConfidence") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("AbsoluteConfidenceReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("AbsoluteConfidence")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.19 Auto Rapture
+function Combat:AutoRapture()
+    MakeTask("AutoRapture", function()
+        if not GetProperty("AutoRapture") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local abilityReady = char:GetAttribute("RaptureReady") or false
+        
+        if abilityReady then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("Rapture")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.20 Auto Slashes of Fury
+function Combat:AutoSlashesOfFury()
+    MakeTask("AutoSlashesOfFury", function()
+        if not GetProperty("AutoSlashesOfFury") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("SlashesOfFury")
+                if abilityRemote then
+                    abilityRemote:FireServer()
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.21 Auto Slash of Duality
+function Combat:AutoSlashOfDuality()
+    MakeTask("AutoSlashOfDuality", function()
+        if not GetProperty("AutoSlashOfDuality") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            local dualityType = GetProperty("AutoSlashOfDualityType") or "Light"
+            
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local abilityRemote = remotes:FindFirstChild("SlashOfDuality")
+                if abilityRemote then
+                    abilityRemote:FireServer(dualityType)
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- 7.22 Auto Notify Clashing
+function Combat:AutoNotifyClashing()
+    MakeTask("AutoNotifyClashing", function()
+        if not GetProperty("AutoNotifyClashing") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isClashing = char:GetAttribute("Clashing") or false
+        
+        if isClashing then
+            Utilities:Notify("Clash Detected!", "You are currently clashing!", 2)
+        end
+    end, 1)
+end
+
+-- 7.23 Hits Before Clashing
+function Combat:HitsBeforeClashing()
+    -- This tracks hits and triggers clash notification
+    local hitCount = 0
+    local maxHits = GetProperty("HitsBeforeClashing") or 3
+    
+    MakeTask("HitsBeforeClashing", function()
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        -- Check for hit events
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            -- This is simplified; actual implementation would use events
+            if humanoid.Health < humanoid.MaxHealth then
+                hitCount = hitCount + 1
+                if hitCount >= maxHits then
+                    Utilities:Notify("Clashing!", "You've been hit " .. maxHits .. " times!", 2)
+                    hitCount = 0
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- ============================================
+-- 8. SILENT AIM
+-- ============================================
+
+local SilentAim = {}
+
+function SilentAim:GetPredictionType()
+    return GetProperty("GunSilentAimPrediction") or "Revert"
+end
+
+function SilentAim:GetPredictionAccuracy(predictionType)
+    local accuracies = {
+        Revert = 0.966,
+        Rectum = 0.962,
+        Electro = 0.96,
+        Remi = 0.87
+    }
+    return accuracies[predictionType] or 0.9
+end
+
+function SilentAim:CalculatePrediction(target, predictionType)
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return nil end
+    
+    local targetRoot = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetRoot then return nil end
+    
+    local targetPos = targetRoot.Position
+    local myPos = HumanoidRootPart.Position
+    
+    -- Base prediction
+    local prediction = targetPos
+    
+    -- Get prediction settings
+    local ping = GetProperty("PredictionPing") or 100
+    local verticalMult = GetProperty("PredictionVerticalMultiplier") or 100
+    local horizontalMult = GetProperty("PredictionHorizontalMultiplier") or 100
+    local interval = GetProperty("PredictionInterval") or 20
+    local wallCheck = GetProperty("PredictionWallCheck")
+    
+    -- Apply prediction based on type
+    if predictionType == "Revert" then
+        -- Basic prediction
+        local velocity = targetRoot.Velocity or Vector3.new()
+        local time = ping / 1000
+        prediction = targetPos + velocity * time
+        
+    elseif predictionType == "Rectum" then
+        -- Advanced prediction with vertical/horizontal multipliers
+        local velocity = targetRoot.Velocity or Vector3.new()
+        local time = ping / 1000
+        
+        local horizontal = Vector3.new(velocity.X, 0, velocity.Z) * (horizontalMult / 100)
+        local vertical = Vector3.new(0, velocity.Y, 0) * (verticalMult / 100)
+        
+        prediction = targetPos + (horizontal + vertical) * time
+        
+    elseif predictionType == "Electro" then
+        -- Electro prediction with interval
+        local velocity = targetRoot.Velocity or Vector3.new()
+        local time = ping / 1000 * (interval / 20)
+        
+        prediction = targetPos + velocity * time
+        
+    elseif predictionType == "Remi" then
+        -- Remi prediction with ping compensation
+        local velocity = targetRoot.Velocity or Vector3.new()
+        local time = ping / 1000 * 1.2
+        
+        prediction = targetPos + velocity * time
+    end
+    
+    -- Wall check
+    if wallCheck then
+        local params = RaycastParams.new()
+        params.FilterType = Enum.RaycastFilterType.Blacklist
+        params.FilterDescendantsInstances = {char}
+        
+        local ray = workspace:Raycast(myPos, (prediction - myPos).Unit * 200, params)
+        if ray then
+            -- If wall in way, adjust prediction
+            prediction = ray.Position
+        end
+    end
+    
+    -- Predict jump
+    if GetProperty("PredictJump") and targetRoot.Velocity.Y > 0 then
+        local velocity = targetRoot.Velocity or Vector3.new()
+        local time = ping / 1000
+        local gravity = workspace.Gravity
+        prediction = prediction + Vector3.new(0, velocity.Y * time + 0.5 * gravity * time^2, 0)
+    end
+    
+    return prediction
+end
+
+function SilentAim:GetAimAngle(target)
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return nil end
+    
+    local targetRoot = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetRoot then return nil end
+    
+    local targetPos = targetRoot.Position
+    local myPos = HumanoidRootPart.Position
+    
+    -- Get prediction
+    local predictionType = self:GetPredictionType()
+    local predictedPos = self:CalculatePrediction(target, predictionType)
+    
+    if not predictedPos then return nil end
+    
+    -- Calculate angle
+    local direction = (predictedPos - myPos).Unit
+    local angle = math.atan2(direction.Y, direction.X)
+    
+    return angle
+end
+
+-- ============================================
+-- 9. HITBOX EXPANDER
+-- ============================================
+
+local HitboxExpander = {}
+
+function HitboxExpander:Apply()
+    MakeTask("HitboxExpander", function()
+        if not GetProperty("HitboxExpander") then return end
+        
+        local size = GetProperty("HitboxSize") or 2
+        local transparency = GetProperty("HitboxTransparency") or 70
+        
+        local r = GetProperty("HitboxColorR") or 250
+        local g = GetProperty("HitboxColorG") or 250
+        local b = GetProperty("HitboxColorB") or 250
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    -- Find hitbox parts
+                    for _, part in ipairs(char:GetDescendants()) do
+                        if part:IsA("BasePart") and part.Name == "HumanoidRootPart" then
+                            -- Create expanded hitbox
+                            local hitbox = part:FindFirstChild("ExpandedHitbox")
+                            if not hitbox then
+                                hitbox = Instance.new("Part")
+                                hitbox.Name = "ExpandedHitbox"
+                                hitbox.Size = Vector3.new(size, size, size)
+                                hitbox.Transparency = transparency / 100
+                                hitbox.BrickColor = BrickColor.new(Color3.fromRGB(r, g, b))
+                                hitbox.Anchored = false
+                                hitbox.CanCollide = false
+                                hitbox.Parent = part
+                                
+                                -- Weld to root part
+                                local weld = Instance.new("Weld")
+                                weld.Part0 = part
+                                weld.Part1 = hitbox
+                                weld.C0 = CFrame.new(0, 0, 0)
+                                weld.Parent = hitbox
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function HitboxExpander:Remove()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local char = player.Character
+            if char then
+                for _, part in ipairs(char:GetDescendants()) do
+                    if part.Name == "ExpandedHitbox" then
+                        part:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- ============================================
+-- 10. AURA SYSTEM
+-- ============================================
+
+local Aura = {}
+
+function Aura:ApplyGunAura()
+    MakeTask("GunAura", function()
+        if not GetProperty("GunAura") then return end
+        
+        local range = GetProperty("GunAuraRange") or 5
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local targetChar = player.Character
+                if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = targetChar.HumanoidRootPart
+                    local distance = (targetRoot.Position - HumanoidRootPart.Position).Magnitude
+                    
+                    if distance <= range then
+                        -- Create or update aura effect
+                        local aura = targetRoot:FindFirstChild("GunAura")
+                        if not aura then
+                            aura = Instance.new("Part")
+                            aura.Name = "GunAura"
+                            aura.Size = Vector3.new(1, 1, 1)
+                            aura.Transparency = 0.5
+                            aura.BrickColor = BrickColor.new(Color3.fromRGB(255, 0, 0))
+                            aura.Anchored = false
+                            aura.CanCollide = false
+                            aura.Parent = targetRoot
+                            
+                            local weld = Instance.new("Weld")
+                            weld.Part0 = targetRoot
+                            weld.Part1 = aura
+                            weld.C0 = CFrame.new(0, 0, 0)
+                            weld.Parent = aura
+                        end
+                    else
+                        local aura = targetRoot:FindFirstChild("GunAura")
+                        if aura then aura:Destroy() end
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function Aura:ApplyKnifeAura()
+    MakeTask("KnifeAura", function()
+        if not GetProperty("KnifeAura") then return end
+        
+        local range = GetProperty("KnifeAuraRange") or 5
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local targetChar = player.Character
+                if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = targetChar.HumanoidRootPart
+                    local distance = (targetRoot.Position - HumanoidRootPart.Position).Magnitude
+                    
+                    if distance <= range then
+                        local aura = targetRoot:FindFirstChild("KnifeAura")
+                        if not aura then
+                            aura = Instance.new("Part")
+                            aura.Name = "KnifeAura"
+                            aura.Size = Vector3.new(1, 1, 1)
+                            aura.Transparency = 0.5
+                            aura.BrickColor = BrickColor.new(Color3.fromRGB(0, 255, 0))
+                            aura.Anchored = false
+                            aura.CanCollide = false
+                            aura.Parent = targetRoot
+                            
+                            local weld = Instance.new("Weld")
+                            weld.Part0 = targetRoot
+                            weld.Part1 = aura
+                            weld.C0 = CFrame.new(0, 0, 0)
+                            weld.Parent = aura
+                        end
+                    else
+                        local aura = targetRoot:FindFirstChild("KnifeAura")
+                        if aura then aura:Destroy() end
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- ============================================
+-- 11. VISUAL FEATURES (ESP)
+-- ============================================
+
+local Visuals = {}
+local DrawingObjects = {}
+
+function Visuals:Initialize()
+    -- Create drawing objects if using drawing library
+    -- This would use the Roblox Drawing library
+end
+
+function Visuals:DrawBox(player, color)
+    local char = player.Character
+    if not char then return end
+    
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+    
+    -- Get screen position
+    local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(root.Position)
+    if not onScreen then return end
+    
+    -- Create or update box
+    local boxId = "Box_" .. player.Name
+    if not DrawingObjects[boxId] then
+        -- Create box using drawing library
+        -- This is simplified; actual implementation would use Drawing.new
+    end
+end
+
+function Visuals:DrawTracer(player)
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return end
+    
+    local targetChar = player.Character
+    if not targetChar or not targetChar:FindFirstChild("HumanoidRootPart") then return end
+    
+    local targetRoot = targetChar.HumanoidRootPart
+    
+    -- Get screen positions
+    local startPos = workspace.CurrentCamera:WorldToViewportPoint(HumanoidRootPart.Position)
+    local endPos = workspace.CurrentCamera:WorldToViewportPoint(targetRoot.Position)
+    
+    -- Draw tracer line
+    -- This would use Drawing library
+end
+
+function Visuals:ApplyESP()
+    MakeTask("ESP", function()
+        if not GetProperty("ESPBox") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    local shouldDraw = false
+                    
+                    if GetProperty("ESPBoxEveryone") then
+                        shouldDraw = true
+                    elseif GetProperty("ESPBoxMurdererOnly") and char:GetAttribute("Role") == "Murderer" then
+                        shouldDraw = true
+                    elseif GetProperty("ESPBoxSheriffOnly") and char:GetAttribute("Role") == "Sheriff" then
+                        shouldDraw = true
+                    end
+                    
+                    if shouldDraw then
+                        Visuals:DrawBox(player)
+                    end
+                end
+            end
+        end
+    end, 0.016)
+end
+
+function Visuals:ApplyTracers()
+    MakeTask("Tracers", function()
+        if not GetProperty("Tracers") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    local shouldDraw = false
+                    
+                    if GetProperty("TracersEveryone") then
+                        shouldDraw = true
+                    elseif GetProperty("TracersMurdererOnly") and char:GetAttribute("Role") == "Murderer" then
+                        shouldDraw = true
+                    elseif GetProperty("TracersSheriffOnly") and char:GetAttribute("Role") == "Sheriff" then
+                        shouldDraw = true
+                    end
+                    
+                    if shouldDraw then
+                        Visuals:DrawTracer(player)
+                    end
+                end
+            end
+        end
+    end, 0.016)
+end
+
+function Visuals:ApplyChams()
+    MakeTask("Chams", function()
+        if not GetProperty("Chams") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local shouldApply = false
+                    
+                    if GetProperty("ChamsEveryone") then
+                        shouldApply = true
+                    elseif GetProperty("ChamsMurdererOnly") and char:GetAttribute("Role") == "Murderer" then
+                        shouldApply = true
+                    elseif GetProperty("ChamsSheriffOnly") and char:GetAttribute("Role") == "Sheriff" then
+                        shouldApply = true
+                    end
+                    
+                    if shouldApply then
+                        for _, part in ipairs(char:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                part.Material = Enum.Material.Neon
+                                part.Transparency = 0.3
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function Visuals:ApplyOutlines()
+    MakeTask("Outlines", function()
+        if not GetProperty("Outlines") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local shouldApply = false
+                    
+                    if GetProperty("OutlinesEveryone") then
+                        shouldApply = true
+                    elseif GetProperty("OutlinesMurdererOnly") and char:GetAttribute("Role") == "Murderer" then
+                        shouldApply = true
+                    elseif GetProperty("OutlinesSheriffOnly") and char:GetAttribute("Role") == "Sheriff" then
+                        shouldApply = true
+                    end
+                    
+                    if shouldApply then
+                        -- Apply outline using Highlight or UIStroke
+                        local highlight = char:FindFirstChild("Highlight")
+                        if not highlight then
+                            highlight = Instance.new("Highlight")
+                            highlight.Parent = char
+                            highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                            highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
+                            highlight.FillTransparency = 0.8
+                            highlight.OutlineTransparency = 0
+                        end
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function Visuals:DisplayDistance()
+    MakeTask("DisplayDistance", function()
+        if not GetProperty("DisplayDistance") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local targetChar = player.Character
+                if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = targetChar.HumanoidRootPart
+                    local distance = (targetRoot.Position - HumanoidRootPart.Position).Magnitude
+                    
+                    -- Display distance above player
+                    -- This would use BillboardGui or Drawing library
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function Visuals:DisplayHealth()
+    MakeTask("DisplayHealth", function()
+        if not GetProperty("DisplayHealth") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local humanoid = char:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        local health = humanoid.Health
+                        local maxHealth = humanoid.MaxHealth
+                        local healthPercent = (health / maxHealth) * 100
+                        
+                        -- Display health above player
+                        -- This would use BillboardGui or Drawing library
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- ============================================
+-- 12. SELF MODIFICATIONS
+-- ============================================
+
+local SelfMods = {}
+
+function SelfMods:SetWalkSpeed(speed)
+    local char = Utilities:GetCharacter()
+    if char then
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = speed
+        end
+    end
+end
+
+function SelfMods:SetJumpPower(power)
+    local char = Utilities:GetCharacter()
+    if char then
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = power
+        end
+    end
+end
+
+function SelfMods:Noclip()
+    MakeTask("Noclip", function()
+        if not GetProperty("Noclip") then return end
+        
+        local char = Utilities:GetCharacter()
+        if char then
+            for _, part in ipairs(char:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end, 0.016)
+end
+
+function SelfMods:Fly()
+    local bodyVelocity = nil
+    local bodyGyro = nil
+    
+    MakeTask("Fly", function()
+        if not GetProperty("Fly") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        local flySpeed = GetProperty("FlySpeed") or 15
+        
+        -- Create body velocity if not exists
+        if not bodyVelocity then
+            bodyVelocity = Instance.new("BodyVelocity")
+            bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+            bodyVelocity.Parent = HumanoidRootPart
+        end
+        
+        if not bodyGyro then
+            bodyGyro = Instance.new("BodyGyro")
+            bodyGyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+            bodyGyro.Parent = HumanoidRootPart
+        end
+        
+        -- Get movement input
+        local moveDirection = Vector3.new()
+        
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+            moveDirection = moveDirection + HumanoidRootPart.CFrame.LookVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+            moveDirection = moveDirection - HumanoidRootPart.CFrame.LookVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+            moveDirection = moveDirection - HumanoidRootPart.CFrame.RightVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+            moveDirection = moveDirection + HumanoidRootPart.CFrame.RightVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+            moveDirection = moveDirection + Vector3.new(0, 1, 0)
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
+            moveDirection = moveDirection - Vector3.new(0, 1, 0)
+        end
+        
+        if moveDirection.Magnitude > 0 then
+            bodyVelocity.Velocity = moveDirection.Unit * flySpeed
+        else
+            bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        end
+        
+        bodyGyro.CFrame = HumanoidRootPart.CFrame
+        
+        -- Disable gravity
+        if Humanoid then
+            Humanoid.PlatformStand = true
+        end
+    end, 0.016)
+end
+
+function SelfMods:DisableFly()
+    if HumanoidRootPart then
+        local bodyVelocity = HumanoidRootPart:FindFirstChild("BodyVelocity")
+        if bodyVelocity then bodyVelocity:Destroy() end
+        
+        local bodyGyro = HumanoidRootPart:FindFirstChild("BodyGyro")
+        if bodyGyro then bodyGyro:Destroy() end
+    end
+    
+    if Humanoid then
+        Humanoid.PlatformStand = false
+    end
+end
+
+function SelfMods:Invisible()
+    MakeTask("Invisible", function()
+        if not GetProperty("Invisible") then return end
+        
+        local char = Utilities:GetCharacter()
+        if char then
+            for _, part in ipairs(char:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.Transparency = 1
+                end
+            end
+            
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.HealthDisplayDistance = 0
+            end
+        end
+    end, 0.5)
+end
+
+function SelfMods:AntiAFK()
+    MakeTask("AntiAFK", function()
+        if not GetProperty("AntiAFK") then return end
+        
+        -- Simulate input to prevent AFK
+        VirtualUser:CaptureController()
+        VirtualUser:ClickButton2(Vector2.new())
+    end, 60)
+end
+
+function SelfMods:AntiVoid()
+    MakeTask("AntiVoid", function()
+        if not GetProperty("AntiVoid") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        -- Check if falling into void
+        if HumanoidRootPart.Position.Y < -50 then
+            -- Teleport back up
+            HumanoidRootPart.CFrame = CFrame.new(0, 100, 0)
+        end
+    end, 0.5)
+end
+
+function SelfMods:AntiFling()
+    MakeTask("AntiFling", function()
+        if not GetProperty("AntiFling") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        -- Check for abnormal velocity (flinging)
+        local velocity = HumanoidRootPart.Velocity
+        if velocity.Magnitude > 100 then
+            -- Stop flinging
+            HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+        end
+    end, 0.1)
+end
+
+function SelfMods:InfiniteJump()
+    MakeTask("InfiniteJump", function()
+        if not GetProperty("InfiniteJump") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
+        
+        -- Allow jumping in air
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+            humanoid.Jump = true
+        end
+    end, 0.016)
+end
+
+function SelfMods:XRay()
+    MakeTask("XRay", function()
+        if not GetProperty("XRay") then return end
+        
+        local transparency = GetProperty("XRayTransparency") or 75
+        
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.LocalTransparencyModifier = transparency / 100
+            end
+        end
+    end, 0.5)
+end
+
+function SelfMods:FullBright()
+    if GetProperty("FullBright") then
+        Lighting.Brightness = 2
+        Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+        Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+    else
+        Lighting.Brightness = 1
+        Lighting.Ambient = Color3.fromRGB(0, 0, 0)
+        Lighting.OutdoorAmbient = Color3.fromRGB(127, 127, 127)
+    end
+end
+
+function SelfMods:NoShadows()
+    if GetProperty("NoShadows") then
+        Lighting.GlobalShadows = false
+    else
+        Lighting.GlobalShadows = true
+    end
+end
+
+-- ============================================
+-- 13. MM2 SPECIFIC FEATURES
+-- ============================================
+
+local MM2 = {}
+
+function MM2:AutoShootMurderer()
+    MakeTask("AutoShootMurderer", function()
+        if not GetProperty("AutoShootMurderer") then return end
+        
+        local condition = GetProperty("AutoShootMurdererCondition") or "Auto"
+        
+        -- Find murderer
+        local murderer = nil
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char and char:GetAttribute("Role") == "Murderer" then
+                    murderer = player
+                    break
+                end
+            end
+        end
+        
+        if not murderer then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        local targetChar = murderer.Character
+        if not targetChar or not targetChar:FindFirstChild("HumanoidRootPart") then return end
+        
+        local targetRoot = targetChar.HumanoidRootPart
+        local distance = (targetRoot.Position - HumanoidRootPart.Position).Magnitude
+        
+        -- Check condition
+        local shouldShoot = false
+        
+        if condition == "Auto" then
+            shouldShoot = true
+        elseif condition == "When Murderer is Holding the Knife" then
+            local hasKnife = targetChar:FindFirstChild("Knife") or false
+            shouldShoot = hasKnife
+        elseif condition == "When Murderer is Near" then
+            shouldShoot = distance < 30
+        end
+        
+        if shouldShoot and distance < 50 then
+            -- Aim at murderer
+            local aimAngle = SilentAim:GetAimAngle(murderer)
+            if aimAngle then
+                -- Shoot
+                local remotes = Utilities:GetRemotes()
+                if remotes then
+                    local shootRemote = remotes:FindFirstChild("Shoot")
+                    if shootRemote then
+                        shootRemote:FireServer()
+                    end
+                end
+            end
+        end
+    end, 0.1)
+end
+
+function MM2:AutoGrabGun()
+    MakeTask("AutoGrabGun", function()
+        if not GetProperty("AutoGrabGun") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        -- Find dropped gun
+        local gun = nil
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA("Tool") and part.Name == "Gun" and part.Parent ~= char then
+                gun = part
+                break
+            end
+        end
+        
+        if gun then
+            local distance = (gun.Position - HumanoidRootPart.Position).Magnitude
+            if distance < 10 then
+                -- Grab gun
+                local remotes = Utilities:GetRemotes()
+                if remotes then
+                    local grabRemote = remotes:FindFirstChild("GrabGun")
+                    if grabRemote then
+                        grabRemote:FireServer(gun)
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+function MM2:AutoNotifyRoles()
+    MakeTask("AutoNotifyRoles", function()
+        if not GetProperty("AutoNotifyRoles") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local role = char:GetAttribute("Role")
+                    if role then
+                        Utilities:Notify("Role Detected", player.Name .. " is " .. role, 2)
+                    end
+                end
+            end
+        end
+    end, 5)
+end
+
+function MM2:AutoExposeRoles()
+    -- Expose roles to chat or GUI
+    MakeTask("AutoExposeRoles", function()
+        if not GetProperty("AutoExposeRoles") then return end
+        
+        local roles = {}
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local role = char:GetAttribute("Role")
+                    if role then
+                        roles[player.Name] = role
+                    end
+                end
+            end
+        end
+        
+        -- Display exposed roles
+        for name, role in pairs(roles) do
+            if role == "Murderer" then
+                Utilities:Notify("Murderer Exposed!", name .. " is the Murderer!", 3)
+            elseif role == "Sheriff" then
+                Utilities:Notify("Sheriff Exposed!", name .. " is the Sheriff!", 3)
+            end
+        end
+    end, 10)
+end
+
+function MM2:AutoExposeMurdererPerk()
+    MakeTask("AutoExposeMurdererPerk", function()
+        if not GetProperty("AutoExposeMurdererPerk") then return end
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local role = char:GetAttribute("Role")
+                    local perk = char:GetAttribute("Perk")
+                    
+                    if role == "Murderer" and perk then
+                        Utilities:Notify("Murderer Perk", player.Name .. " has " .. perk, 3)
+                    end
+                end
+            end
+        end
+    end, 10)
+end
+
+function MM2:AutoNotifyMurdererPerk()
+    MakeTask("AutoNotifyMurdererPerk", function()
+        if not GetProperty("AutoNotifyMurdererPerk") then return end
+        
+        local murderer = nil
+        local perk = nil
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local role = char:GetAttribute("Role")
+                    if role == "Murderer" then
+                        murderer = player
+                        perk = char:GetAttribute("Perk")
+                        break
+                    end
+                end
+            end
+        end
+        
+        if murderer and perk then
+            Utilities:Notify("Murderer Perk", murderer.Name .. " has " .. perk, 3)
+        end
+    end, 60)
+end
+
+function MM2:IndicateChatRoles()
+    MakeTask("IndicateChatRoles", function()
+        if not GetProperty("IndicateChatRoles") then return end
+        
+        -- Monitor chat messages and add role indicators
+        -- This would hook into the chat system
+    end, 0.5)
+end
+
+function MM2:ShowMurdererChance()
+    MakeTask("ShowMurdererChance", function()
+        if not GetProperty("ShowMurdererChance") then return end
+        
+        -- Calculate chance of each player being murderer
+        local totalPlayers = #Players:GetPlayers()
+        local chance = 1 / totalPlayers
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                -- Display chance
+                -- This would use GUI
+            end
+        end
+    end, 5)
+end
+
+function MM2:InstantRoleNotify()
+    MakeTask("InstantRoleNotify", function()
+        if not GetProperty("InstantRoleNotify") then return end
+        
+        -- Detect role changes instantly
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local role = char:GetAttribute("Role")
+                    if role and char:GetAttribute("RoleChanged") then
+                        Utilities:Notify("Role Changed!", player.Name .. " is now " .. role, 2)
+                        char:SetAttribute("RoleChanged", false)
+                    end
+                end
+            end
+        end
+    end, 0.5)
+end
+
+-- ============================================
+-- 14. AUTO FARM
+-- ============================================
+
+local AutoFarm = {}
+
+function AutoFarm:AutoFarm()
+    MakeTask("AutoFarm", function()
+        if not GetProperty("AutoFarm") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        -- Farm coins
+        if GetProperty("AutoCollectCoins") then
+            self:CollectCoins()
+        end
+        
+        -- Farm eggs
+        if GetProperty("AutoCollectEggs") then
+            self:CollectEggs()
+        end
+        
+        -- Farm bandages
+        if GetProperty("AutoCollectBandage") then
+            self:CollectBandage()
+        end
+    end, 0.1)
+end
+
+function AutoFarm:CollectCoins()
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return end
+    
+    -- Find nearest coin
+    local nearestCoin = nil
+    local nearestDist = math.huge
+    
+    for _, part in ipairs(workspace:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name == "Coin" then
+            local dist = (part.Position - HumanoidRootPart.Position).Magnitude
+            if dist < nearestDist then
+                nearestDist = dist
+                nearestCoin = part
+            end
+        end
+    end
+    
+    if nearestCoin and nearestDist < 50 then
+        -- Move to coin
+        char:MoveTo(nearestCoin.Position)
+        
+        -- Collect coin
+        if nearestDist < 5 then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local collectRemote = remotes:FindFirstChild("CollectCoin")
+                if collectRemote then
+                    collectRemote:FireServer(nearestCoin)
+                end
+            end
+        end
+    end
+end
+
+function AutoFarm:CollectEggs()
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return end
+    
+    -- Find nearest egg
+    local nearestEgg = nil
+    local nearestDist = math.huge
+    
+    for _, part in ipairs(workspace:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name == "Egg" then
+            local dist = (part.Position - HumanoidRootPart.Position).Magnitude
+            if dist < nearestDist then
+                nearestDist = dist
+                nearestEgg = part
+            end
+        end
+    end
+    
+    if nearestEgg and nearestDist < 50 then
+        -- Move to egg
+        char:MoveTo(nearestEgg.Position)
+        
+        -- Collect egg
+        if nearestDist < 5 then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local collectRemote = remotes:FindFirstChild("CollectEgg")
+                if collectRemote then
+                    collectRemote:FireServer(nearestEgg)
+                end
+            end
+        end
+    end
+end
+
+function AutoFarm:CollectBandage()
+    local char = Utilities:GetCharacter()
+    if not char or not HumanoidRootPart then return end
+    
+    -- Find nearest bandage
+    local nearestBandage = nil
+    local nearestDist = math.huge
+    
+    for _, part in ipairs(workspace:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name == "Bandage" then
+            local dist = (part.Position - HumanoidRootPart.Position).Magnitude
+            if dist < nearestDist then
+                nearestDist = dist
+                nearestBandage = part
+            end
+        end
+    end
+    
+    if nearestBandage and nearestDist < 50 then
+        char:MoveTo(nearestBandage.Position)
+        
+        if nearestDist < 5 then
+            local remotes = Utilities:GetRemotes()
+            if remotes then
+                local collectRemote = remotes:FindFirstChild("CollectBandage")
+                if collectRemote then
+                    collectRemote:FireServer(nearestBandage)
+                end
+            end
+        end
+    end
+end
+
+function AutoFarm:AutoUnbox()
+    MakeTask("AutoUnbox", function()
+        if not GetProperty("AutoUnbox") then return end
+        
+        local remotes = Utilities:GetRemotes()
+        if remotes then
+            local unboxRemote = remotes:FindFirstChild("UnboxCrate")
+            if unboxRemote then
+                unboxRemote:FireServer()
+            end
+        end
+    end, 60)
+end
+
+function AutoFarm:AutoReel()
+    MakeTask("AutoReel", function()
+        if not GetProperty("AutoReel") then return end
+        
+        -- Check if fishing
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isFishing = char:GetAttribute("Fishing") or false
+        if not isFishing then return end
+        
+        -- Auto reel
+        local accuracy = GetProperty("AutoReelAccuracy") or 100
+        local power = GetProperty("AutoCastPower") or 100
+        
+        -- Simulate reeling
+        local remotes = Utilities:GetRemotes()
+        if remotes then
+            local reelRemote = remotes:FindFirstChild("ReelFish")
+            if reelRemote then
+                reelRemote:FireServer(accuracy, power)
+            end
+        end
+    end, 0.5)
+end
+
+function AutoFarm:AutoCast()
+    MakeTask("AutoCast", function()
+        if not GetProperty("AutoCast") then return end
+        
+        local char = Utilities:GetCharacter()
+        if not char then return end
+        
+        local isFishing = char:GetAttribute("Fishing") or false
+        if isFishing then return end
+        
+        local power = GetProperty("AutoCastPower") or 100
+        
+        -- Cast line
+        local remotes = Utilities:GetRemotes()
+        if remotes then
+            local castRemote = remotes:FindFirstChild("CastLine")
+            if castRemote then
+                castRemote:FireServer(power)
+            end
+        end
+    end, 2)
+end
+
+function AutoFarm:AutoShake()
+    MakeTask("AutoShake", function()
+        if not GetProperty("AutoShake") then return end
+        
+        -- Simulate shaking to catch fish
+        local remotes = Utilities:GetRemotes()
+        if remotes then
+            local shakeRemote = remotes:FindFirstChild("ShakeFish")
+            if shakeRemote then
+                shakeRemote:FireServer()
+            end
+        end
+    end, 0.1)
+end
+
+function AutoFarm:AutoSellAllFish()
+    MakeTask("AutoSellAllFish", function()
+        if not GetProperty("AutoSellAllFish") then return end
+        
+        local remotes = Utilities:GetRemotes()
+        if remotes then
+            local sellRemote = remotes:FindFirstChild("SellAllFish")
+            if sellRemote then
+                sellRemote:FireServer()
+            end
+        end
+    end, 300) -- Sell every 5 minutes
+end
+
+function AutoFarm:AutoStoreItems()
+    MakeTask("AutoStoreItems", function()
+        if not GetProperty("AutoStoreItems") then return end
+        
+        local range = GetProperty("AutoStoreRange") or 5
+        local char = Utilities:GetCharacter()
+        if not char or not HumanoidRootPart then return end
+        
+        -- Find storage
+        local storage = nil
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name == "Storage" then
+                storage = part
+                break
+            end
+        end
+        
+        if storage then
+            local distance = (storage.Position - HumanoidRootPart.Position).Magnitude
+            if distance < range then
+                local remotes = Utilities:GetRemotes()
+                if remotes then
+                    local storeRemote = remotes:FindFirstChild("StoreItems")
+                    if storeRemote then
+                        storeRemote:FireServer()
+                    end
+                end
+            end
+        end
+    end, 5)
+end
+
+-- ============================================
+-- 15. GUI SYSTEM
+-- ============================================
+
+local GUI = {}
+
+function GUI:Create()
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "OverdriveH_GUI"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    
+    -- Create main frame
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Name = "MainFrame"
+    mainFrame.Size = UDim2.new(0, 400, 0, 500)
+    mainFrame.Position = UDim2.new(0.5, -200, 0.5, -250)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = screenGui
+    
+    -- Title
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0, 30)
+    title.Position = UDim2.new(0, 0, 0, 0)
+    title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    title.BorderSizePixel = 0
+    title.Text = "Overdrive H " .. Config.Version
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 18
+    title.Parent = mainFrame
+    
+    -- Close button
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 30, 0, 30)
+    closeBtn.Position = UDim2.new(1, -30, 0, 0)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.Parent = mainFrame
+    
+    closeBtn.MouseButton1Click:Connect(function()
+        mainFrame.Visible = not mainFrame.Visible
+    end)
+    
+    -- Tab container
+    local tabContainer = Instance.new("Frame")
+    tabContainer.Size = UDim2.new(1, 0, 0, 30)
+    tabContainer.Position = UDim2.new(0, 0, 0, 30)
+    tabContainer.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    tabContainer.BorderSizePixel = 0
+    tabContainer.Parent = mainFrame
+    
+    -- Content container
+    local contentContainer = Instance.new("ScrollingFrame")
+    contentContainer.Size = UDim2.new(1, -10, 1, -70)
+    contentContainer.Position = UDim2.new(0, 5, 0, 65)
+    contentContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    contentContainer.BorderSizePixel = 0
+    contentContainer.ScrollBarThickness = 5
+    contentContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+    contentContainer.Parent = mainFrame
+    
+    -- Create tabs
+    local tabs = {
+        "Main",
+        "Combat",
+        "Visuals",
+        "SelfMods",
+        "AutoFarm",
+        "MM2",
+        "Settings"
+    }
+    
+    local tabButtons = {}
+    local currentTab = nil
+    
+    for i, tabName in ipairs(tabs) do
+        local tabBtn = Instance.new("TextButton")
+        tabBtn.Size = UDim2.new(0, 50, 1, 0)
+        tabBtn.Position = UDim2.new(0, (i-1) * 50, 0, 0)
+        tabBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        tabBtn.BorderSizePixel = 0
+        tabBtn.Text = tabName
+        tabBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+        tabBtn.TextSize = 12
+        tabBtn.Parent = tabContainer
+        
+        tabButtons[tabName] = tabBtn
+        
+        tabBtn.MouseButton1Click:Connect(function()
+            GUI:SwitchTab(tabName, tabButtons, contentContainer)
+        end)
+    end
+    
+    -- Switch to first tab
+    GUI:SwitchTab("Main", tabButtons, contentContainer)
+    
+    -- Make draggable
+    GUI:MakeDraggable(mainFrame)
+    
+    return screenGui
+end
+
+function GUI:SwitchTab(tabName, tabButtons, contentContainer)
+    -- Clear content
+    for _, child in ipairs(contentContainer:GetChildren()) do
+        child:Destroy()
+    end
+    
+    -- Update tab buttons
+    for name, btn in pairs(tabButtons) do
+        if name == tabName then
+            btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+            btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+        end
+    end
+    
+    -- Create content based on tab
+    local yPos = 5
+    
+    if tabName == "Main" then
+        yPos = GUI:AddMainTab(contentContainer, yPos)
+    elseif tabName == "Combat" then
+        yPos = GUI:AddCombatTab(contentContainer, yPos)
+    elseif tabName == "Visuals" then
+        yPos = GUI:AddVisualTab(contentContainer, yPos)
+    elseif tabName == "SelfMods" then
+        yPos = GUI:AddSelfModsTab(contentContainer, yPos)
+    elseif tabName == "AutoFarm" then
+        yPos = GUI:AddAutoFarmTab(contentContainer, yPos)
+    elseif tabName == "MM2" then
+        yPos = GUI:AddMM2Tab(contentContainer, yPos)
+    elseif tabName == "Settings" then
+        yPos = GUI:AddSettingsTab(contentContainer, yPos)
+    end
+    
+    -- Update canvas size
+    contentContainer.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
+end
+
+function GUI:AddToggle(parent, yPos, label, property)
+    local toggleFrame = Instance.new("Frame")
+    toggleFrame.Size = UDim2.new(1, -10, 0, 25)
+    toggleFrame.Position = UDim2.new(0, 5, 0, yPos)
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    toggleFrame.BorderSizePixel = 0
+    toggleFrame.Parent = parent
+    
+    local labelText = Instance.new("TextLabel")
+    labelText.Size = UDim2.new(0.7, 0, 1, 0)
+    labelText.Position = UDim2.new(0, 5, 0, 0)
+    labelText.BackgroundTransparency = 1
+    labelText.Text = label
+    labelText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    labelText.TextSize = 14
+    labelText.TextXAlignment = Enum.TextXAlignment.Left
+    labelText.Parent = toggleFrame
+    
+    local toggleBtn = Instance.new("TextButton")
+    toggleBtn.Size = UDim2.new(0, 30, 0, 20)
+    toggleBtn.Position = UDim2.new(1, -35, 0.5, -10)
+    toggleBtn.BackgroundColor3 = GetProperty(property) and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(60, 60, 60)
+    toggleBtn.BorderSizePixel = 0
+    toggleBtn.Text = GetProperty(property) and "ON" or "OFF"
+    toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleBtn.TextSize = 12
+    toggleBtn.Parent = toggleFrame
+    
+    toggleBtn.MouseButton1Click:Connect(function()
+        local newValue = ToggleProperty(property)
+        toggleBtn.BackgroundColor3 = newValue and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(60, 60, 60)
+        toggleBtn.Text = newValue and "ON" or "OFF"
+    end)
+    
+    return yPos + 30
+end
+
+function GUI:AddSlider(parent, yPos, label, property, min, max, default)
+    local sliderFrame = Instance.new("Frame")
+    sliderFrame.Size = UDim2.new(1, -10, 0, 40)
+    sliderFrame.Position = UDim2.new(0, 5, 0, yPos)
+    sliderFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    sliderFrame.BorderSizePixel = 0
+    sliderFrame.Parent = parent
+    
+    local labelText = Instance.new("TextLabel")
+    labelText.Size = UDim2.new(0.7, 0, 0.5, 0)
+    labelText.Position = UDim2.new(0, 5, 0, 0)
+    labelText.BackgroundTransparency = 1
+    labelText.Text = label
+    labelText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    labelText.TextSize = 14
+    labelText.TextXAlignment = Enum.TextXAlignment.Left
+    labelText.Parent = sliderFrame
+    
+    local valueText = Instance.new("TextLabel")
+    valueText.Size = UDim2.new(0.3, 0, 0.5, 0)
+    valueText.Position = UDim2.new(0.7, 0, 0, 0)
+    valueText.BackgroundTransparency = 1
+    valueText.Text = tostring(GetProperty(property) or default)
+    valueText.TextColor3 = Color3.fromRGB(0, 255, 0)
+    valueText.TextSize = 14
+    valueText.TextXAlignment = Enum.TextXAlignment.Right
+    valueText.Parent = sliderFrame
+    
+    local slider = Instance.new("TextButton")
+    slider.Size = UDim2.new(1, -10, 0, 15)
+    slider.Position = UDim2.new(0, 5, 0.6, 0)
+    slider.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    slider.BorderSizePixel = 0
+    slider.Text = ""
+    slider.Parent = sliderFrame
+    
+    local fill = Instance.new("Frame")
+    fill.Size = UDim2.new(0, 0, 1, 0)
+    fill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    fill.BorderSizePixel = 0
+    fill.Parent = slider
+    
+    local currentValue = GetProperty(property) or default
+    local percent = (currentValue - min) / (max - min)
+    fill.Size = UDim2.new(percent, 0, 1, 0)
+    
+    slider.MouseButton1Down:Connect(function()
+        local connection
+        connection = UserInputService.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                local mousePos = UserInputService:GetMouseLocation()
+                local sliderPos = slider.AbsolutePosition
+                local sliderSize = slider.AbsoluteSize
+                
+                local x = (mousePos.X - sliderPos.X) / sliderSize.X
+                x = math.clamp(x, 0, 1)
+                
+                local newValue = math.round(min + (max - min) * x)
+                SetProperty(property, newValue)
+                
+                valueText.Text = tostring(newValue)
+                fill.Size = UDim2.new(x, 0, 1, 0)
+            end
+        end)
+        
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                connection:Disconnect()
+            end
+        end)
+    end)
+    
+    return yPos + 45
+end
+
+function GUI:AddDropdown(parent, yPos, label, property, options)
+    local dropdownFrame = Instance.new("Frame")
+    dropdownFrame.Size = UDim2.new(1, -10, 0, 30)
+    dropdownFrame.Position = UDim2.new(0, 5, 0, yPos)
+    dropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    dropdownFrame.BorderSizePixel = 0
+    dropdownFrame.Parent = parent
+    
+    local labelText = Instance.new("TextLabel")
+    labelText.Size = UDim2.new(0.4, 0, 1, 0)
+    labelText.Position = UDim2.new(0, 5, 0, 0)
+    labelText.BackgroundTransparency = 1
+    labelText.Text = label
+    labelText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    labelText.TextSize = 14
+    labelText.TextXAlignment = Enum.TextXAlignment.Left
+    labelText.Parent = dropdownFrame
+    
+    local currentValue = GetProperty(property) or options[1]
+    
+    local dropdownBtn = Instance.new("TextButton")
+    dropdownBtn.Size = UDim2.new(0.5, 0, 1, 0)
+    dropdownBtn.Position = UDim2.new(0.5, 0, 0, 0)
+    dropdownBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    dropdownBtn.BorderSizePixel = 0
+    dropdownBtn.Text = currentValue
+    dropdownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dropdownBtn.TextSize = 14
+    dropdownBtn.Parent = dropdownFrame
+    
+    local dropdownList = Instance.new("Frame")
+    dropdownList.Size = UDim2.new(0.5, 0, 0, 0)
+    dropdownList.Position = UDim2.new(0.5, 0, 1, 0)
+    dropdownList.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    dropdownList.BorderSizePixel = 0
+    dropdownList.Visible = false
+    dropdownList.Parent = dropdownFrame
+    
+    local listHeight = 0
+    for _, option in ipairs(options) do
+        local optionBtn = Instance.new("TextButton")
+        optionBtn.Size = UDim2.new(1, 0, 0, 25)
+        optionBtn.Position = UDim2.new(0, 0, 0, listHeight)
+        optionBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        optionBtn.BorderSizePixel = 0
+        optionBtn.Text = option
+        optionBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        optionBtn.TextSize = 14
+        optionBtn.Parent = dropdownList
+        
+        optionBtn.MouseButton1Click:Connect(function()
+            SetProperty(property, option)
+            dropdownBtn.Text = option
+            dropdownList.Visible = false
+            dropdownList.Size = UDim2.new(0.5, 0, 0, 0)
+        end)
+        
+        listHeight = listHeight + 25
+    end
+    
+    dropdownBtn.MouseButton1Click:Connect(function()
+        dropdownList.Visible = not dropdownList.Visible
+        if dropdownList.Visible then
+            dropdownList.Size = UDim2.new(0.5, 0, 0, listHeight)
+        else
+            dropdownList.Size = UDim2.new(0.5, 0, 0, 0)
+        end
+    end)
+    
+    return yPos + 35
+end
+
+function GUI:AddHeader(parent, yPos, text)
+    local header = Instance.new("TextLabel")
+    header.Size = UDim2.new(1, -10, 0, 25)
+    header.Position = UDim2.new(0, 5, 0, yPos)
+    header.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    header.BorderSizePixel = 0
+    header.Text = text
+    header.TextColor3 = Color3.fromRGB(255, 255, 255)
+    header.TextSize = 16
+    header.TextScaled = true
+    header.Font = Enum.Font.GothamBold
+    header.Parent = parent
+    
+    return yPos + 30
+end
+
+function GUI:AddLabel(parent, yPos, text)
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -10, 0, 20)
+    label.Position = UDim2.new(0, 5, 0, yPos)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    label.TextSize = 12
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = parent
+    
+    return yPos + 25
+end
+
+function GUI:MakeDraggable(frame)
+    local dragging = false
+    local dragInput = nil
+    local dragStart = nil
+    local startPos = nil
+    
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+
+-- ============================================
+-- 16. GUI TAB CONTENTS
+-- ============================================
+
+function GUI:AddMainTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "COMBAT FEATURES")
+    
+    -- Combat toggles
+    yPos = self:AddToggle(parent, yPos, "Auto Parry", "AutoParry")
+    yPos = self:AddToggle(parent, yPos, "Auto Parry (Legit Mode)", "AutoParryLegitMode")
+    yPos = self:AddToggle(parent, yPos, "Auto Forcefield", "AutoForcefield")
+    yPos = self:AddToggle(parent, yPos, "Auto Raging Deflection", "AutoRagingDeflection")
+    yPos = self:AddToggle(parent, yPos, "Auto Infinity", "AutoInfinity")
+    yPos = self:AddToggle(parent, yPos, "Auto Phantom", "AutoPhantom")
+    yPos = self:AddToggle(parent, yPos, "Auto Fracture", "AutoFracture")
+    yPos = self:AddToggle(parent, yPos, "Auto Singularity", "AutoSingularity")
+    yPos = self:AddToggle(parent, yPos, "Auto Death Slash", "AutoDeathSlash")
+    yPos = self:AddToggle(parent, yPos, "Auto Perfect Death Slash", "AutoPerfectDeathSlash")
+    yPos = self:AddToggle(parent, yPos, "Auto Swap", "AutoSwap")
+    yPos = self:AddToggle(parent, yPos, "Auto Flash Counter", "AutoFlashCounter")
+    yPos = self:AddToggle(parent, yPos, "Auto Aerodynamic Slash", "AutoAerodynamicSlash")
+    yPos = self:AddToggle(parent, yPos, "Auto Calming Deflection", "AutoCalmingDeflection")
+    yPos = self:AddToggle(parent, yPos, "Auto Hell Hook", "AutoHellHook")
+    yPos = self:AddToggle(parent, yPos, "Auto Pull", "AutoPull")
+    yPos = self:AddToggle(parent, yPos, "Auto Telekinesis", "AutoTelekinesis")
+    yPos = self:AddToggle(parent, yPos, "Auto Counter Telekinesis", "AutoCounterTelekinesis")
+    yPos = self:AddToggle(parent, yPos, "Auto Absolute Confidence", "AutoAbsoluteConfidence")
+    yPos = self:AddToggle(parent, yPos, "Auto Rapture", "AutoRapture")
+    yPos = self:AddToggle(parent, yPos, "Auto Slashes of Fury", "AutoSlashesOfFury")
+    yPos = self:AddToggle(parent, yPos, "Auto Slash of Duality", "AutoSlashOfDuality")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "SETTINGS")
+    yPos = self:AddSlider(parent, yPos, "Hits Before Clashing", "HitsBeforeClashing", 2, 10, 3)
+    yPos = self:AddSlider(parent, yPos, "Clash Range", "ClashRange", 10, 60, 32)
+    yPos = self:AddToggle(parent, yPos, "Auto Notify When Clashing", "AutoNotifyClashing")
+    
+    return yPos
+end
+
+function GUI:AddCombatTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "SILENT AIM")
+    yPos = self:AddDropdown(parent, yPos, "Gun Silent Aim Prediction", "GunSilentAimPrediction", {"Revert", "Rectum", "Electro", "Remi"})
+    yPos = self:AddSlider(parent, yPos, "Prediction Ping", "PredictionPing", 1, 1000, 100)
+    yPos = self:AddSlider(parent, yPos, "Prediction Vertical Multiplier (%)", "PredictionVerticalMultiplier", 50, 300, 100)
+    yPos = self:AddSlider(parent, yPos, "Prediction Horizontal Multiplier (%)", "PredictionHorizontalMultiplier", 50, 300, 100)
+    yPos = self:AddSlider(parent, yPos, "Prediction Interval", "PredictionInterval", 1, 100, 20)
+    yPos = self:AddToggle(parent, yPos, "Prediction Wall Check", "PredictionWallCheck")
+    yPos = self:AddToggle(parent, yPos, "Predict Jump", "PredictJump")
+    yPos = self:AddSlider(parent, yPos, "Simulation Divider (%)", "SimulationDivider", 1, 100, 20)
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "HITBOX EXPANDER")
+    yPos = self:AddToggle(parent, yPos, "Enable Hitbox Expander", "HitboxExpander")
+    yPos = self:AddSlider(parent, yPos, "Hitbox Size", "HitboxSize", 1, 10, 2)
+    yPos = self:AddSlider(parent, yPos, "Hitbox Transparency (%)", "HitboxTransparency", 0, 100, 70)
+    yPos = self:AddSlider(parent, yPos, "Hitbox Color (R)", "HitboxColorR", 1, 255, 250)
+    yPos = self:AddSlider(parent, yPos, "Hitbox Color (G)", "HitboxColorG", 1, 255, 250)
+    yPos = self:AddSlider(parent, yPos, "Hitbox Color (B)", "HitboxColorB", 1, 255, 250)
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "AURA")
+    yPos = self:AddToggle(parent, yPos, "Gun Aura", "GunAura")
+    yPos = self:AddSlider(parent, yPos, "Gun Aura Range", "GunAuraRange", 1, 15, 5)
+    yPos = self:AddToggle(parent, yPos, "Knife Aura", "KnifeAura")
+    yPos = self:AddSlider(parent, yPos, "Knife Aura Range", "KnifeAuraRange", 1, 15, 5)
+    
+    return yPos
+end
+
+function GUI:AddVisualTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "ESP BOX")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Everyone", "ESPBoxEveryone")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Murderer Only", "ESPBoxMurdererOnly")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Sheriff Only", "ESPBoxSheriffOnly")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Hostile Mobs", "ESPBoxHostileMobs")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Corpses", "ESPBoxCorpses")
+    yPos = self:AddToggle(parent, yPos, "ESP Box Items", "ESPBoxItems")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "TRACERS")
+    yPos = self:AddToggle(parent, yPos, "Tracers Everyone", "TracersEveryone")
+    yPos = self:AddToggle(parent, yPos, "Tracers Murderer Only", "TracersMurdererOnly")
+    yPos = self:AddToggle(parent, yPos, "Tracers Sheriff Only", "TracersSheriffOnly")
+    yPos = self:AddToggle(parent, yPos, "Tracers Corpses", "TracersCorpses")
+    yPos = self:AddToggle(parent, yPos, "Tracers Items", "TracersItems")
+    yPos = self:AddToggle(parent, yPos, "Tracers Dropped Gun", "TracersDroppedGun")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "CHAMS")
+    yPos = self:AddToggle(parent, yPos, "Chams Everyone", "ChamsEveryone")
+    yPos = self:AddToggle(parent, yPos, "Chams Murderer Only", "ChamsMurdererOnly")
+    yPos = self:AddToggle(parent, yPos, "Chams Sheriff Only", "ChamsSheriffOnly")
+    yPos = self:AddToggle(parent, yPos, "Chams Hostile Mobs", "ChamsHostileMobs")
+    yPos = self:AddToggle(parent, yPos, "Chams Corpses", "ChamsCorpses")
+    yPos = self:AddToggle(parent, yPos, "Chams Items", "ChamsItems")
+    yPos = self:AddToggle(parent, yPos, "Chams Train", "ChamsTrain")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "OUTLINES")
+    yPos = self:AddToggle(parent, yPos, "Outlines Everyone", "OutlinesEveryone")
+    yPos = self:AddToggle(parent, yPos, "Outlines Murderer Only", "OutlinesMurdererOnly")
+    yPos = self:AddToggle(parent, yPos, "Outlines Sheriff Only", "OutlinesSheriffOnly")
+    yPos = self:AddToggle(parent, yPos, "Outlines Hostile Mobs", "OutlinesHostileMobs")
+    yPos = self:AddToggle(parent, yPos, "Outlines Corpses", "OutlinesCorpses")
+    yPos = self:AddToggle(parent, yPos, "Outlines Items", "OutlinesItems")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "ESP SKELETON")
+    yPos = self:AddToggle(parent, yPos, "ESP Skeleton Everyone", "ESPSkeletonEveryone")
+    yPos = self:AddToggle(parent, yPos, "ESP Skeleton Murderer Only", "ESPSkeletonMurdererOnly")
+    yPos = self:AddToggle(parent, yPos, "ESP Skeleton Sheriff Only", "ESPSkeletonSheriffOnly")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "DISPLAY")
+    yPos = self:AddToggle(parent, yPos, "Display Distance", "DisplayDistance")
+    yPos = self:AddToggle(parent, yPos, "Display Health", "DisplayHealth")
+    
+    return yPos
+end
+
+function GUI:AddSelfModsTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "MOVEMENT")
+    yPos = self:AddSlider(parent, yPos, "WalkSpeed", "WalkSpeed", 1, 255, 16)
+    yPos = self:AddSlider(parent, yPos, "JumpPower", "JumpPower", 1, 255, 50)
+    yPos = self:AddToggle(parent, yPos, "Noclip", "Noclip")
+    yPos = self:AddToggle(parent, yPos, "Fly", "Fly")
+    yPos = self:AddSlider(parent, yPos, "Fly Speed", "FlySpeed", 1, 50, 15)
+    yPos = self:AddToggle(parent, yPos, "Infinite Jump", "InfiniteJump")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "VISUAL")
+    yPos = self:AddToggle(parent, yPos, "Invisible", "Invisible")
+    yPos = self:AddToggle(parent, yPos, "X-Ray", "XRay")
+    yPos = self:AddSlider(parent, yPos, "X-Ray Transparency (%)", "XRayTransparency", 0, 100, 75)
+    yPos = self:AddToggle(parent, yPos, "Full Bright", "FullBright")
+    yPos = self:AddToggle(parent, yPos, "No Shadows", "NoShadows")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "PROTECTION")
+    yPos = self:AddToggle(parent, yPos, "Anti AFK", "AntiAFK")
+    yPos = self:AddToggle(parent, yPos, "Anti Void", "AntiVoid")
+    yPos = self:AddToggle(parent, yPos, "Anti Fling", "AntiFling")
+    yPos = self:AddToggle(parent, yPos, "Face Ball", "FaceBall")
+    yPos = self:AddToggle(parent, yPos, "Lock Ball", "LockBall")
+    yPos = self:AddToggle(parent, yPos, "Anti Pulse", "AntiPulse")
+    yPos = self:AddToggle(parent, yPos, "Fake Bomb Clutch", "FakeBombClutch")
+    
+    return yPos
+end
+
+function GUI:AddAutoFarmTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "AUTO FARM")
+    yPos = self:AddToggle(parent, yPos, "Auto Farm", "AutoFarm")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Coins", "AutoCollectCoins")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Eggs", "AutoCollectEggs")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Bandage", "AutoCollectBandage")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Bond", "AutoCollectBond")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Moneybag", "AutoCollectMoneybag")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Ammo", "AutoCollectAmmo")
+    yPos = self:AddToggle(parent, yPos, "Auto Collect Snake Oil", "AutoCollectSnakeOil")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "FISHING")
+    yPos = self:AddToggle(parent, yPos, "Auto Reel", "AutoReel")
+    yPos = self:AddToggle(parent, yPos, "Auto Cast", "AutoCast")
+    yPos = self:AddSlider(parent, yPos, "Auto Cast Power", "AutoCastPower", 1, 100, 100)
+    yPos = self:AddSlider(parent, yPos, "Auto Reel Accuracy", "AutoReelAccuracy", 1, 100, 100)
+    yPos = self:AddToggle(parent, yPos, "Auto Shake", "AutoShake")
+    yPos = self:AddToggle(parent, yPos, "Auto Sell All Fish", "AutoSellAllFish")
+    yPos = self:AddToggle(parent, yPos, "Auto Sell Held Fish", "AutoSellHeldFish")
+    yPos = self:AddToggle(parent, yPos, "Auto Equip Rod", "AutoEquipRod")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "STORAGE")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Items", "AutoStoreItems")
+    yPos = self:AddSlider(parent, yPos, "Auto Store Range", "AutoStoreRange", 1, 10, 5)
+    yPos = self:AddToggle(parent, yPos, "Auto Store Coal", "AutoStoreCoal")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Goldbar", "AutoStoreGoldbar")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Silverbar", "AutoStoreSilverbar")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Fuel Items", "AutoStoreFuelItems")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Valuable Items", "AutoStoreValuableItems")
+    yPos = self:AddToggle(parent, yPos, "Auto Store Corpses", "AutoStoreCorpses")
+    
+    return yPos
+end
+
+function GUI:AddMM2Tab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "MURDERER")
+    yPos = self:AddToggle(parent, yPos, "Auto Shoot Murderer", "AutoShootMurderer")
+    yPos = self:AddDropdown(parent, yPos, "Shoot Condition", "AutoShootMurdererCondition", {"Auto", "When Murderer is Holding the Knife", "When Murderer is Near"})
+    yPos = self:AddToggle(parent, yPos, "Auto Notify When Clashing", "AutoNotifyClashing")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "SHERIFF")
+    yPos = self:AddToggle(parent, yPos, "Auto Grab Gun", "AutoGrabGun")
+    yPos = self:AddToggle(parent, yPos, "Auto Notify Roles", "AutoNotifyRoles")
+    yPos = self:AddToggle(parent, yPos, "Auto Expose Roles", "AutoExposeRoles")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "GENERAL")
+    yPos = self:AddToggle(parent, yPos, "Auto Notify Murderer's Perk", "AutoNotifyMurdererPerk")
+    yPos = self:AddToggle(parent, yPos, "Auto Expose Murderer's Perk", "AutoExposeMurdererPerk")
+    yPos = self:AddToggle(parent, yPos, "Indicate Chat Roles", "IndicateChatRoles")
+    yPos = self:AddToggle(parent, yPos, "Show Murderer Chance", "ShowMurdererChance")
+    yPos = self:AddToggle(parent, yPos, "Instant Role Notify", "InstantRoleNotify")
+    
+    return yPos
+end
+
+function GUI:AddSettingsTab(parent, yPos)
+    yPos = self:AddHeader(parent, yPos, "PERFORMANCE")
+    yPos = self:AddToggle(parent, yPos, "Low Performance Mode", "LowPerformanceMode")
+    yPos = self:AddToggle(parent, yPos, "Disable 3D Rendering", "Disable3DRendering")
+    yPos = self:AddToggle(parent, yPos, "Disable Animated Decorations", "DisableAnimatedDecorations")
+    yPos = self:AddToggle(parent, yPos, "Remove Chroma Effects", "RemoveChromaEffects")
+    yPos = self:AddToggle(parent, yPos, "Remove Pets Display", "RemovePetsDisplay")
+    yPos = self:AddToggle(parent, yPos, "Mute Coin Sound", "MuteCoinSound")
+    yPos = self:AddToggle(parent, yPos, "Optimize Coins", "OptimizeCoins")
+    
+    yPos = yPos + 5
+    yPos = self:AddHeader(parent, yPos, "MISC")
+    yPos = self:AddToggle(parent, yPos, "Anti Lag Server", "AntiLagServer")
+    yPos = self:AddSlider(parent, yPos, "Lag Server Intensity", "LagServerIntensity", 1, 50, 3)
+    yPos = self:AddToggle(parent, yPos, "Use Gun Dual Effect", "UseGunDualEffect")
+    yPos = self:AddToggle(parent, yPos, "Use Knife Dual Effect", "UseKnifeDualEffect")
+    yPos = self:AddToggle(parent, yPos, "Show Round Timer", "ShowRoundTimer")
+    
+    return yPos
+end
+
+-- ============================================
+-- 17. INITIALIZATION & LISTENERS
+-- ============================================
+
+function Initialize()
+    -- Define all properties
+    PropertySystem:DefineProperties()
+    
+    -- Listen to property changes
+    ListenProperty("AutoParry", function(value)
+        TaskSystem:ToggleTask("AutoParry", value, function() Combat:AutoParry() end)
+    end)
+    
+    ListenProperty("AutoForcefield", function(value)
+        TaskSystem:ToggleTask("AutoForcefield", value, function() Combat:AutoForcefield() end)
+    end)
+    
+    ListenProperty("AutoRagingDeflection", function(value)
+        TaskSystem:ToggleTask("AutoRagingDeflection", value, function() Combat:AutoRagingDeflection() end, 0.5)
+    end)
+    
+    ListenProperty("AutoInfinity", function(value)
+        TaskSystem:ToggleTask("AutoInfinity", value, function() Combat:AutoInfinity() end, 0.5)
+    end)
+    
+    ListenProperty("AutoPhantom", function(value)
+        TaskSystem:ToggleTask("AutoPhantom", value, function() Combat:AutoPhantom() end, 0.5)
+    end)
+    
+    ListenProperty("AutoFracture", function(value)
+        TaskSystem:ToggleTask("AutoFracture", value, function() Combat:AutoFracture() end, 0.5)
+    end)
+    
+    ListenProperty("AutoSingularity", function(value)
+        TaskSystem:ToggleTask("AutoSingularity", value, function() Combat:AutoSingularity() end, 0.5)
+    end)
+    
+    ListenProperty("AutoDeathSlash", function(value)
+        TaskSystem:ToggleTask("AutoDeathSlash", value, function() Combat:AutoDeathSlash() end, 0.5)
+    end)
+    
+    ListenProperty("AutoPerfectDeathSlash", function(value)
+        TaskSystem:ToggleTask("AutoPerfectDeathSlash", value, function() Combat:AutoPerfectDeathSlash() end)
+    end)
+    
+    ListenProperty("AutoSwap", function(value)
+        TaskSystem:ToggleTask("AutoSwap", value, function() Combat:AutoSwap() end, 0.5)
+    end)
+    
+    ListenProperty("AutoFlashCounter", function(value)
+        TaskSystem:ToggleTask("AutoFlashCounter", value, function() Combat:AutoFlashCounter() end, 0.5)
+    end)
+    
+    ListenProperty("AutoAerodynamicSlash", function(value)
+        TaskSystem:ToggleTask("AutoAerodynamicSlash", value, function() Combat:AutoAerodynamicSlash() end, 0.5)
+    end)
+    
+    ListenProperty("AutoCalmingDeflection", function(value)
+        TaskSystem:ToggleTask("AutoCalmingDeflection", value, function() Combat:AutoCalmingDeflection() end, 0.5)
+    end)
+    
+    ListenProperty("AutoHellHook", function(value)
+        TaskSystem:ToggleTask("AutoHellHook", value, function() Combat:AutoHellHook() end, 0.5)
+    end)
+    
+    ListenProperty("AutoPull", function(value)
+        TaskSystem:ToggleTask("AutoPull", value, function() Combat:AutoPull() end, 0.5)
+    end)
+    
+    ListenProperty("AutoTelekinesis", function(value)
+        TaskSystem:ToggleTask("AutoTelekinesis", value, function() Combat:AutoTelekinesis() end, 0.5)
+    end)
+    
+    ListenProperty("AutoCounterTelekinesis", function(value)
+        TaskSystem:ToggleTask("AutoCounterTelekinesis", value, function() Combat:AutoCounterTelekinesis() end, 0.5)
+    end)
+    
+    ListenProperty("AutoAbsoluteConfidence", function(value)
+        TaskSystem:ToggleTask("AutoAbsoluteConfidence", value, function() Combat:AutoAbsoluteConfidence() end, 0.5)
+    end)
+    
+    ListenProperty("AutoRapture", function(value)
+        TaskSystem:ToggleTask("AutoRapture", value, function() Combat:AutoRapture() end, 0.5)
+    end)
+    
+    ListenProperty("AutoSlashesOfFury", function(value)
+        TaskSystem:ToggleTask("AutoSlashesOfFury", value, function() Combat:AutoSlashesOfFury() end, 0.5)
+    end)
+    
+    ListenProperty("AutoSlashOfDuality", function(value)
+        TaskSystem:ToggleTask("AutoSlashOfDuality", value, function() Combat:AutoSlashOfDuality() end, 0.5)
+    end)
+    
+    ListenProperty("AutoNotifyClashing", function(value)
+        TaskSystem:ToggleTask("AutoNotifyClashing", value, function() Combat:AutoNotifyClashing() end, 1)
+    end)
+    
+    ListenProperty("HitsBeforeClashing", function(value)
+        TaskSystem:ToggleTask("HitsBeforeClashing", value > 0, function() Combat:HitsBeforeClashing() end, 0.5)
+    end)
+    
+    -- Hitbox Expander
+    ListenProperty("HitboxExpander", function(value)
+        if value then
+            HitboxExpander:Apply()
+        else
+            HitboxExpander:Remove()
+            RemoveTask("HitboxExpander")
+        end
+    end)
+    
+    -- Aura
+    ListenProperty("GunAura", function(value)
+        TaskSystem:ToggleTask("GunAura", value, function() Aura:ApplyGunAura() end, 0.5)
+    end)
+    
+    ListenProperty("KnifeAura", function(value)
+        TaskSystem:ToggleTask("KnifeAura", value, function() Aura:ApplyKnifeAura() end, 0.5)
+    end)
+    
+    -- Visuals
+    ListenProperty("ESPBoxEveryone", function(value)
+        TaskSystem:ToggleTask("ESP", value or GetProperty("ESPBoxMurdererOnly") or GetProperty("ESPBoxSheriffOnly"), function() Visuals:ApplyESP() end, 0.016)
+    end)
+    
+    ListenProperty("ESPBoxMurdererOnly", function(value)
+        TaskSystem:ToggleTask("ESP", value or GetProperty("ESPBoxEveryone") or GetProperty("ESPBoxSheriffOnly"), function() Visuals:ApplyESP() end, 0.016)
+    end)
+    
+    ListenProperty("ESPBoxSheriffOnly", function(value)
+        TaskSystem:ToggleTask("ESP", value or GetProperty("ESPBoxEveryone") or GetProperty("ESPBoxMurdererOnly"), function() Visuals:ApplyESP() end, 0.016)
+    end)
+    
+    ListenProperty("TracersEveryone", function(value)
+        TaskSystem:ToggleTask("Tracers", value or GetProperty("TracersMurdererOnly") or GetProperty("TracersSheriffOnly"), function() Visuals:ApplyTracers() end, 0.016)
+    end)
+    
+    ListenProperty("TracersMurdererOnly", function(value)
+        TaskSystem:ToggleTask("Tracers", value or GetProperty("TracersEveryone") or GetProperty("TracersSheriffOnly"), function() Visuals:ApplyTracers() end, 0.016)
+    end)
+    
+    ListenProperty("TracersSheriffOnly", function(value)
+        TaskSystem:ToggleTask("Tracers", value or GetProperty("TracersEveryone") or GetProperty("TracersMurdererOnly"), function() Visuals:ApplyTracers() end, 0.016)
+    end)
+    
+    ListenProperty("ChamsEveryone", function(value)
+        TaskSystem:ToggleTask("Chams", value or GetProperty("ChamsMurdererOnly") or GetProperty("ChamsSheriffOnly"), function() Visuals:ApplyChams() end, 0.5)
+    end)
+    
+    ListenProperty("ChamsMurdererOnly", function(value)
+        TaskSystem:ToggleTask("Chams", value or GetProperty("ChamsEveryone") or GetProperty("ChamsSheriffOnly"), function() Visuals:ApplyChams() end, 0.5)
+    end)
+    
+    ListenProperty("ChamsSheriffOnly", function(value)
+        TaskSystem:ToggleTask("Chams", value or GetProperty("ChamsEveryone") or GetProperty("ChamsMurdererOnly"), function() Visuals:ApplyChams() end, 0.5)
+    end)
+    
+    ListenProperty("OutlinesEveryone", function(value)
+        TaskSystem:ToggleTask("Outlines", value or GetProperty("OutlinesMurdererOnly") or GetProperty("OutlinesSheriffOnly"), function() Visuals:ApplyOutlines() end, 0.5)
+    end)
+    
+    ListenProperty("OutlinesMurdererOnly", function(value)
+        TaskSystem:ToggleTask("Outlines", value or GetProperty("OutlinesEveryone") or GetProperty("OutlinesSheriffOnly"), function() Visuals:ApplyOutlines() end, 0.5)
+    end)
+    
+    ListenProperty("OutlinesSheriffOnly", function(value)
+        TaskSystem:ToggleTask("Outlines", value or GetProperty("OutlinesEveryone") or GetProperty("OutlinesMurdererOnly"), function() Visuals:ApplyOutlines() end, 0.5)
+    end)
+    
+    ListenProperty("DisplayDistance", function(value)
+        TaskSystem:ToggleTask("DisplayDistance", value, function() Visuals:DisplayDistance() end, 0.5)
+    end)
+    
+    ListenProperty("DisplayHealth", function(value)
+        TaskSystem:ToggleTask("DisplayHealth", value, function() Visuals:DisplayHealth() end, 0.5)
+    end)
+    
+    -- Self Mods
+    ListenProperty("WalkSpeed", function(value)
+        SelfMods:SetWalkSpeed(value)
+    end)
+    
+    ListenProperty("JumpPower", function(value)
+        SelfMods:SetJumpPower(value)
+    end)
+    
+    ListenProperty("Noclip", function(value)
+        TaskSystem:ToggleTask("Noclip", value, function() SelfMods:Noclip() end, 0.016)
+    end)
+    
+    ListenProperty("Fly", function(value)
+        if not value then
+            SelfMods:DisableFly()
+        end
+        TaskSystem:ToggleTask("Fly", value, function() SelfMods:Fly() end, 0.016)
+    end)
+    
+    ListenProperty("Invisible", function(value)
+        TaskSystem:ToggleTask("Invisible", value, function() SelfMods:Invisible() end, 0.5)
+    end)
+    
+    ListenProperty("AntiAFK", function(value)
+        TaskSystem:ToggleTask("AntiAFK", value, function() SelfMods:AntiAFK() end, 60)
+    end)
+    
+    ListenProperty("AntiVoid", function(value)
+        TaskSystem:ToggleTask("AntiVoid", value, function() SelfMods:AntiVoid() end, 0.5)
+    end)
+    
+    ListenProperty("AntiFling", function(value)
+        TaskSystem:ToggleTask("AntiFling", value, function() SelfMods:AntiFling() end, 0.1)
+    end)
+    
+    ListenProperty("InfiniteJump", function(value)
+        TaskSystem:ToggleTask("InfiniteJump", value, function() SelfMods:InfiniteJump() end, 0.016)
+    end)
+    
+    ListenProperty("XRay", function(value)
+        TaskSystem:ToggleTask("XRay", value, function() SelfMods:XRay() end, 0.5)
+    end)
+    
+    ListenProperty("FullBright", function(value)
+        SelfMods:FullBright()
+    end)
+    
+    ListenProperty("NoShadows", function(value)
+        SelfMods:NoShadows()
+    end)
+    
+    -- MM2 Features
+    ListenProperty("AutoShootMurderer", function(value)
+        TaskSystem:ToggleTask("AutoShootMurderer", value, function() MM2:AutoShootMurderer() end, 0.1)
+    end)
+    
+    ListenProperty("AutoGrabGun", function(value)
+        TaskSystem:ToggleTask("AutoGrabGun", value, function() MM2:AutoGrabGun() end, 0.5)
+    end)
+    
+    ListenProperty("AutoNotifyRoles", function(value)
+        TaskSystem:ToggleTask("AutoNotifyRoles", value, function() MM2:AutoNotifyRoles() end, 5)
+    end)
+    
+    ListenProperty("AutoExposeRoles", function(value)
+        TaskSystem:ToggleTask("AutoExposeRoles", value, function() MM2:AutoExposeRoles() end, 10)
+    end)
+    
+    ListenProperty("AutoNotifyMurdererPerk", function(value)
+        TaskSystem:ToggleTask("AutoNotifyMurdererPerk", value, function() MM2:AutoNotifyMurdererPerk() end, 60)
+    end)
+    
+    ListenProperty("AutoExposeMurdererPerk", function(value)
+        TaskSystem:ToggleTask("AutoExposeMurdererPerk", value, function() MM2:AutoExposeMurdererPerk() end, 10)
+    end)
+    
+    ListenProperty("IndicateChatRoles", function(value)
+        TaskSystem:ToggleTask("IndicateChatRoles", value, function() MM2:IndicateChatRoles() end, 0.5)
+    end)
+    
+    ListenProperty("ShowMurdererChance", function(value)
+        TaskSystem:ToggleTask("ShowMurdererChance", value, function() MM2:ShowMurdererChance() end, 5)
+    end)
+    
+    ListenProperty("InstantRoleNotify", function(value)
+        TaskSystem:ToggleTask("InstantRoleNotify", value, function() MM2:InstantRoleNotify() end, 0.5)
+    end)
+    
+    -- Auto Farm
+    ListenProperty("AutoFarm", function(value)
+        TaskSystem:ToggleTask("AutoFarm", value, function() AutoFarm:AutoFarm() end, 0.1)
+    end)
+    
+    ListenProperty("AutoUnbox", function(value)
+        TaskSystem:ToggleTask("AutoUnbox", value, function() AutoFarm:AutoUnbox() end, 60)
+    end)
+    
+    ListenProperty("AutoReel", function(value)
+        TaskSystem:ToggleTask("AutoReel", value, function() AutoFarm:AutoReel() end, 0.5)
+    end)
+    
+    ListenProperty("AutoCast", function(value)
+        TaskSystem:ToggleTask("AutoCast", value, function() AutoFarm:AutoCast() end, 2)
+    end)
+    
+    ListenProperty("AutoShake", function(value)
+        TaskSystem:ToggleTask("AutoShake", value, function() AutoFarm:AutoShake() end, 0.1)
+    end)
+    
+    ListenProperty("AutoSellAllFish", function(value)
+        TaskSystem:ToggleTask("AutoSellAllFish", value, function() AutoFarm:AutoSellAllFish() end, 300)
+    end)
+    
+    ListenProperty("AutoStoreItems", function(value)
+        TaskSystem:ToggleTask("AutoStoreItems", value, function() AutoFarm:AutoStoreItems() end, 5)
+    end)
+    
+    -- Create GUI
+    GUI:Create()
+    
+    Utilities:Notify("Overdrive H", "Loaded successfully!", 3)
+end
+
+-- ============================================
+-- 18. MAIN ENTRY POINT
+-- ============================================
+
+-- Wait for character
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    Utilities:GetCharacter()
+end)
+
+-- Initialize
+pcall(Initialize)
+
+-- Keep script running
+while task.wait(60) do
+    -- Check for updates or keep alive
+end
